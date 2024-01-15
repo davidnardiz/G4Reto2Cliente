@@ -5,10 +5,37 @@
  */
 package entities;
 
+import java.util.List;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+
 /**
  *
- * @author Gonzalo
+ * Clase que representa a un administrador del sistema. Un administrador puede
+ * organizar eventos y tiene un contador de eventos organizados.
+ *
+ * @author Iñigo
  */
 public class Administrador {
-    
+
+    private static final long serialVersionUID = 1L;
+    private int numEventos;
+    private List<Evento> eventosOrganizados;
+
+    public int getNumEventos() {
+        return numEventos;
+    }
+
+    public void setNumEventos(int numEventos) {
+        this.numEventos = numEventos;
+    }
+
+    public List<Evento> getEventosOrganizados() {
+        return eventosOrganizados;
+    }
+
+    public void setEventosOrganizados(List<Evento> eventosOrganizados) {
+        this.eventosOrganizados = eventosOrganizados;
+    }
+
 }
