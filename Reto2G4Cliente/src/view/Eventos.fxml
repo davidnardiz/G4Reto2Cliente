@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView layoutX="58.0" layoutY="289.0" prefHeight="421.0" prefWidth="1048.0">
+         <columns>
+            <TableColumn prefWidth="227.73335647583008" text="ID" />
+            <TableColumn prefWidth="285.0666046142578" text="Fecha" />
+            <TableColumn prefWidth="276.7999572753906" text="Total recaudado" />
+            <TableColumn prefWidth="256.79998779296875" text="Número de participantes" />
+         </columns>
+      </TableView>
+      <Label />
+      <ComboBox layoutX="1150.0" layoutY="340.0" prefHeight="38.0" prefWidth="172.0" promptText="Selecciona tu filtro" />
+      <TextField layoutX="1151.0" layoutY="391.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+      <TextField layoutX="1151.0" layoutY="436.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+      <Button layoutX="1153.0" layoutY="501.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Pane layoutX="59.0" layoutY="79.0" prefHeight="186.0" prefWidth="1048.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;">
+         <children>
+            <TextField layoutX="53.0" layoutY="77.0" prefHeight="31.0" prefWidth="385.0" promptText="ID">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <Label layoutX="52.0" layoutY="34.0" text="Gestor de eventos:">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <DatePicker layoutX="53.0" layoutY="118.0" prefHeight="34.0" prefWidth="385.0" promptText="Fecha" />
+            <TextField layoutX="496.0" layoutY="78.0" prefHeight="31.0" prefWidth="325.0" promptText="Número participantes">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <TextField layoutX="496.0" layoutY="120.0" prefHeight="31.0" prefWidth="325.0" promptText="Total recaudado">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <Button layoutX="860.0" layoutY="42.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="131.0" style="-fx-background-color: #2F2F2F;" text="Crear" textFill="#f2f2f2">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="860.0" layoutY="121.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="131.0" style="-fx-background-color: #2F2F2F;" text="Eliminar" textFill="#f2f2f2">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="860.0" layoutY="81.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="131.0" style="-fx-background-color: #2F2F2F;" text="Editar" textFill="#f2f2f2">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+         </children>
+         <effect>
+            <DropShadow blurType="GAUSSIAN" color="#929292" />
+         </effect>
+      </Pane>
+      <MenuBar layoutY="-1.0" prefHeight="39.0" prefWidth="1369.0" styleClass="Inicio">
+         <menus>
+            <Menu mnemonicParsing="false" text="Inicio" />
+            <Menu mnemonicParsing="false" text="Menú">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Perfil" />
+                  <MenuItem mnemonicParsing="false" text="Productos" />
+                  <MenuItem mnemonicParsing="false" text="Eventos" />
+                  <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Ayuda" />
+         </menus>
+         <padding>
+            <Insets left="8.0" top="5.0" />
+         </padding>
+      </MenuBar>
+      <Button layoutX="1151.0" layoutY="289.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Informe" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="169.0" layoutY="44.0" prefHeight="308.0" prefWidth="282.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
+         <effect>
+            <DropShadow blurType="TWO_PASS_BOX" color="#6c6969" />
+         </effect>
+         <children>
+            <TextField layoutX="43.0" layoutY="211.0" prefHeight="25.0" prefWidth="201.0" promptText="Repite la contraseña" style="-fx-background-color: #F2F2F2;">
+               <effect>
+                  <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
+               </effect>
+            </TextField>
+            <Label layoutX="40.0" layoutY="37.0" prefHeight="30.0" prefWidth="203.0" text="Código de recuperación" textFill="#2f2f2f">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="147.0" layoutY="246.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: #2F2F2F;" text="Enviar" textFill="#f2f2f2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button layoutX="42.0" layoutY="246.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Cancelar" textFill="#2f2f2f">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Text fontSmoothingType="LCD" layoutX="41.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Una vez hayas introducido el código que te hemos enviado al correo, escribe aquí abajo la nueva contraseña que quieres asignar a tu cuenta." textAlignment="JUSTIFY" wrappingWidth="202.02523040771484">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <TextField layoutX="39.0" layoutY="72.0" prefHeight="29.0" prefWidth="201.0" promptText="Introduce el código" style="-fx-background-color: #F2F2F2;">
+               <effect>
+                  <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
+               </effect>
+            </TextField>
+            <TextField layoutX="42.0" layoutY="176.0" prefHeight="25.0" prefWidth="201.0" promptText="Nueva contraseña" style="-fx-background-color: #F2F2F2;">
+               <effect>
+                  <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
+               </effect>
+            </TextField>
+         </children>
+      </Pane>
+   </children>
+</Pane>

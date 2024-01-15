@@ -1,0 +1,3 @@
+.buttonEventos {-fx-background-image: url("EventosVerde.png")}
+.buttonEventos {-fx-background-repeat: stretch;
+                  -fx-background-position: center center;}
