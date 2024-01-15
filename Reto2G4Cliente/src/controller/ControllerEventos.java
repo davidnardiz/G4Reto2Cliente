@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Gonzalo
+ * @author Iñigo
  */
 public class ControllerEventos {
 

@@ -5,56 +5,37 @@
  */
 package entities;
 
-import java.io.Serializable;
 import java.util.List;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 
 /**
  *
- * Clase que representa a un administrador en MarketMakers. Hereda de la clase
- * base Usuario. Contiene información específica de los administradores, como el
- * número de eventos que han creado y administrado.
+ * Clase que representa a un administrador del sistema. Un administrador puede
+ * organizar eventos y tiene un contador de eventos organizados.
  *
- * @author inigo
+ * @author Iñigo
  */
-@XmlRootElement(name = "Administrador")
-public class Administrador extends Usuario implements Serializable {
+public class Administrador {
 
     private static final long serialVersionUID = 1L;
-
-    private SimpleIntegerProperty numEventos;
-    private SimpleObjectProperty<List<Evento>> eventosOrganizados;
-
-    public Administrador(Integer numEventos, List<Evento> eventosOrganizados) {
-        this.numEventos = new SimpleIntegerProperty(numEventos);
-        this.eventosOrganizados = new SimpleObjectProperty<>(eventosOrganizados);
-    }
-
-    public Administrador() {
-        this.numEventos = new SimpleIntegerProperty();
-        this.eventosOrganizados = new SimpleObjectProperty<>();
-    }
+    private int numEventos;
+    private List<Evento> eventosOrganizados;
 
     public int getNumEventos() {
-        return numEventos.get();
+        return numEventos;
     }
 
     public void setNumEventos(int numEventos) {
-        this.numEventos.set(numEventos);
+        this.numEventos = numEventos;
     }
 
     public List<Evento> getEventosOrganizados() {
-        return eventosOrganizados.get();
+        return eventosOrganizados;
     }
 
     public void setEventosOrganizados(List<Evento> eventosOrganizados) {
-        this.eventosOrganizados.set(eventosOrganizados);
+        this.eventosOrganizados = eventosOrganizados;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "Administrador{" + "numEventos=" + numEventos + ", eventosOrganizados=" + eventosOrganizados + '}';
-    }
 }
