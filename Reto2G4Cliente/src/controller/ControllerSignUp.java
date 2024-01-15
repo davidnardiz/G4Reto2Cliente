@@ -13,7 +13,7 @@ import javafx.stage.Stage;
  *
  * @author Gonzalo
  */
-public class ControllerPrincipal {
+public class ControllerSignUp {
 
     private Stage stage;
 

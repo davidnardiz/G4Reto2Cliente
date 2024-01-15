@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package service;
 
 /**
  *
- * @author Gonzalo
+ * @author David
  */
-public class ControllerRecuperarContraseña {
-    
+public class TiendaFactoria {
+
+    public static TiendaInterface getTiendaInterface() {
+        return new TiendaRestCliente();
+    }
 }

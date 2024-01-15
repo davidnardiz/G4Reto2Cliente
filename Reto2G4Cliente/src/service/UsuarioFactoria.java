@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package service;
 
 /**
  *
- * @author Gonzalo
+ * @author David
  */
-public class ControllerSingUp {
-    
+public class UsuarioFactoria {
+
+    public static UsuarioInterface getUserInterface() {
+        return new UsuarioRestCliente();
+    }
 }

@@ -11,50 +11,50 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="362.0" prefWidth="569.0" styleClass="layout" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerSignIn">
-   <children>
-      <Label fx:id="lblCorreoI" layoutX="283.0" layoutY="168.0" prefHeight="33.0" prefWidth="76.0" text="Email:" textFill="#2f2f2f">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblContraseniaI" layoutX="281.0" layoutY="201.0" prefHeight="33.0" prefWidth="86.0" text="Contraseña:" textFill="#2f2f2f">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtFieldEmail" layoutX="378.0" layoutY="205.0" prefHeight="25.0" prefWidth="138.0" />
-      <PasswordField fx:id="txtFieldPass" layoutX="378.0" layoutY="172.0" prefHeight="25.0" prefWidth="138.0" />
-      <Hyperlink fx:id="hplNoCuenta" layoutX="313.0" layoutY="244.0" onAction="#noCuenta" prefHeight="23.0" prefWidth="171.0" text="¿No tienes cuenta? Regístrate" textFill="#2e2e2e" underline="true" />
-      <Button id="button" fx:id="btnIniciarSesion" layoutX="333.0" layoutY="292.0" mnemonicParsing="false" onAction="#iniciarSesion" prefHeight="33.0" prefWidth="138.0" style="-fx-background-color: #233D28;" stylesheets="@styles.css" text="Iniciar sesión" textFill="#f2f2f2">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </Button>
-      <Pane layoutY="-6.0" prefHeight="370.0" prefWidth="233.0" style="-fx-background-color: #233D28;">
-         <children>
-            <Label layoutX="25.0" layoutY="50.0" prefHeight="32.0" prefWidth="159.0" text="TU GESTOR DE" textFill="#f2f2f2">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-            <Label layoutX="25.0" layoutY="82.0" text="MERCADOS" textFill="WHITE">
-               <font>
-                  <Font name="System Bold Italic" size="22.0" />
-               </font>
-            </Label>
-            <Label layoutX="153.0" layoutY="332.0" text="by Grupo 4" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-      <ImageView fitHeight="123.0" fitWidth="150.0" layoutX="325.0" layoutY="31.0">
-         <image>
-            <Image url="@LogoMM.png" />
-         </image>
-      </ImageView>
-      <Hyperlink fx:id="hplNoCuenta1" layoutX="314.0" layoutY="260.0" onAction="#noCuenta" prefHeight="23.0" prefWidth="171.0" text="¿Has olvidado tu contraseña?" textFill="#383b51" underline="true" />
-   </children>
+<AnchorPane prefHeight="560.0" prefWidth="742.0" styleClass="layout" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerSignIn">
+    <children>
+        <Label fx:id="lblCorreoI" layoutX="379.0" layoutY="248.0" prefHeight="33.0" prefWidth="76.0" text="Email:" textFill="#2f2f2f">
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Label>
+        <Label fx:id="lblContraseniaI" layoutX="379.0" layoutY="295.0" prefHeight="33.0" prefWidth="86.0" text="Contraseña:" textFill="#2f2f2f">
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtFieldEmail" layoutX="473.0" layoutY="252.0" prefHeight="26.0" prefWidth="195.0" />
+        <PasswordField fx:id="passField" layoutX="473.0" layoutY="299.0" prefHeight="26.0" prefWidth="195.0" />
+        <Hyperlink fx:id="hplNoCuenta" layoutX="426.0" layoutY="363.0" prefHeight="23.0" prefWidth="214.0" text="¿No tienes cuenta? Regístrate" textFill="#2e2e2e" underline="true" />
+        <Button id="button" fx:id="btnIniciarSesion" layoutX="442.0" layoutY="418.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="138.0" style="-fx-background-color: #233D28;" stylesheets="@styles.css" text="Iniciar sesión" textFill="#f2f2f2">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+        </Button>
+        <Pane layoutY="-6.0" prefHeight="566.0" prefWidth="297.0" style="-fx-background-color: #233D28;">
+            <children>
+                <Label layoutX="25.0" layoutY="50.0" prefHeight="47.0" prefWidth="247.0" text="TU GESTOR DE" textFill="#f2f2f2">
+                    <font>
+                        <Font name="System Bold" size="32.0" />
+                    </font>
+                </Label>
+                <Label layoutX="25.0" layoutY="82.0" text="MERCADOS" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold Italic" size="22.0" />
+                    </font>
+                </Label>
+                <Label layoutX="221.0" layoutY="535.0" text="by Grupo 4" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+            </children>
+        </Pane>
+        <ImageView fitHeight="161.0" fitWidth="214.0" layoutX="404.0" layoutY="44.0">
+            <image>
+                <Image url="@../multimedia/Logo.png" />
+            </image>
+        </ImageView>
+        <Hyperlink fx:id="hplNoCuenta1" layoutX="426.0" layoutY="387.0" prefHeight="23.0" prefWidth="214.0" text="¿Has olvidado tu contraseña?" textFill="#383b51" underline="true" />
+    </children>
 </AnchorPane>

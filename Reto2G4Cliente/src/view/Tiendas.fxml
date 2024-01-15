@@ -17,86 +17,89 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="876.0" stylesheets="@../resources/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <MenuBar prefHeight="39.0" prefWidth="876.0" styleClass="Inicio">
-        <menus>
-          <Menu mnemonicParsing="false" text="Inicio" />
-          <Menu mnemonicParsing="false" text="Menú">
-            <items>
-                  <MenuItem mnemonicParsing="false" text="Perfil" />
-              <MenuItem mnemonicParsing="false" text="Productos" />
-                  <MenuItem mnemonicParsing="false" text="Eventos" />
-                  <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Ayuda" />
-        </menus>
-         <padding>
-            <Insets left="8.0" top="5.0" />
-         </padding>
-      </MenuBar>
-      <TableView layoutX="75.0" layoutY="261.0" prefHeight="302.0" prefWidth="579.0">
-        <columns>
-          <TableColumn prefWidth="53.0" text="Id" />
-            <TableColumn prefWidth="70.0" text="Nombre" />
-            <TableColumn prefWidth="99.0" text="Descripción" />
-            <TableColumn prefWidth="98.0" text="Tipo de pago" />
-            <TableColumn prefWidth="81.0" text="Espacio" />
-            <TableColumn prefWidth="109.0" text="Fecha de creción" />
-            <TableColumn prefWidth="68.0" text="Cliente" />
-        </columns>
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                <MenuItem mnemonicParsing="false" text="Crear" />
-                  <MenuItem mnemonicParsing="false" text="Modificar" />
-                  <MenuItem mnemonicParsing="false" text="Eliminar" />
-                  <MenuItem mnemonicParsing="false" text="Ver" />
-              </items>
-            </ContextMenu>
-         </contextMenu>
-      </TableView>
-      <Pane layoutX="75.0" layoutY="64.0" prefHeight="175.0" prefWidth="771.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;" styleClass="RellenarDatos">
-         <children>
-            <Button layoutX="613.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Crear" textFill="#f2f2f2">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="613.0" layoutY="79.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Editar" textFill="#f2f2f2">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="613.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Eliminar" textFill="#f2f2f2">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <TextField layoutX="41.0" layoutY="70.0" promptText="Nombre" />
-            <TextField layoutX="205.0" layoutY="70.0" promptText="Breve descripción" />
-            <TextField layoutX="41.0" layoutY="106.0" promptText="Espacio" />
-            <DatePicker layoutX="205.0" layoutY="106.0" prefHeight="25.0" prefWidth="149.0" promptText="Fecha de creación" />
-            <ComboBox layoutX="369.0" layoutY="70.0" prefWidth="150.0" promptText="Tipo de pago" />
-            <Label layoutX="41.0" layoutY="36.0" text="Gestiona las tiendas:" textFill="#2f2f2f">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-            </Label>
-         </children>
-         <effect>
-            <DropShadow>
-               <color>
-                  <Color red="0.5" green="0.5" blue="0.5" />
-               </color>
-            </DropShadow>
-         </effect>
-      </Pane>
-      <ComboBox layoutX="674.0" layoutY="261.0" prefHeight="38.0" prefWidth="172.0" promptText="Selecciona tu filtro" />
-      <TextField layoutX="675.0" layoutY="312.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
-      <TextField layoutX="675.0" layoutY="357.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
-      <Button layoutX="677.0" layoutY="422.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </Button>
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="876.0" stylesheets="@../resources/styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTiendas">
+    <children>
+        <MenuBar prefHeight="39.0" prefWidth="876.0" styleClass="Inicio">
+            <menus>
+                <Menu mnemonicParsing="false" text="Inicio" />
+                <Menu mnemonicParsing="false" text="Menú">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Perfil" />
+                        <MenuItem mnemonicParsing="false" text="Productos" />
+                        <MenuItem mnemonicParsing="false" text="Eventos" />
+                        <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Ayuda" />
+            </menus>
+            <padding>
+                <Insets left="8.0" top="5.0" />
+            </padding>
+        </MenuBar>
+        <TableView fx:id="tbTiendas" layoutX="75.0" layoutY="261.0" prefHeight="302.0" prefWidth="579.0">
+            <columns>
+                <TableColumn fx:id="cmnId" prefWidth="53.0" text="Id" />
+                <TableColumn fx:id="cmnNombre" prefWidth="70.0" text="Nombre" />
+                <TableColumn fx:id="cmnDescripcion" prefWidth="99.0" text="Descripción" />
+                <TableColumn fx:id="cmnTipoPago" prefWidth="98.0" text="Tipo de pago" />
+                <TableColumn fx:id="cmnEspacio" prefWidth="81.0" text="Espacio" />
+                <TableColumn fx:id="cmnFechaCreacion" prefWidth="109.0" text="Fecha de creción" />
+                <TableColumn fx:id="clmnCliente" prefWidth="68.0" text="Cliente" />
+            </columns>
+            <contextMenu>
+                <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Crear" />
+                        <MenuItem mnemonicParsing="false" text="Modificar" />
+                        <MenuItem mnemonicParsing="false" text="Eliminar" />
+                        <MenuItem mnemonicParsing="false" text="Ver" />
+                    </items>
+                </ContextMenu>
+            </contextMenu>
+        </TableView>
+        <Pane layoutX="75.0" layoutY="64.0" prefHeight="175.0" prefWidth="771.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;" styleClass="RellenarDatos">
+            <children>
+                <Button fx:id="btnCrear" layoutX="613.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Crear" textFill="#f2f2f2">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Button fx:id="btnEditar" layoutX="613.0" layoutY="79.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Editar" textFill="#f2f2f2">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Button fx:id="btnEliminar" layoutX="613.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Eliminar" textFill="#f2f2f2">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+                <TextField fx:id="txtFieldNombre" layoutX="41.0" layoutY="70.0" promptText="Nombre" />
+                <TextField fx:id="txtFieldDescripcion" layoutX="205.0" layoutY="70.0" promptText="Breve descripción" />
+                <TextField fx:id="txtFieldEspacio" layoutX="41.0" layoutY="106.0" promptText="Espacio" />
+                <DatePicker fx:id="dpFechaCreacion" layoutX="205.0" layoutY="106.0" prefHeight="25.0" prefWidth="149.0" promptText="Fecha de creación" />
+                <ComboBox fx:id="cbTipoPago" layoutX="369.0" layoutY="70.0" prefWidth="150.0" promptText="Tipo de pago" />
+                <Label layoutX="41.0" layoutY="36.0" text="Gestiona las tiendas:" textFill="#2f2f2f">
+                    <font>
+                        <Font name="System Bold" size="17.0" />
+                    </font>
+                </Label>
+            </children>
+            <effect>
+                <DropShadow>
+                    <color>
+                        <Color blue="0.5" green="0.5" red="0.5" />
+                    </color>
+                </DropShadow>
+            </effect>
+        </Pane>
+        <ComboBox fx:id="cbFiltros" layoutX="674.0" layoutY="261.0" prefHeight="38.0" prefWidth="172.0" promptText="Selecciona tu filtro" />
+        <TextField fx:id="txtFieldFiltro1" layoutX="675.0" layoutY="312.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+        <TextField fx:id="txtFieldFiltro2" layoutX="675.0" layoutY="357.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+        <Button fx:id="btnFiltrar" layoutX="677.0" layoutY="422.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+        </Button>
+    </children>
 </Pane>
