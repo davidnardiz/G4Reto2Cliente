@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="876.0" stylesheets="@../resources/styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerProductosTienda">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="876.0" stylesheets="@../resources/styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerProductos">
    <children>
       <MenuBar prefHeight="39.0" prefWidth="876.0" styleClass="Inicio">
         <menus>
@@ -35,7 +35,7 @@
             <Insets left="8.0" top="5.0" />
          </padding>
       </MenuBar>
-      <TableView layoutX="54.0" layoutY="261.0" prefHeight="265.0" prefWidth="589.0">
+      <TableView fx:id="tbProductos" layoutX="54.0" layoutY="261.0" prefHeight="265.0" prefWidth="589.0">
         <columns>
           <TableColumn prefWidth="43.20001220703125" text="Id" />
             <TableColumn prefWidth="81.5999984741211" text="Nombre" />

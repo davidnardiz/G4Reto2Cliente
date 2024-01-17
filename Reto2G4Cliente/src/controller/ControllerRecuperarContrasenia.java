@@ -9,6 +9,6 @@ package controller;
  *
  * @author Gonzalo
  */
-public class ControllerSingUp {
+public class ControllerRecuperarContrasenia {
     
 }
