@@ -6,7 +6,12 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -20,32 +25,44 @@ public class Cliente extends Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private TipoVenta tipoVenta;
-    private Tienda tienda;
-    private List<Producto> productosCreados;
+    private SimpleObjectProperty<TipoVenta> tipoVenta;
+    private SimpleObjectProperty<Tienda> tienda;
+    private SimpleObjectProperty<List<Producto>> productosCreados;
+
+    public Cliente(TipoVenta tipoVenta, Tienda tienda, List<Producto> productosCreados) {
+        this.tipoVenta = new SimpleObjectProperty<>(tipoVenta);
+        this.tienda = new SimpleObjectProperty<>(tienda);
+        this.productosCreados = new SimpleObjectProperty<>(productosCreados);
+    }
+
+    public Cliente() {
+        this.tipoVenta = new SimpleObjectProperty<>();
+        this.tienda = new SimpleObjectProperty<>();
+        this.productosCreados = new SimpleObjectProperty<>();
+    }
 
     public TipoVenta getTipoVenta() {
-        return tipoVenta;
+        return tipoVenta.get();
     }
 
     public void setTipoVenta(TipoVenta tipoVenta) {
-        this.tipoVenta = tipoVenta;
+        this.tipoVenta.set(tipoVenta);
     }
 
     public Tienda getTienda() {
-        return tienda;
+        return tienda.get();
     }
 
     public void setTienda(Tienda tienda) {
-        this.tienda = tienda;
+        this.tienda.set(tienda);
     }
 
     public List<Producto> getProductosCreados() {
-        return productosCreados;
+        return productosCreados.get();
     }
 
     public void setProductosCreados(List<Producto> productosCreados) {
-        this.productosCreados = productosCreados;
+        this.productosCreados.set(productosCreados);
     }
 
 }

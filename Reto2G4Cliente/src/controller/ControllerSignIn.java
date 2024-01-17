@@ -56,8 +56,9 @@ public class ControllerSignIn {
         stage.setResizable(false);
         stage.show();
 
-        txtFieldEmail.setText("davidavid@gmail.com");
-        passField.setText("contraco");
+        btnIniciarSesion.requestFocus();
+        txtFieldEmail.setText("usuario1@example.com");
+        passField.setText("password1");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -106,11 +107,13 @@ public class ControllerSignIn {
             } else if (!checkEmailFormat(texto) || !checkPassFormat(pass)) {
                 throw new InvalidFormatException("Error de inicio de sesión: has introducido algun dato mal!!");
             }
-            /*
-            UsuarioInterface ui = UsuarioFactoria.getUserInterface();
-            ui.iniciarSesion_XML(new GenericType<Usuario>() {
-            }, texto, pass);
 
+            UsuarioInterface ui = UsuarioFactoria.getUserInterface();
+            Usuario us = new Usuario();
+            System.out.println(us.toString());
+            us = ui.iniciarSesion_XML(new GenericType<Usuario>() {
+            }, texto, pass);
+            System.out.println(us.toString());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root;
             root = (Parent) loader.load();
@@ -118,9 +121,8 @@ public class ControllerSignIn {
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
             viewController.setStage(stage);
             viewController.initStage(root);
-             */
-
-            if (texto.equalsIgnoreCase("davidavid@gmail.com") && pass.equalsIgnoreCase("contraco")) {
+            /*
+            if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Tiendas.fxml"));
                 Parent root;
                 root = (Parent) loader.load();
@@ -129,7 +131,7 @@ public class ControllerSignIn {
                 viewController.setStage(stage);
                 viewController.initStage(root);
             }
-
+             */
         } catch (NotCompleteException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
@@ -157,7 +159,8 @@ public class ControllerSignIn {
             viewController.initStage(root);
 
         } catch (IOException ex) {
-            Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerSignUp.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -174,7 +177,8 @@ public class ControllerSignIn {
             viewController.initStage(root);
 
         } catch (IOException ex) {
-            Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerSignUp.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
