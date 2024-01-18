@@ -5,6 +5,7 @@
  */
 package controller;
 
+import entities.Cliente;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
 import exceptions.NotCompleteException;
@@ -57,8 +58,8 @@ public class ControllerSignIn {
         stage.show();
 
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario1@example.com");
-        passField.setText("password1");
+        txtFieldEmail.setText("usuario3@example.com");
+        passField.setText("password3");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -111,7 +112,7 @@ public class ControllerSignIn {
             UsuarioInterface ui = UsuarioFactoria.getUserInterface();
             Usuario us = new Usuario();
             System.out.println(us.toString());
-            us = ui.iniciarSesion_XML(new GenericType<Usuario>() {
+            us = ui.iniciarSesion_XML(new GenericType<Cliente>() {
             }, texto, pass);
             System.out.println(us.toString());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
@@ -121,17 +122,17 @@ public class ControllerSignIn {
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
             viewController.setStage(stage);
             viewController.initStage(root);
-            /*
-            if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Tiendas.fxml"));
-                Parent root;
-                root = (Parent) loader.load();
 
-                ControllerTiendas viewController = ((ControllerTiendas) loader.getController());
+            if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
+                FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
+                Parent root2;
+                root2 = (Parent) loader.load();
+
+                ControllerPrincipal viewController2 = ((ControllerPrincipal) loader.getController());
                 viewController.setStage(stage);
-                viewController.initStage(root);
+                viewController.initStage(root2);
             }
-             */
+
         } catch (NotCompleteException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {

@@ -7,11 +7,10 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -21,78 +20,70 @@ import javax.persistence.Temporal;
  *
  * @author Iñigo
  */
+@XmlRootElement(name = "Usuario")
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private int idUsuario;
-    private String nombre;
-    private String password;
-    private String correo;
-    private Date fechaNacimiento;
+    private SimpleIntegerProperty idUsuario;
+    private SimpleStringProperty nombre;
+    private SimpleStringProperty password;
+    private SimpleStringProperty correo;
+    private SimpleObjectProperty<Date> fechaNacimiento;
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario(Integer idUsuario, String nombre, String password, String correo, Date fechaNacimiento) {
+        this.idUsuario = new SimpleIntegerProperty(idUsuario);
+        this.nombre = new SimpleStringProperty(nombre);
+        this.password = new SimpleStringProperty(password);
+        this.correo = new SimpleStringProperty(correo);
+        this.fechaNacimiento = new SimpleObjectProperty<>(fechaNacimiento);
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public Usuario() {
+        this.idUsuario = new SimpleIntegerProperty();
+        this.nombre = new SimpleStringProperty();
+        this.password = new SimpleStringProperty();
+        this.correo = new SimpleStringProperty();
+        this.fechaNacimiento = new SimpleObjectProperty<>();
+    }
+
+    public Integer getIdUsuario() {
+        return idUsuario.get();
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario.set(idUsuario);
     }
 
     public String getNombre() {
-        return nombre;
+        return nombre.get();
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre.set(nombre);
     }
 
     public String getPassword() {
-        return password;
+        return password.get();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password.set(password);
     }
 
     public String getCorreo() {
-        return correo;
+        return correo.get();
     }
 
     public void setCorreo(String correo) {
-        this.correo = correo;
+        this.correo.set(correo);
     }
 
     public Date getFechaNacimiento() {
-        return fechaNacimiento;
+        return fechaNacimiento.get();
     }
 
     public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 79 * hash + this.idUsuario;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Usuario other = (Usuario) obj;
-        if (this.idUsuario != other.idUsuario) {
-            return false;
-        }
-        return true;
+        this.fechaNacimiento.set(fechaNacimiento);
     }
 
     @Override

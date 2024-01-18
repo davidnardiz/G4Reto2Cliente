@@ -8,10 +8,8 @@ package entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -21,6 +19,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author David
  */
+@XmlRootElement(name = "Cliente")
 public class Cliente extends Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,13 +28,15 @@ public class Cliente extends Usuario implements Serializable {
     private SimpleObjectProperty<Tienda> tienda;
     private SimpleObjectProperty<List<Producto>> productosCreados;
 
-    public Cliente(TipoVenta tipoVenta, Tienda tienda, List<Producto> productosCreados) {
+    public Cliente(TipoVenta tipoVenta, Tienda tienda, List<Producto> productosCreados, int idUsuario, String nombre, String password, String correo, Date fechaNacimiento) {
+        super(idUsuario, nombre, password, correo, fechaNacimiento);
         this.tipoVenta = new SimpleObjectProperty<>(tipoVenta);
         this.tienda = new SimpleObjectProperty<>(tienda);
         this.productosCreados = new SimpleObjectProperty<>(productosCreados);
     }
 
     public Cliente() {
+        super();
         this.tipoVenta = new SimpleObjectProperty<>();
         this.tienda = new SimpleObjectProperty<>();
         this.productosCreados = new SimpleObjectProperty<>();

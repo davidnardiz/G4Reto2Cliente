@@ -84,8 +84,11 @@ public class UsuarioRestCliente implements UsuarioInterface {
 
     @Override
     public <T> T iniciarSesion_XML(GenericType<T> responseType, String correo, String password) throws ClientErrorException {
+        System.out.println(correo);
+        System.out.println(password);
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("iniciarSesion/{0}/{1}", new Object[]{correo, password}));
+        System.out.println(resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

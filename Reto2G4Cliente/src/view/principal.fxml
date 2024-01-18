@@ -9,38 +9,41 @@
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerPrincipal">
-    <children>
-        <MenuBar prefHeight="39.0" prefWidth="876.0" styleClass="Inicio">
-            <menus>
-                <Menu mnemonicParsing="false" text="Inicio" />
-                <Menu mnemonicParsing="false" text="Menú">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Perfil" />
-                        <MenuItem mnemonicParsing="false" text="Productos" />
-                        <MenuItem mnemonicParsing="false" text="Eventos" />
-                        <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Ayuda" />
-            </menus>
-            <padding>
-                <Insets left="8.0" top="5.0" />
-            </padding>
-        </MenuBar>
-        <Button fx:id="buttonProductos" layoutY="39.0" mnemonicParsing="false" prefHeight="554.0" prefWidth="292.0" styleClass="buttonProductos" stylesheets="@buttons.css" text="Productos" textFill="#000000fd">
-            <font>
-                <Font size="48.0" />
-            </font>
-        </Button>
-        <Button fx:id="buttonTiendas" layoutX="292.0" layoutY="39.0" mnemonicParsing="false" prefHeight="554.0" prefWidth="292.0" styleClass="buttonTiendas" stylesheets="@tiendas.css" text="Tiendas" textFill="#000000fd">
-            <font>
-                <Font size="48.0" />
-            </font>
-        </Button>
-        <Button fx:id="buttonEventos" layoutX="584.0" layoutY="39.0" mnemonicParsing="false" prefHeight="554.0" prefWidth="292.0" styleClass="buttonEventos" stylesheets="@eventos.css" text="Eventos" textFill="#000000fc">
-            <font>
-                <Font size="48.0" />
-            </font>
-        </Button>
-    </children>
+   <children>
+      <MenuBar prefHeight="39.0" prefWidth="876.0" styleClass="Inicio">
+         <menus>
+            <Menu mnemonicParsing="false" text="Inicio">
+               <items>
+                  <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Unspecified Action" />
+               </items></Menu>
+            <Menu mnemonicParsing="false" text="Menú">
+               <items>
+                  <MenuItem fx:id="miPerfil" mnemonicParsing="false" text="Perfil" />
+                  <MenuItem fx:id="miProductos" mnemonicParsing="false" text="Productos" />
+                  <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
+                  <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Ayuda" />
+         </menus>
+         <padding>
+            <Insets left="8.0" top="5.0" />
+         </padding>
+      </MenuBar>
+      <Button fx:id="buttonProductos" layoutY="39.0" mnemonicParsing="false" prefHeight="554.0" prefWidth="292.0" styleClass="buttonProductos" stylesheets="@../multimedia/productos.css" text="Productos" textFill="#f2f2f2fc">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonTiendas" layoutX="292.0" layoutY="39.0" mnemonicParsing="false" prefHeight="554.0" prefWidth="292.0" styleClass="buttonTiendas" stylesheets="@../multimedia/tiendas.css" text="Tiendas" textFill="#2f2f2f">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonEventos" layoutX="584.0" layoutY="39.0" mnemonicParsing="false" prefHeight="554.0" prefWidth="292.0" styleClass="buttonEventos" stylesheets="@../multimedia/eventos.css" text="Eventos" textFill="#f2f2f2fc">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Button>
+   </children>
 </Pane>

@@ -10,6 +10,7 @@ import entities.Tienda;
 import entities.TipoPago;
 import exceptions.InvalidFormatException;
 import exceptions.NotSelectedTiendaException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -33,6 +35,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -51,6 +55,18 @@ import service.TiendaInterface;
 public class ControllerTiendas {
 
     private Stage stage;
+    @FXML
+    private MenuBar menu;
+    @FXML
+    private MenuItem miCerrarSesion;
+    @FXML
+    private MenuItem miPrincipal;
+    @FXML
+    private MenuItem miProductos;
+    @FXML
+    private MenuItem miEventos;
+    @FXML
+    private MenuItem miPerfil;
     @FXML
     private TextField txtFieldNombre;
     @FXML
@@ -97,6 +113,12 @@ public class ControllerTiendas {
         stage.setScene(scene);
         stage.setResizable(false);
 
+        miCerrarSesion.setOnAction(this::handleCerrarSesion);
+        miPrincipal.setOnAction(this::handleAbrirInicio);
+        miProductos.setOnAction(this::handleAbrirProductos);
+        miEventos.setOnAction(this::handleAbrirEventos);
+        miPerfil.setOnAction(this::handleAbrirPerfil);
+
         tbTiendas.getColumns().clear();
         tbTiendas.getColumns().addAll(cmnId, cmnNombre, cmnDescripcion, cmnTipoPago, cmnEspacio, cmnFechaCreacion, cmnCliente);
         tbTiendas.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -111,7 +133,13 @@ public class ControllerTiendas {
                     cbTipoPago.setValue(tiendaSeleccionada.getTipoPago());
                     //dpFechaCreacion.setValue(tiendaSeleccionada.getFechaCreacion());
                 }
+            } else {
+                if (event.getClickCount() == 2) {
+                    tbTiendas.getSelectionModel().clearSelection();
+                    cleanFields();
+                }
             }
+
         });
 
         cbTipoPago.getItems().setAll(FXCollections.observableArrayList(TipoPago.values()));
@@ -216,6 +244,9 @@ public class ControllerTiendas {
             cleanFields();
             handleCargeTable();
         } catch (InvalidFormatException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Debes introducir bien los datos!!");
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
@@ -350,6 +381,73 @@ public class ControllerTiendas {
             handleCargeTableFiltro(tiendas);
         } else {
 
+        }
+    }
+
+    private void handleCerrarSesion(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
+            Parent root;
+
+            root = (Parent) loader.load();
+
+            ControllerSignIn viewController = ((ControllerSignIn) loader.getController());
+            viewController.setStage(stage);
+            viewController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    public void handleAbrirInicio(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
+            Parent root = loader.load();
+            ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
+            viewController.setStage(stage);
+            viewController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    public void handleAbrirProductos(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Productos.fxml"));
+            Parent root = loader.load();
+            ControllerProductos viewController = ((ControllerProductos) loader.getController());
+            viewController.setStage(stage);
+            viewController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    public void handleAbrirEventos(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
+            Parent root = loader.load();
+            ControllerEventos viewController = ((ControllerEventos) loader.getController());
+            viewController.setStage(stage);
+            viewController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    public void handleAbrirPerfil(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Perfil.fxml"));
+            Parent root = loader.load();
+            ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
+            viewController.setStage(stage);
+            viewController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

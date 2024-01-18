@@ -5,10 +5,27 @@
  */
 package controller;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 /**
  *
  * @author Gonzalo
  */
 public class ControllerEventos {
-    
+
+    private Stage stage;
+
+    public void initStage(Parent root) {
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 }

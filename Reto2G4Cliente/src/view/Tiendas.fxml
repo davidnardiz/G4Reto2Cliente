@@ -17,17 +17,20 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="946.0" stylesheets="@../resources/styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTiendas">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1016.0" stylesheets="@../resources/styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTiendas">
     <children>
-        <MenuBar prefHeight="39.0" prefWidth="946.0" styleClass="Inicio">
+        <MenuBar prefHeight="39.0" prefWidth="1016.0" styleClass="Inicio">
             <menus>
-                <Menu mnemonicParsing="false" text="Inicio" />
+                <Menu mnemonicParsing="false" text="Inicio">
+               <items>
+                  <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Inicio" />
+               </items></Menu>
                 <Menu mnemonicParsing="false" text="Menú">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Perfil" />
-                        <MenuItem mnemonicParsing="false" text="Productos" />
-                        <MenuItem mnemonicParsing="false" text="Eventos" />
-                        <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
+                        <MenuItem fx:id="miPerfil" mnemonicParsing="false" text="Perfil" />
+                        <MenuItem fx:id="miProductos" mnemonicParsing="false" text="Productos" />
+                        <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
+                        <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda" />
@@ -36,15 +39,15 @@
                 <Insets left="8.0" top="5.0" />
             </padding>
         </MenuBar>
-        <TableView fx:id="tbTiendas" layoutX="75.0" layoutY="251.0" prefHeight="336.0" prefWidth="817.0">
+        <TableView fx:id="tbTiendas" layoutX="75.0" layoutY="251.0" prefHeight="336.0" prefWidth="880.0">
             <columns>
                 <TableColumn fx:id="cmnId" prefWidth="30.39996337890625" text="Id" />
                 <TableColumn fx:id="cmnNombre" prefWidth="165.59999084472656" text="Nombre" />
-                <TableColumn fx:id="cmnDescripcion" prefWidth="217.60003662109375" text="Descripción" />
+                <TableColumn fx:id="cmnDescripcion" prefWidth="253.60000610351562" text="Descripción" />
                 <TableColumn fx:id="cmnTipoPago" prefWidth="116.79998779296875" text="Tipo de pago" />
-                <TableColumn fx:id="cmnEspacio" prefWidth="68.0" text="Espacio" />
-                <TableColumn fx:id="cmnFechaCreacion" prefWidth="145.60009765625" text="Fecha de creción" />
-                <TableColumn fx:id="cmnCliente" prefWidth="79.20001220703125" text="Cliente" />
+                <TableColumn fx:id="cmnEspacio" prefWidth="74.4000244140625" text="Espacio" />
+                <TableColumn fx:id="cmnFechaCreacion" prefWidth="161.5999755859375" text="Fecha de creción" />
+                <TableColumn fx:id="cmnCliente" prefWidth="75.20001220703125" text="Cliente" />
             </columns>
             <contextMenu>
                 <ContextMenu>
@@ -57,24 +60,24 @@
                 </ContextMenu>
             </contextMenu>
         </TableView>
-        <Pane layoutX="75.0" layoutY="55.0" prefHeight="175.0" prefWidth="817.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;" styleClass="RellenarDatos">
+        <Pane layoutX="75.0" layoutY="55.0" prefHeight="175.0" prefWidth="880.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;" styleClass="RellenarDatos">
             <children>
-                <TextField fx:id="txtFieldNombre" layoutX="41.0" layoutY="70.0" prefHeight="25.0" prefWidth="283.0" promptText="Nombre" />
-                <TextField fx:id="txtFieldEspacio" layoutX="348.0" layoutY="70.0" prefHeight="25.0" prefWidth="106.0" promptText="Espacio" />
-                <ComboBox fx:id="cbTipoPago" layoutX="474.0" layoutY="70.0" prefHeight="25.0" prefWidth="149.0" promptText="Tipo de pago" />
-                <TextField fx:id="txtFieldDescripcion" layoutX="41.0" layoutY="106.0" prefHeight="25.0" prefWidth="413.0" promptText="Breve descripción" />
-                <DatePicker fx:id="dpFechaCreacion" layoutX="474.0" layoutY="106.0" prefHeight="25.0" prefWidth="149.0" promptText="Fecha de creación" />
-                <Button fx:id="btnCrear" layoutX="655.0" layoutY="31.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Crear" textFill="#f2f2f2">
+                <TextField fx:id="txtFieldNombre" layoutX="41.0" layoutY="70.0" prefHeight="25.0" prefWidth="289.0" promptText="Nombre" />
+                <TextField fx:id="txtFieldEspacio" layoutX="348.0" layoutY="70.0" prefHeight="25.0" prefWidth="149.0" promptText="Espacio" />
+                <ComboBox fx:id="cbTipoPago" layoutX="513.0" layoutY="69.0" prefHeight="25.0" prefWidth="176.0" promptText="Tipo de pago" />
+                <TextField fx:id="txtFieldDescripcion" layoutX="41.0" layoutY="106.0" prefHeight="25.0" prefWidth="456.0" promptText="Breve descripción" />
+                <DatePicker fx:id="dpFechaCreacion" layoutX="513.0" layoutY="105.0" prefHeight="25.0" prefWidth="176.0" promptText="Fecha de creación" />
+                <Button fx:id="btnCrear" layoutX="711.0" layoutY="30.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Crear" textFill="#f2f2f2">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
-                <Button fx:id="btnEditar" layoutX="655.0" layoutY="69.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Editar" textFill="#f2f2f2">
+                <Button fx:id="btnEditar" layoutX="711.0" layoutY="68.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Editar" textFill="#f2f2f2">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
-                <Button fx:id="btnEliminar" layoutX="655.0" layoutY="106.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Eliminar" textFill="#f2f2f2">
+                <Button fx:id="btnEliminar" layoutX="711.0" layoutY="105.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="128.0" style="-fx-background-color: #2F2F2F;" styleClass="BotonesInicio" text="Eliminar" textFill="#f2f2f2">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
@@ -93,10 +96,10 @@
                 </DropShadow>
             </effect>
         </Pane>
-        <ComboBox fx:id="cbFiltros" layoutX="75.0" layoutY="599.0" prefHeight="38.0" prefWidth="149.0" promptText="Selecciona filtro" />
-        <TextField fx:id="txtFieldFiltro1" layoutX="240.0" layoutY="600.0" prefHeight="37.0" prefWidth="149.0" promptText="Escribe aquí" />
-        <TextField fx:id="txtFieldFiltro2" layoutX="409.0" layoutY="600.0" prefHeight="37.0" prefWidth="149.0" promptText="Escribe aquí" />
-        <Button fx:id="btnFiltrar" layoutX="576.0" layoutY="602.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="141.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
+        <ComboBox fx:id="cbFiltros" layoutX="75.0" layoutY="599.0" prefHeight="38.0" prefWidth="170.0" promptText="Selecciona filtro" />
+        <TextField fx:id="txtFieldFiltro1" layoutX="265.0" layoutY="599.0" prefHeight="37.0" prefWidth="149.0" promptText="Escribe aquí" />
+        <TextField fx:id="txtFieldFiltro2" layoutX="434.0" layoutY="599.0" prefHeight="37.0" prefWidth="149.0" promptText="Escribe aquí" />
+        <Button fx:id="btnFiltrar" layoutX="601.0" layoutY="601.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="141.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
