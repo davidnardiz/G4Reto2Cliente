@@ -6,10 +6,12 @@
 package controller;
 
 import entities.Cliente;
+import entities.Producto;
 import entities.Tienda;
 import entities.TipoPago;
+import entities.Usuario;
 import exceptions.InvalidFormatException;
-import exceptions.NotSelectedTiendaException;
+import exceptions.NotSelectedException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +40,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -55,6 +58,7 @@ import service.TiendaInterface;
 public class ControllerTiendas {
 
     private Stage stage;
+    private Usuario usuario;
     @FXML
     private MenuBar menu;
     @FXML
@@ -131,7 +135,7 @@ public class ControllerTiendas {
                     txtFieldEspacio.setText(tiendaSeleccionada.getEspacio() + "");
                     txtFieldDescripcion.setText(tiendaSeleccionada.getDescripcion());
                     cbTipoPago.setValue(tiendaSeleccionada.getTipoPago());
-                    //dpFechaCreacion.setValue(tiendaSeleccionada.getFechaCreacion());
+                    dpFechaCreacion.setValue(tiendaSeleccionada.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                 }
             } else {
                 if (event.getClickCount() == 2) {
@@ -170,10 +174,12 @@ public class ControllerTiendas {
         txtFieldFiltro2.setDisable(true);
 
         stage.show();
+        txtFieldNombre.setText(usuario.getNombre());
     }
 
-    public void setStage(Stage stage) {
+    public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
+        this.usuario = usuario;
     }
 
     /**
@@ -255,17 +261,30 @@ public class ControllerTiendas {
 
     @FXML
     public void handleEditTienda(ActionEvent actionEvent) {
-
         Tienda tiendaSeleccionada = tbTiendas.getSelectionModel().getSelectedItem();
         try {
             if (tiendaSeleccionada == null) {
-                throw new NotSelectedTiendaException("No hay seleccionada ninguna tienda!!");
+                throw new NotSelectedException("No hay seleccionada ninguna tienda!!");
             }
+
+            tiendaSeleccionada.setNombre(txtFieldNombre.getText());
+            tiendaSeleccionada.setDescripcion(txtFieldDescripcion.getText());
+            tiendaSeleccionada.setEspacio(Float.parseFloat(txtFieldEspacio.getText()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaCreacion;
+            fechaCreacion = dateFormat.parse(dpFechaCreacion.getValue().toString());
+            tiendaSeleccionada.setFechaCreacion(fechaCreacion);
+            tiendaSeleccionada.setTipoPago((TipoPago) cbTipoPago.getValue());
 
             TiendaInterface ti = TiendaFactoria.getTiendaInterface();
             ti.edit_XML(tiendaSeleccionada, tiendaSeleccionada.getIdTienda().toString());
 
-        } catch (NotSelectedTiendaException ex) {
+        } catch (NotSelectedException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "No hay ninguna tienda seleccionada!!");
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
         }
         cleanFields();
@@ -405,7 +424,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root = loader.load();
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -418,7 +437,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Productos.fxml"));
             Parent root = loader.load();
             ControllerProductos viewController = ((ControllerProductos) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -431,7 +450,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
             Parent root = loader.load();
             ControllerEventos viewController = ((ControllerEventos) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -444,7 +463,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Perfil.fxml"));
             Parent root = loader.load();
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);

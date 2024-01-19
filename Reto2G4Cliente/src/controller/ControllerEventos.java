@@ -7,9 +7,9 @@ package controller;
 
 import entities.Cliente;
 import entities.Evento;
+import entities.Usuario;
 import exceptions.InvalidFormatException;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
+import exceptions.NotSelectedException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +37,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -61,18 +63,18 @@ import service.EventoInterface;
 public class ControllerEventos {
 
     private Stage stage;
-
+    private Usuario usuario;
     private MenuBar menu;
     @FXML
-    private MenuItem miCerrarSesion;
+    private MenuItem menuItemCerrarSesion;
     @FXML
-    private MenuItem miPrincipal;
+    private MenuItem menuItemPrincipal;
     @FXML
-    private MenuItem miProductos;
+    private MenuItem menuItemProductos;
     @FXML
-    private MenuItem miEventos;
+    private MenuItem menuItemEventos;
     @FXML
-    private MenuItem miPerfil;
+    private MenuItem menuItemPerfil;
     @FXML
     private TextField txtFieldId;
     @FXML
@@ -90,8 +92,6 @@ public class ControllerEventos {
     @FXML
     private Button btnFiltrar;
     @FXML
-    private Table tablaEventos;
-    @FXML
     private ComboBox comboFiltros;
     @FXML
     private TextField txtFieldParametro1;
@@ -102,15 +102,15 @@ public class ControllerEventos {
     @FXML
     private ComboBox comboTipoPago;
     @FXML
-    private TableColumn<Evento, Integer> cmnId;
+    private TableColumn<Evento, Integer> columnaId;
     @FXML
-    private TableColumn<Evento, Integer> cmnNumParticipantes;
+    private TableColumn<Evento, Integer> columnaNumParticipantes;
     @FXML
-    private TableColumn<Evento, Date> cmnFechaCreacion;
+    private TableColumn<Evento, Date> columnaFechaCreacion;
     @FXML
-    private TableColumn<Evento, Cliente> cmnAdmin;
+    private TableColumn<Evento, Cliente> columnaAdmin;
     @FXML
-    private TableColumn<Evento, Double> cmnTotal;
+    private TableColumn<Evento, Double> columnaTotal;
 
     // Esto es una lista observable para almacenar eventos
     private ObservableList<Evento> eventosData = FXCollections.observableArrayList();
@@ -120,8 +120,9 @@ public class ControllerEventos {
      *
      * @param stage El escenario de la ventana de inicio de sesión.
      */
-    public void setStage(Stage stage) {
+    public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
+        this.usuario = usuario;
     }
 
     /**
@@ -138,14 +139,14 @@ public class ControllerEventos {
         stage.setResizable(false);
         stage.show();
 
-        miCerrarSesion.setOnAction(this::handleCerrarSesion);
-        miPrincipal.setOnAction(this::handleAbrirInicio);
-        miProductos.setOnAction(this::handleAbrirProductos);
-        miEventos.setOnAction(this::handleAbrirEventos);
-        miPerfil.setOnAction(this::handleAbrirPerfil);
+        menuItemCerrarSesion.setOnAction(this::handleCerrarSesion);
+        menuItemPrincipal.setOnAction(this::handleAbrirInicio);
+        menuItemProductos.setOnAction(this::handleAbrirProductos);
+        menuItemEventos.setOnAction(this::handleAbrirEventos);
+        menuItemPerfil.setOnAction(this::handleAbrirPerfil);
 
         tbEventos.getColumns().clear();
-        tbEventos.getColumns().addAll(cmnId, cmnFechaCreacion, cmnNumParticipantes, cmnTotal, cmnAdmin);
+        tbEventos.getColumns().addAll(columnaId, columnaFechaCreacion, columnaNumParticipantes, columnaTotal, columnaAdmin);
         tbEventos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         tbEventos.setOnMouseClicked(event -> {
@@ -175,10 +176,10 @@ public class ControllerEventos {
         comboFiltros.getItems().add("Más recaudado que");
         comboFiltros.getItems().add("Recaudado entre");
 
-        cmnId.setCellValueFactory(new PropertyValueFactory<>("idEvento"));
-        cmnFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
-        cmnNumParticipantes.setCellValueFactory(new PropertyValueFactory<>("numParticipantes"));
-        cmnAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
+        columnaId.setCellValueFactory(new PropertyValueFactory<>("idEvento"));
+        columnaFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
+        columnaNumParticipantes.setCellValueFactory(new PropertyValueFactory<>("numParticipantes"));
+        columnaAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
 
         stage.setOnCloseRequest(this::handleCloseWindow);
         btnCrear.setOnAction(this::handleCreateEvento);
@@ -186,8 +187,7 @@ public class ControllerEventos {
         btnEliminar.setOnAction(this::handleDeleteEvento);
 
         handleCargeTable();
-
-        comboFiltros.setOnAction(this::handleFiltros);
+        //comboFiltros.setOnAction(this::handleFiltros);
         btnFiltrar.setOnAction(this::handleEjecutarFiltros);
         txtFieldParametro1.setDisable(true);
         txtFieldParametro2.setDisable(true);
@@ -279,11 +279,11 @@ public class ControllerEventos {
         Evento eventoSeleccionado = tbEventos.getSelectionModel().getSelectedItem();
         try {
             if (eventoSeleccionado == null) {
-                throw new NotSelectedEventoException("Para editar un Evento debes seleccionarlo.");
+                throw new NotSelectedException("Para editar un Evento debes seleccionarlo.");
             }
             EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
             eventoInterface.edit_XML(eventoSeleccionado, eventoSeleccionado.getIdEvento().toString());
-        } catch (NotSelectedEventoException ex) {
+        } catch (NotSelectedException ex) {
             Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
         }
         cleanFields();
@@ -448,7 +448,7 @@ public class ControllerEventos {
         }
     }
 
-    private void handleCerrarSesion(Event event) {
+    private void handleCerrarSesion(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root;
@@ -468,7 +468,7 @@ public class ControllerEventos {
      * sesión,establece el escenario y el controlador, y muestra la nueva
      * ventana.
      *
-     * @param event Evento que desencadenó el cierre de sesión.
+     * @param actionEvent
      */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
@@ -476,7 +476,7 @@ public class ControllerEventos {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root = loader.load();
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -489,7 +489,7 @@ public class ControllerEventos {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Productos.fxml"));
             Parent root = loader.load();
             ControllerProductos viewController = ((ControllerProductos) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -510,7 +510,7 @@ public class ControllerEventos {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
             Parent root = loader.load();
             ControllerEventos viewController = ((ControllerEventos) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -531,7 +531,7 @@ public class ControllerEventos {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Perfil.fxml"));
             Parent root = loader.load();
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,13 +9,13 @@ package exceptions;
  *
  * @author David
  */
-public class NotSelectedTiendaException extends Exception {
+public class NotSelectedException extends Exception {
 
     /**
      * Creates a new instance of <code>NotSelectedTiendaException</code> without
      * detail message.
      */
-    public NotSelectedTiendaException() {
+    public NotSelectedException() {
     }
 
     /**
@@ -24,7 +24,7 @@ public class NotSelectedTiendaException extends Exception {
      *
      * @param msg the detail message.
      */
-    public NotSelectedTiendaException(String msg) {
+    public NotSelectedException(String msg) {
         super(msg);
     }
 }

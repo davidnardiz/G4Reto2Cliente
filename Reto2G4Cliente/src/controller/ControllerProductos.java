@@ -6,6 +6,7 @@
 package controller;
 
 import entities.Producto;
+import entities.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -23,22 +24,25 @@ import service.ProductoInterface;
  * @author Gonzalo
  */
 public class ControllerProductos {
+
     private Stage stage;
+    private Usuario usuario;
     private TableView tbProductos;
-    
+
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         handleCargeTable();
         stage.setResizable(false);
         stage.show();
-        
+
     }
 
-    public void setStage(Stage stage) {
+    public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
+        this.usuario = usuario;
     }
-    
+
     private void handleCargeTable() {
         List<Producto> productos = new ArrayList();
         ProductoInterface ti = ProductoFactoria.createProductoImple();

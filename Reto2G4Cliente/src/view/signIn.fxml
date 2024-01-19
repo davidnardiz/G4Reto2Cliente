@@ -55,6 +55,6 @@
                 <Image url="@../multimedia/Logo.png" />
             </image>
         </ImageView>
-        <Hyperlink fx:id="hplNoCuenta1" layoutX="426.0" layoutY="387.0" prefHeight="23.0" prefWidth="214.0" text="¿Has olvidado tu contraseña?" textFill="#383b51" underline="true" />
+        <Hyperlink fx:id="hplRecuperarPass" layoutX="426.0" layoutY="387.0" prefHeight="23.0" prefWidth="214.0" text="¿Has olvidado tu contraseña?" textFill="#383b51" underline="true" />
     </children>
 </AnchorPane>

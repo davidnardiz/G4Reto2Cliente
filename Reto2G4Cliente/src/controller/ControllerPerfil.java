@@ -5,6 +5,7 @@
  */
 package controller;
 
+import entities.Usuario;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 public class ControllerPerfil {
 
     private Stage stage;
+    private Usuario usuario;
 
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -25,7 +27,8 @@ public class ControllerPerfil {
 
     }
 
-    public void setStage(Stage stage) {
+    public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
+        this.usuario = usuario;
     }
 }

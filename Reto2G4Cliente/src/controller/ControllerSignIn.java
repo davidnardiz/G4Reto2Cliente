@@ -5,6 +5,7 @@
  */
 package controller;
 
+import static encriptation.ClienteEncriptation.encriptar;
 import entities.Cliente;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
@@ -58,8 +59,8 @@ public class ControllerSignIn {
         stage.show();
 
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario3@example.com");
-        passField.setText("password3");
+        txtFieldEmail.setText("usuario1@example.com");
+        passField.setText("password1");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -70,7 +71,7 @@ public class ControllerSignIn {
         hplNoCuenta.setOnAction(this::handleOpenSignUp);
 
         //Método para abrir el registrarse
-        //hplRecuperarPass.setOnAction(this::handleRecoverPass);
+        hplRecuperarPass.setOnAction(this::handleRecoverPass);
     }
 
     public void setStage(Stage stage) {
@@ -109,31 +110,36 @@ public class ControllerSignIn {
                 throw new InvalidFormatException("Error de inicio de sesión: has introducido algun dato mal!!");
             }
 
+            String passCifrada = encriptar(pass);
+            System.out.println(pass);
             UsuarioInterface ui = UsuarioFactoria.getUserInterface();
             Usuario us = new Usuario();
             System.out.println(us.toString());
             us = ui.iniciarSesion_XML(new GenericType<Cliente>() {
-            }, texto, pass);
+            }, texto, passCifrada);
             System.out.println(us.toString());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root;
             root = (Parent) loader.load();
 
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, us);
             viewController.initStage(root);
 
+            /*
             if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
                 FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
                 Parent root2;
-                root2 = (Parent) loader.load();
+                root2 = (Parent) loader2.load();
 
-                ControllerPrincipal viewController2 = ((ControllerPrincipal) loader.getController());
-                viewController.setStage(stage);
-                viewController.initStage(root2);
-            }
-
+                ControllerPrincipal viewController2 = ((ControllerPrincipal) loader2.getController());
+                viewController2.setStage(stage);
+                viewController2.initStage(root2);
+            }*/
         } catch (NotCompleteException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Debes rellenar todos los campos!!");
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
@@ -166,7 +172,7 @@ public class ControllerSignIn {
     }
 
     @FXML
-    public void handleRecoverPass(WindowEvent windowEvent) {
+    public void handleRecoverPass(ActionEvent actionEvent) {
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecuperarContrasenia.fxml"));
