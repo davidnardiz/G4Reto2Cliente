@@ -7,6 +7,10 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,98 +21,111 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "producto")
 public class Producto implements Serializable {
 
-    private Integer idProducto;
-    private String nombre;
-    private float precio;
-    private int altura;
-    private String material;
-    private float peso;
-    private Date fechacreacion;
-    private Cliente cliente;
-    private Tienda tienda;
+    private static final long serialVersionUID = 1L;
+    private SimpleIntegerProperty idProducto;
+    private SimpleStringProperty nombre;
+    private SimpleFloatProperty precio;
+    private SimpleIntegerProperty altura;
+    private SimpleStringProperty material;
+    private SimpleFloatProperty peso;
+    private SimpleObjectProperty<Date> fechacreacion;
+    private SimpleObjectProperty<Cliente> cliente;
+    private SimpleObjectProperty<Tienda> tienda;
 
-    public Producto() {
+    public Producto(Integer idProducto, String nombre, Float precio, Integer altura, String material, Float peso, Date fechacreacion, Cliente cliente, Tienda tienda) {
+        this.idProducto = new SimpleIntegerProperty(idProducto);
+        this.nombre = new SimpleStringProperty(nombre);
+        this.precio = new SimpleFloatProperty(precio);
+        this.altura = new SimpleIntegerProperty(altura);
+        this.material = new SimpleStringProperty(material);
+        this.peso = new SimpleFloatProperty(peso);
+        this.fechacreacion = new SimpleObjectProperty<>(fechacreacion);
+        this.cliente = new SimpleObjectProperty<>(cliente);
+        this.tienda = new SimpleObjectProperty<>(tienda);
     }
 
-    @XmlElement(name = "idProducto")    
+    public Producto() {
+        this.idProducto = new SimpleIntegerProperty();
+        this.nombre = new SimpleStringProperty();
+        this.precio = new SimpleFloatProperty();
+        this.altura = new SimpleIntegerProperty();
+        this.material = new SimpleStringProperty();
+        this.peso = new SimpleFloatProperty();
+        this.fechacreacion = new SimpleObjectProperty<>();
+        this.cliente = new SimpleObjectProperty<>();
+        this.tienda = new SimpleObjectProperty<>();
+    }    
+
     public Integer getIdProducto() {
-        return idProducto;
+        return idProducto.get();
     }
 
     public void setIdProducto(Integer idProducto) {
-        this.idProducto = idProducto;
+        this.idProducto.set(idProducto);
     }
 
-    @XmlElement(name = "nombre")
     public String getNombre() {
-        return nombre;
+        return nombre.get();
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre.set(nombre);
     }
 
-    @XmlElement(name = "precio")
     public float getPrecio() {
-        return precio;
+        return precio.get();
     }
 
     public void setPrecio(float precio) {
-        this.precio = precio;
+        this.precio.set(precio);
     }
 
-    @XmlElement(name = "altura")
     public int getAltura() {
-        return altura;
+        return altura.get();
     }
 
     public void setAltura(int altura) {
-        this.altura = altura;
+        this.altura.set(altura);
     }
 
-    @XmlElement(name = "material")
     public String getMaterial() {
-        return material;
+        return material.get();
     }
 
     public void setMaterial(String material) {
-        this.material = material;
+        this.material.set(material);
     }
 
-    @XmlElement(name = "peso")
     public float getPeso() {
-        return peso;
+        return peso.get();
     }
 
     public void setPeso(float peso) {
-        this.peso = peso;
+        this.peso.set(peso);
     }
 
-    @XmlElement(name = "fechacreacion")
     public Date getFechacreacion() {
-        return fechacreacion;
+        return fechacreacion.get();
     }
 
     public void setFechacreacion(Date fechacreacion) {
-        this.fechacreacion = fechacreacion;
+        this.fechacreacion.set(fechacreacion);
     }
 
-    @XmlElement(name = "cliente")
     public Cliente getCliente() {
-        return cliente;
+        return cliente.get();
     }
 
     public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+        this.cliente.set(cliente);
     }
 
-    @XmlElement(name = "tienda")
     public Tienda getTienda() {
-        return tienda;
+        return tienda.get();
     }
 
     public void setTienda(Tienda tienda) {
-        this.tienda = tienda;
+        this.tienda.set(tienda);
     }
  
     
