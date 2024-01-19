@@ -6,6 +6,8 @@
 package entities;
 
 import java.util.List;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
@@ -19,23 +21,28 @@ import javax.persistence.ManyToMany;
 public class Administrador {
 
     private static final long serialVersionUID = 1L;
-    private int numEventos;
-    private List<Evento> eventosOrganizados;
+    private SimpleIntegerProperty numEventos;
+    private SimpleObjectProperty<List<Evento>> listaEventos;
 
-    public int getNumEventos() {
-        return numEventos;
+    public Integer getNumEventos() {
+        return numEventos.get();
     }
 
-    public void setNumEventos(int numEventos) {
-        this.numEventos = numEventos;
+    public void setNumEventos(Integer numEventos) {
+        this.numEventos.set(numEventos);
     }
 
-    public List<Evento> getEventosOrganizados() {
-        return eventosOrganizados;
+    public List<Evento> getListaEventosEvento() {
+        return listaEventos.get();
     }
 
-    public void setEventosOrganizados(List<Evento> eventosOrganizados) {
-        this.eventosOrganizados = eventosOrganizados;
+    public void setListaEventosEvento(List<Evento> listaEventosEvento) {
+        this.listaEventos.set(listaEventosEvento);
+    }
+
+    @Override
+    public String toString() {
+        return "Evento{" + "numEventos=" + numEventos + ", listaEventos=" + listaEventos + '}';
     }
 
 }

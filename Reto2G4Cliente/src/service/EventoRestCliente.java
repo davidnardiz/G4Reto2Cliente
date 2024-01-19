@@ -8,6 +8,7 @@ package service;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:EventoFacadeREST
@@ -22,7 +23,7 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author Gonzalo
  */
-public class EventoRestCliente {
+public class EventoRestCliente implements EventoInterface {
 
     private WebTarget webTarget;
     private Client client;
@@ -33,25 +34,25 @@ public class EventoRestCliente {
         webTarget = client.target(BASE_URI).path("entities.evento");
     }
 
-    public <T> T encontrarEventoEntreParticipantes_XML(Class<T> responseType, String numParticipantesMin, String numParticipantesMax) throws ClientErrorException {
+    public <T> T encontrarEventoEntreParticipantes_XML(GenericType<T> responseType, String numParticipantesMin, String numParticipantesMax) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoEntreParticipantes/{0}/{1}", new Object[]{numParticipantesMin, numParticipantesMax}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarEventoEntreParticipantes_JSON(Class<T> responseType, String numParticipantesMin, String numParticipantesMax) throws ClientErrorException {
+    public <T> T encontrarEventoEntreParticipantes_JSON(GenericType<T> responseType, String numParticipantesMin, String numParticipantesMax) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoEntreParticipantes/{0}/{1}", new Object[]{numParticipantesMin, numParticipantesMax}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T encontrarEventoMayorRecaudado_XML(Class<T> responseType, String totalRecaudado) throws ClientErrorException {
+    public <T> T encontrarEventoMayorRecaudado_XML(GenericType<T> responseType, String totalRecaudado) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMayorRecaudado/{0}", new Object[]{totalRecaudado}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarEventoMayorRecaudado_JSON(Class<T> responseType, String totalRecaudado) throws ClientErrorException {
+    public <T> T encontrarEventoMayorRecaudado_JSON(GenericType<T> responseType, String totalRecaudado) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMayorRecaudado/{0}", new Object[]{totalRecaudado}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -65,13 +66,13 @@ public class EventoRestCliente {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T find_XML(Class<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T find_JSON(Class<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_JSON(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -85,36 +86,36 @@ public class EventoRestCliente {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T encontrarEventoMenorNumParticipantes_XML(Class<T> responseType, String numParticipantes) throws ClientErrorException {
+    public <T> T encontrarEventoMenorNumParticipantes_XML(GenericType<T> responseType, String numParticipantes) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMenorNumParticipantes/{0}", new Object[]{numParticipantes}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarEventoMenorNumParticipantes_JSON(Class<T> responseType, String numParticipantes) throws ClientErrorException {
+    public <T> T encontrarEventoMenorNumParticipantes_JSON(GenericType<T> responseType, String numParticipantes) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMenorNumParticipantes/{0}", new Object[]{numParticipantes}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T encontrarEventoMenorRecaudado_XML(Class<T> responseType, String totalRecaudado) throws ClientErrorException {
+    public <T> T encontrarEventoMenorRecaudado_XML(GenericType<T> responseType, String totalRecaudado) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMenorRecaudado/{0}", new Object[]{totalRecaudado}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarEventoMenorRecaudado_JSON(Class<T> responseType, String totalRecaudado) throws ClientErrorException {
+    public <T> T encontrarEventoMenorRecaudado_JSON(GenericType<T> responseType, String totalRecaudado) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMenorRecaudado/{0}", new Object[]{totalRecaudado}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findAll_JSON(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll_JSON(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
@@ -123,25 +124,25 @@ public class EventoRestCliente {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
-    public <T> T encontrarEventoMayorNumParticipantes_XML(Class<T> responseType, String numParticipantes) throws ClientErrorException {
+    public <T> T encontrarEventoMayorNumParticipantes_XML(GenericType<T> responseType, String numParticipantes) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMayorNumParticipantes/{0}", new Object[]{numParticipantes}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarEventoMayorNumParticipantes_JSON(Class<T> responseType, String numParticipantes) throws ClientErrorException {
+    public <T> T encontrarEventoMayorNumParticipantes_JSON(GenericType<T> responseType, String numParticipantes) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMayorNumParticipantes/{0}", new Object[]{numParticipantes}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T encontrarEventoEntreRecaudado_XML(Class<T> responseType, String totalRecaudadoMin, String totalRecaudadoMax) throws ClientErrorException {
+    public <T> T encontrarEventoEntreRecaudado_XML(GenericType<T> responseType, String totalRecaudadoMin, String totalRecaudadoMax) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoEntreRecaudado/{0}/{1}", new Object[]{totalRecaudadoMin, totalRecaudadoMax}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarEventoEntreRecaudado_JSON(Class<T> responseType, String totalRecaudadoMin, String totalRecaudadoMax) throws ClientErrorException {
+    public <T> T encontrarEventoEntreRecaudado_JSON(GenericType<T> responseType, String totalRecaudadoMin, String totalRecaudadoMax) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoEntreRecaudado/{0}/{1}", new Object[]{totalRecaudadoMin, totalRecaudadoMax}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -150,5 +151,5 @@ public class EventoRestCliente {
     public void close() {
         client.close();
     }
-    
+
 }

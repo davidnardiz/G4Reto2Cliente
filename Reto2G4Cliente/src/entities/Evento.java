@@ -5,76 +5,145 @@
  */
 package entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * Clase que representa un evento en el la app de MarketMaker.
- *
- * Un evento tiene información como su identificador, fecha de creación,
- * recaudación total, número de participantes, lista de administradores y lista
- * de tiendas asociadas.
- *
  * @author Iñigo
  */
-public class Evento {
+@XmlRootElement(name = "evento")
+public class Evento implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private SimpleIntegerProperty idEvento;
+    private SimpleObjectProperty<Date> fecha;
+    private SimpleFloatProperty totalRecaudado;
+    private SimpleIntegerProperty cantidadParticipantes;
+    private SimpleObjectProperty<Cliente> cliente;
+    private SimpleObjectProperty<Administrador> admin;
+    private SimpleObjectProperty<List<Producto>> productos;
+    private SimpleObjectProperty<List<Evento>> listaEventos;
 
-    private int idEvento;
-    private Date fechaCreacion;
-    private double totalRecaudado;
-    private int numParticipantes;
-    private List<Administrador> administradores;
-    private List<TiendaEvento> listaTiendasEvento;
-
-    public int getIdEvento() {
-        return idEvento;
+    public Evento(Integer idEvento, Float totalRecaudado, Integer cantidadParticipantes, Date fechaCreacion, Administrador admin, Cliente cliente, List<Producto> productos, List<Evento> listaEventos) {
+        this.idEvento = new SimpleIntegerProperty(idEvento);
+        this.fecha = new SimpleObjectProperty<>(fechaCreacion);
+        this.totalRecaudado = new SimpleFloatProperty(totalRecaudado);
+        this.cantidadParticipantes = new SimpleIntegerProperty(cantidadParticipantes);
+        this.cliente = new SimpleObjectProperty<>(cliente);
+        this.productos = new SimpleObjectProperty<>(productos);
+        this.listaEventos = new SimpleObjectProperty<>(listaEventos);
     }
 
-    public void setIdEvento(int idEvento) {
-        this.idEvento = idEvento;
+    public Evento() {
+        this.idEvento = new SimpleIntegerProperty();
+        this.fecha = new SimpleObjectProperty<>();
+        this.totalRecaudado = new SimpleFloatProperty();
+        this.cantidadParticipantes = new SimpleIntegerProperty();
+        this.cliente = new SimpleObjectProperty<>();
+        this.productos = new SimpleObjectProperty<>();
+        this.listaEventos = new SimpleObjectProperty<>();
     }
 
-    public Date getFechaCreacion() {
-        return fechaCreacion;
+    public Integer getIdEvento() {
+        return idEvento.get();
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setIdEvento(Integer idEvento) {
+        this.idEvento.set(idEvento);
     }
 
-    public double getTotalRecaudado() {
-        return totalRecaudado;
+    public Integer getCantidadParticipantes() {
+        return cantidadParticipantes.get();
     }
 
-    public void setTotalRecaudado(double totalRecaudado) {
-        this.totalRecaudado = totalRecaudado;
+    public void setCantidadParticipantes(Integer cantidadParticipantes) {
+        this.cantidadParticipantes.set(cantidadParticipantes);
     }
 
-    public int getNumParticipantes() {
-        return numParticipantes;
+    public Float getTotalRecaudado() {
+        return totalRecaudado.get();
     }
 
-    public void setNumParticipantes(int numParticipantes) {
-        this.numParticipantes = numParticipantes;
+    public void setTotalRecaudado(Float totalRecaudado) {
+        this.totalRecaudado.set(totalRecaudado);
     }
 
-    public List<Administrador> getAdministradores() {
-        return administradores;
+    public Date getFecha() {
+        return fecha.get();
     }
 
-    public void setAdministradores(List<Administrador> administradores) {
-        this.administradores = administradores;
+    public void setFecha(Date fecha) {
+        this.fecha.set(fecha);
     }
 
-    public List<TiendaEvento> getListaTiendasEvento() {
-        return listaTiendasEvento;
+    public Cliente getCliente() {
+        return cliente.get();
     }
 
-    public void setListaTiendasEvento(List<TiendaEvento> listaTiendasEvento) {
-        this.listaTiendasEvento = listaTiendasEvento;
+    public void setCliente(Cliente cliente) {
+        this.cliente.set(cliente);
+    }
+
+    public Administrador getAdministrador() {
+        return admin.get();
+    }
+
+    public void setAdministrador(Administrador admin) {
+        this.admin.set(admin);
+    }
+
+    public List<Producto> getProductos() {
+        return productos.get();
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos.set(productos);
+    }
+
+    public List<Evento> getListaEventosEvento() {
+        return listaEventos.get();
+    }
+
+    public void setListaEventosEvento(List<Evento> listaEventosEvento) {
+        this.listaEventos.set(listaEventosEvento);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.idEvento);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Evento other = (Evento) obj;
+        if (this.idEvento != other.idEvento) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Evento{" + "idEvento=" + idEvento + ", fecha=" + fecha + ", cantidadParticipantes=" + cantidadParticipantes + "admin=" + admin + '}';
     }
 
 }
