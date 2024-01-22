@@ -31,6 +31,7 @@
                         <MenuItem fx:id="miProductos" mnemonicParsing="false" text="Productos" />
                         <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
                         <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+                  <MenuItem fx:id="miTiendas" mnemonicParsing="false" text="Tiendas" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda" />
@@ -50,12 +51,12 @@
                 <TableColumn fx:id="cmnCliente" prefWidth="75.20001220703125" text="Cliente" />
             </columns>
             <contextMenu>
-                <ContextMenu>
+                <ContextMenu fx:id="menuContexto">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Crear" />
-                        <MenuItem mnemonicParsing="false" text="Modificar" />
-                        <MenuItem mnemonicParsing="false" text="Eliminar" />
-                        <MenuItem mnemonicParsing="false" text="Ver" />
+                        <MenuItem fx:id="menuItemMenuContextoCrear" mnemonicParsing="false" text="Crear" />
+                        <MenuItem fx:id="menuItemMenuContextoModificar" mnemonicParsing="false" text="Modificar" />
+                        <MenuItem fx:id="menuItemMenuContextoEliminar" mnemonicParsing="false" text="Eliminar" />
+                        <MenuItem fx:id="menuItemMenuContextoVer" mnemonicParsing="false" text="Ver" />
                     </items>
                 </ContextMenu>
             </contextMenu>

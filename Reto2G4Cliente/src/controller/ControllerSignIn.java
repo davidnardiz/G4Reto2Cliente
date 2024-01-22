@@ -104,7 +104,7 @@ public class ControllerSignIn {
         String pass = passField.getText();
 
         try {
-            if (texto == null || pass == null) {
+            if (texto.isEmpty() || pass.isEmpty()) {
                 throw new NotCompleteException("Error de inicio de sesión: debes rellenar todos campos!!");
             } else if (!checkEmailFormat(texto) || !checkPassFormat(pass)) {
                 throw new InvalidFormatException("Error de inicio de sesión: has introducido algun dato mal!!");
@@ -142,6 +142,9 @@ public class ControllerSignIn {
             alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Has introducido mal los campos!!");
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);

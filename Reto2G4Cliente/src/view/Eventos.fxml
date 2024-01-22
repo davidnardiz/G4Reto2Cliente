@@ -21,14 +21,14 @@
             <columns>
                 <TableColumn fx:id="columnaId" prefWidth="67.19995498657227" text="ID" />
                 <TableColumn fx:id="columnaFecha" prefWidth="262.3999481201172" text="Fecha" />
-                <TableColumn fx:id="columnaTotalRecaudado" prefWidth="205.60003662109375" text="Total recaudado" />
                 <TableColumn fx:id="columnaNumParticipantes" prefWidth="201.60009765625" text="Número de participantes" />
+                <TableColumn fx:id="columnaTotalRecaudado" prefWidth="205.60003662109375" text="Total recaudado" />
             </columns>
         </TableView>
         <Label />
         <ComboBox fx:id="comboFiltros" layoutX="822.0" layoutY="365.0" prefHeight="38.0" prefWidth="172.0" promptText="Selecciona tu filtro" />
-        <TextField fx:id="txtFiltro1" layoutX="821.0" layoutY="416.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
-        <TextField fx:id="txtFltro2" layoutX="821.0" layoutY="461.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+        <TextField fx:id="txtFieldParametro1" layoutX="821.0" layoutY="416.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+        <TextField fx:id="txtFieldParametro2" layoutX="821.0" layoutY="461.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
         <Button fx:id="btnFiltrar" layoutX="823.0" layoutY="526.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
             <font>
                 <Font name="System Bold" size="15.0" />
@@ -36,7 +36,7 @@
         </Button>
         <Pane layoutX="59.0" layoutY="79.0" prefHeight="186.0" prefWidth="942.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;">
             <children>
-                <TextField fx:id="txt" layoutX="53.0" layoutY="77.0" prefHeight="31.0" prefWidth="274.0" promptText="ID">
+                <TextField fx:id="txtFieldId" layoutX="53.0" layoutY="77.0" prefHeight="31.0" prefWidth="274.0" promptText="ID">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -62,7 +62,7 @@
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Button>
-                <Button layoutX="766.0" layoutY="129.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="131.0" style="-fx-background-color: #2F2F2F;" text="Eliminar" textFill="#f2f2f2">
+                <Button fx:id="btnEliminar" layoutX="766.0" layoutY="129.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="131.0" style="-fx-background-color: #2F2F2F;" text="Eliminar" textFill="#f2f2f2">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -89,6 +89,7 @@
                         <MenuItem fx:id="menuItemProductos" mnemonicParsing="false" text="Productos" />
                         <MenuItem fx:id="menuItemEventos" mnemonicParsing="false" text="Eventos" />
                         <MenuItem fx:id="menuItemCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+                  <MenuItem fx:id="menuItemTiendas" mnemonicParsing="false" text="Tiendas" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda" />

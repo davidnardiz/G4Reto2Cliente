@@ -5,7 +5,6 @@
  */
 package controller;
 
-import entities.Cliente;
 import entities.Evento;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
@@ -46,7 +45,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javax.persistence.Table;
 import javax.ws.rs.core.GenericType;
 import service.EventoFactoria;
 import service.EventoInterface;
@@ -80,7 +78,7 @@ public class ControllerEventos {
     @FXML
     private DatePicker dpfechaEvento;
     @FXML
-    private TextField txtFieldTotal;
+    private TextField txtFieldTotalRecaudado;
     @FXML
     private TextField txtFieldNumParticipantes;
     @FXML
@@ -100,17 +98,13 @@ public class ControllerEventos {
     @FXML
     private TableView<Evento> tbEventos;
     @FXML
-    private ComboBox comboTipoPago;
-    @FXML
     private TableColumn<Evento, Integer> columnaId;
+    @FXML
+    private TableColumn<Evento, Date> columnaFecha;
     @FXML
     private TableColumn<Evento, Integer> columnaNumParticipantes;
     @FXML
-    private TableColumn<Evento, Date> columnaFechaCreacion;
-    @FXML
-    private TableColumn<Evento, Cliente> columnaAdmin;
-    @FXML
-    private TableColumn<Evento, Double> columnaTotal;
+    private TableColumn<Evento, Double> columnaTotalRecaudado;
 
     // Esto es una lista observable para almacenar eventos
     private ObservableList<Evento> eventosData = FXCollections.observableArrayList();
@@ -146,17 +140,19 @@ public class ControllerEventos {
         menuItemPerfil.setOnAction(this::handleAbrirPerfil);
 
         tbEventos.getColumns().clear();
-        tbEventos.getColumns().addAll(columnaId, columnaFechaCreacion, columnaNumParticipantes, columnaTotal, columnaAdmin);
+        tbEventos.getColumns().addAll(columnaId, columnaFecha, columnaNumParticipantes, columnaTotalRecaudado);
         tbEventos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        txtFieldId.setDisable(true);
 
         tbEventos.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 Evento eventoSeleccionado = tbEventos.getSelectionModel().getSelectedItem();
                 if (eventoSeleccionado != null) {
                     txtFieldId.setText(eventoSeleccionado.getIdEvento().toString());
-                    txtFieldNumParticipantes.setText(eventoSeleccionado.getCantidadParticipantes() + "");
-                    txtFieldTotal.setText(String.valueOf(eventoSeleccionado.getTotalRecaudado()));
-                    //dpfechaEvento.setValue(eventoSeleccionado.getFecha());
+                    txtFieldNumParticipantes.setText(eventoSeleccionado.getNumParticipantes() + "");
+                    txtFieldTotalRecaudado.setText(String.valueOf(eventoSeleccionado.getTotalRecaudado()));
+                    dpfechaEvento.setValue(eventoSeleccionado.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
                 }
             } else {
@@ -177,9 +173,9 @@ public class ControllerEventos {
         comboFiltros.getItems().add("Recaudado entre");
 
         columnaId.setCellValueFactory(new PropertyValueFactory<>("idEvento"));
-        columnaFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
+        columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         columnaNumParticipantes.setCellValueFactory(new PropertyValueFactory<>("numParticipantes"));
-        columnaAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
+        columnaTotalRecaudado.setCellValueFactory(new PropertyValueFactory<>("totalRecaudado"));
 
         stage.setOnCloseRequest(this::handleCloseWindow);
         btnCrear.setOnAction(this::handleCreateEvento);
@@ -225,28 +221,26 @@ public class ControllerEventos {
      */
     @FXML
     public void handleCreateEvento(ActionEvent actionEvent) {
-        String id = txtFieldId.getText();
-        Float total = Float.parseFloat(txtFieldTotal.getText());
-        int cantidadParticipantes = Integer.parseInt(txtFieldNumParticipantes.getText());
+        System.out.println("hola");
+        Float total = Float.parseFloat(txtFieldTotalRecaudado.getText());
+        int numParticipantes = Integer.parseInt(txtFieldNumParticipantes.getText());
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date fecha;
             fecha = dateFormat.parse(dpfechaEvento.getValue().toString());
-            if (!checkIdFormat(id)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
-            } else if (!checkDateFormat(fecha)) {
+
+            if (!checkDateFormat(fecha)) {
                 throw new InvalidFormatException("Debes introducir bien los datos!!");
             } else if (!checkTotalFormat(total)) {
                 throw new InvalidFormatException("Debes introducir bien los datos!!");
-            } else if (!checkParticipantesFormat(cantidadParticipantes)) {
+            } else if (!checkParticipantesFormat(numParticipantes)) {
                 throw new InvalidFormatException("Debes introducir bien los datos!!");
             }
 
             Evento evento = new Evento();
-            evento.setIdEvento(Integer.parseInt(id));
             evento.setFecha(fecha);
-            evento.setCantidadParticipantes(cantidadParticipantes);
+            evento.setNumParticipantes(numParticipantes);
             //evento.setAdministradores(administradores);
 
             EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
@@ -421,28 +415,28 @@ public class ControllerEventos {
                 handleCargeTableFiltro(eventos);
             }
         } else if (filtroSeleccionado.equalsIgnoreCase("Menos participantes que")) {
-            String cantidadParticipantes = txtFieldParametro1.getText();
-            if (checkParticipantesFormat(Integer.parseInt(cantidadParticipantes))) {
+            String numParticipantes = txtFieldParametro1.getText();
+            if (checkParticipantesFormat(Integer.parseInt(numParticipantes))) {
                 List<Evento> eventos = new ArrayList();
                 eventos = eventoInterface.encontrarEventoMenorNumParticipantes_XML(new GenericType<List<Evento>>() {
-                }, cantidadParticipantes);
+                }, numParticipantes);
                 handleCargeTableFiltro(eventos);
             }
         } else if (filtroSeleccionado.equalsIgnoreCase("Más participantes que")) {
-            String cantidadParticipantes = txtFieldParametro1.getText();
-            if (checkParticipantesFormat(Integer.parseInt(cantidadParticipantes))) {
+            String numParticipantes = txtFieldParametro1.getText();
+            if (checkParticipantesFormat(Integer.parseInt(numParticipantes))) {
                 List<Evento> eventos = new ArrayList();
                 eventos = eventoInterface.encontrarEventoMayorRecaudado_XML(new GenericType<List<Evento>>() {
-                }, cantidadParticipantes);
+                }, numParticipantes);
                 handleCargeTableFiltro(eventos);
             }
         } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad participantes entre")) {
-            String cantidadPartcipantes = txtFieldParametro1.getText();
-            String cantidadPartcipantes2 = txtFieldParametro2.getText();
-            if (checkParticipantesFormat(Integer.parseInt(cantidadPartcipantes)) && checkParticipantesFormat(Integer.parseInt(cantidadPartcipantes2))) {
+            String numPartcipantes = txtFieldParametro1.getText();
+            String numPartcipantes2 = txtFieldParametro2.getText();
+            if (checkParticipantesFormat(Integer.parseInt(numPartcipantes)) && checkParticipantesFormat(Integer.parseInt(numPartcipantes2))) {
                 List<Evento> eventos = new ArrayList();
                 eventos = eventoInterface.encontrarEventoEntreParticipantes_XML(new GenericType<List<Evento>>() {
-                }, cantidadPartcipantes, cantidadPartcipantes2);
+                }, numPartcipantes, numPartcipantes2);
                 handleCargeTableFiltro(eventos);
             }
         }
@@ -585,8 +579,8 @@ public class ControllerEventos {
      * @return true si la fecha de creación es anterior a la fecha actual; false
      * en caso contrario.
      */
-    private boolean checkParticipantesFormat(int cantidadParticipantes) {
-        return cantidadParticipantes > 2;
+    private boolean checkParticipantesFormat(int numParticipantes) {
+        return numParticipantes > 2;
     }
 
     /**
@@ -605,7 +599,7 @@ public class ControllerEventos {
     private void cleanFields() {
         txtFieldId.setText("");
         txtFieldNumParticipantes.setText("");
-        txtFieldTotal.setText("");
+        txtFieldTotalRecaudado.setText("");
         dpfechaEvento.setValue(null);
         txtFieldParametro1.setText("");
         txtFieldParametro2.setText("");

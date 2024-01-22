@@ -6,7 +6,6 @@
 package controller;
 
 import entities.Cliente;
-import entities.Producto;
 import entities.Tienda;
 import entities.TipoPago;
 import entities.Usuario;
@@ -36,11 +35,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -71,6 +70,16 @@ public class ControllerTiendas {
     private MenuItem miEventos;
     @FXML
     private MenuItem miPerfil;
+    @FXML
+    private ContextMenu contextMenu;
+    @FXML
+    private MenuItem menuItemMenuContextoCrear;
+    @FXML
+    private MenuItem menuItemMenuContextoModificar;
+    @FXML
+    private MenuItem menuItemMenuContextoEliminar;
+    @FXML
+    private MenuItem menuItemMenuContextoVer;
     @FXML
     private TextField txtFieldNombre;
     @FXML
@@ -116,6 +125,12 @@ public class ControllerTiendas {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
+
+        miCerrarSesion.setOnAction(this::handleCerrarSesion);
+        miPrincipal.setOnAction(this::handleAbrirInicio);
+        miProductos.setOnAction(this::handleAbrirProductos);
+        miEventos.setOnAction(this::handleAbrirEventos);
+        miPerfil.setOnAction(this::handleAbrirPerfil);
 
         miCerrarSesion.setOnAction(this::handleCerrarSesion);
         miPrincipal.setOnAction(this::handleAbrirInicio);
@@ -174,7 +189,6 @@ public class ControllerTiendas {
         txtFieldFiltro2.setDisable(true);
 
         stage.show();
-        txtFieldNombre.setText(usuario.getNombre());
     }
 
     public void setStage(Stage stage, Usuario usuario) {

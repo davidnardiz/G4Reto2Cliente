@@ -39,6 +39,8 @@ public class ControllerPrincipal {
     @FXML
     private MenuItem miPerfil;
     @FXML
+    private MenuItem miTiendas;
+    @FXML
     private Button buttonProductos;
     @FXML
     private Button buttonTiendas;
@@ -60,11 +62,12 @@ public class ControllerPrincipal {
         miPrincipal.setOnAction(this::handleAbrirInicio);
         miProductos.setOnAction(this::handleAbrirProductos);
         miEventos.setOnAction(this::handleAbrirEventos);
+        miTiendas.setOnAction(this::handleAbrirTiendas);
         miPerfil.setOnAction(this::handleAbrirPerfil);
 
-        buttonProductos.setOnAction(this::handleProductos);
-        buttonTiendas.setOnAction(this::handleTiendas);
-        buttonEventos.setOnAction(this::handleEventos);
+        buttonProductos.setOnAction(this::handleAbrirProductos);
+        buttonTiendas.setOnAction(this::handleAbrirTiendas);
+        buttonEventos.setOnAction(this::handleAbrirEventos);
     }
 
     public void setStage(Stage stage, Usuario usuario) {
@@ -73,39 +76,12 @@ public class ControllerPrincipal {
     }
 
     @FXML
-    public void handleProductos(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Productos.fxml"));
-            Parent root = loader.load();
-            ControllerProductos productController = ((ControllerProductos) loader.getController());
-            productController.setStage(stage, usuario);
-            productController.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @FXML
-    public void handleTiendas(ActionEvent actionEvent) {
+    public void handleAbrirTiendas(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Tiendas.fxml"));
             Parent root = loader.load();
 
             ControllerTiendas productController = ((ControllerTiendas) loader.getController());
-            productController.setStage(stage, usuario);
-            productController.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    @FXML
-    public void handleEventos(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
-            Parent root = loader.load();
-            ControllerEventos productController = ((ControllerEventos) loader.getController());
             productController.setStage(stage, usuario);
             productController.initStage(root);
         } catch (IOException ex) {

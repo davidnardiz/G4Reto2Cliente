@@ -25,17 +25,17 @@ public class Evento implements Serializable {
     private SimpleIntegerProperty idEvento;
     private SimpleObjectProperty<Date> fecha;
     private SimpleFloatProperty totalRecaudado;
-    private SimpleIntegerProperty cantidadParticipantes;
+    private SimpleIntegerProperty numParticipantes;
     private SimpleObjectProperty<Cliente> cliente;
     private SimpleObjectProperty<Administrador> admin;
     private SimpleObjectProperty<List<Producto>> productos;
     private SimpleObjectProperty<List<Evento>> listaEventos;
 
-    public Evento(Integer idEvento, Float totalRecaudado, Integer cantidadParticipantes, Date fechaCreacion, Administrador admin, Cliente cliente, List<Producto> productos, List<Evento> listaEventos) {
+    public Evento(Integer idEvento, Float totalRecaudado, Integer numParticipantes, Date fechaCreacion, Administrador admin, Cliente cliente, List<Producto> productos, List<Evento> listaEventos) {
         this.idEvento = new SimpleIntegerProperty(idEvento);
         this.fecha = new SimpleObjectProperty<>(fechaCreacion);
         this.totalRecaudado = new SimpleFloatProperty(totalRecaudado);
-        this.cantidadParticipantes = new SimpleIntegerProperty(cantidadParticipantes);
+        this.numParticipantes = new SimpleIntegerProperty(numParticipantes);
         this.cliente = new SimpleObjectProperty<>(cliente);
         this.productos = new SimpleObjectProperty<>(productos);
         this.listaEventos = new SimpleObjectProperty<>(listaEventos);
@@ -45,7 +45,7 @@ public class Evento implements Serializable {
         this.idEvento = new SimpleIntegerProperty();
         this.fecha = new SimpleObjectProperty<>();
         this.totalRecaudado = new SimpleFloatProperty();
-        this.cantidadParticipantes = new SimpleIntegerProperty();
+        this.numParticipantes = new SimpleIntegerProperty();
         this.cliente = new SimpleObjectProperty<>();
         this.productos = new SimpleObjectProperty<>();
         this.listaEventos = new SimpleObjectProperty<>();
@@ -59,12 +59,12 @@ public class Evento implements Serializable {
         this.idEvento.set(idEvento);
     }
 
-    public Integer getCantidadParticipantes() {
-        return cantidadParticipantes.get();
+    public Integer getNumParticipantes() {
+        return numParticipantes.get();
     }
 
-    public void setCantidadParticipantes(Integer cantidadParticipantes) {
-        this.cantidadParticipantes.set(cantidadParticipantes);
+    public void setNumParticipantes(Integer numParticipantes) {
+        this.numParticipantes.set(numParticipantes);
     }
 
     public Float getTotalRecaudado() {
@@ -142,7 +142,7 @@ public class Evento implements Serializable {
 
     @Override
     public String toString() {
-        return "Evento{" + "idEvento=" + idEvento + ", fecha=" + fecha + ", cantidadParticipantes=" + cantidadParticipantes + "admin=" + admin + '}';
+        return "Evento{" + "idEvento=" + idEvento + ", fecha=" + fecha + ", numParticipantes=" + numParticipantes + "admin=" + admin + '}';
     }
 
 }
