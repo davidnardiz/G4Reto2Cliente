@@ -46,7 +46,7 @@
                         <Font name="System Bold" size="22.0" />
                     </font>
                 </Label>
-                <DatePicker fx:id="dpFecha" layoutX="350.0" layoutY="120.0" prefHeight="34.0" prefWidth="274.0" promptText="Fecha" />
+                <DatePicker fx:id="dpfechaEvento" layoutX="350.0" layoutY="120.0" prefHeight="34.0" prefWidth="274.0" promptText="Fecha" />
                 <TextField fx:id="txtFieldNumParticipantes" layoutX="350.0" layoutY="77.0" prefHeight="31.0" prefWidth="274.0" promptText="Número participantes">
                     <font>
                         <Font size="15.0" />

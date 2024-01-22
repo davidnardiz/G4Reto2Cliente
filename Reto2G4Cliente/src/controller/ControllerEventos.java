@@ -5,6 +5,7 @@
  */
 package controller;
 
+import entities.Administrador;
 import entities.Evento;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
@@ -241,7 +242,7 @@ public class ControllerEventos {
             Evento evento = new Evento();
             evento.setFecha(fecha);
             evento.setNumParticipantes(numParticipantes);
-            //evento.setAdministradores(administradores);
+            evento.setTotalRecaudado(total);
 
             EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
             eventoInterface.create_XML(evento);
@@ -300,6 +301,7 @@ public class ControllerEventos {
         for (int i = 0; i < eventosSeleccionados.size(); i++) {
             eventoInterface.remove(eventosSeleccionados.get(i).getIdEvento().toString());
         }
+
         cleanFields();
         handleCargeTable();
     }
@@ -568,7 +570,7 @@ public class ControllerEventos {
         } catch (ParseException ex) {
             Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return fecha.before(date);
+        return fecha.after(date);
     }
 
     /**
