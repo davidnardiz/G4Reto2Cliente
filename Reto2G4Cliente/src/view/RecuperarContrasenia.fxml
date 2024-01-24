@@ -10,44 +10,47 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Pane layoutX="159.0" layoutY="32.0" prefHeight="337.0" prefWidth="282.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
-         <effect>
-            <DropShadow blurType="TWO_PASS_BOX" color="#5c5c5c" />
-         </effect>
-         <children>
-            <TextField layoutX="40.0" layoutY="233.0" prefHeight="29.0" prefWidth="201.0" promptText="Dirección de email" style="-fx-background-color: #F2F2F2;">
-               <effect>
-                  <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
-               </effect>
-            </TextField>
-            <Label layoutX="37.0" layoutY="117.0" prefHeight="30.0" prefWidth="203.0" text="Recupera tu contraseña" textFill="#2f2f2f">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="749.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerRecuperarContrasenia">
+    <children>
+        <Pane layoutX="159.0" layoutY="32.0" prefHeight="483.0" prefWidth="432.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
+            <effect>
+                <DropShadow blurType="TWO_PASS_BOX" color="#5c5c5c" />
+            </effect>
+            <children>
+                <TextField fx:id="txtFieldEmail" layoutX="103.0" layoutY="343.0" prefHeight="37.0" prefWidth="247.0" promptText="Dirección de email" style="-fx-background-color: #F2F2F2;">
+                    <effect>
+                        <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
+                    </effect>
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font size="14.0" />
                </font>
-            </Label>
-            <Button layoutX="144.0" layoutY="269.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: #2F2F2F;" text="Enviar" textFill="#f2f2f2">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button layoutX="39.0" layoutY="269.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Cancelar" textFill="#2f2f2f">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Text fontSmoothingType="LCD" layoutX="38.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Si has olvidado tu contraseña puedes escribir en este formulario la dirección de email cuya contraseña quieras recuperar y te enviaremos un correo con un código de recuperación." textAlignment="JUSTIFY" wrappingWidth="206.29192352294922">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Text>
-            <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="112.0" layoutY="42.0">
-               <image>
-                  <Image url="@../../Downloads/IconoCerradura.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-   </children>
+                </TextField>
+                <Label layoutX="126.0" layoutY="188.0" prefHeight="30.0" prefWidth="203.0" text="Recupera tu contraseña" textFill="#2f2f2f">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Button fx:id="btnEnviar" layoutX="226.0" layoutY="393.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="125.0" style="-fx-background-color: #2F2F2F;" text="Enviar" textFill="#f2f2f2">
+                    <font>
+                        <Font name="System Bold" size="17.0" />
+                    </font>
+                </Button>
+                <Button fx:id="btnCancelar" layoutX="103.0" layoutY="393.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="117.0" text="Cancelar" textFill="#2f2f2f">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Button>
+                <Text fontSmoothingType="LCD" layoutX="90.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Si has olvidado tu contraseña puedes escribir en este formulario la dirección de email cuya contraseña quieras recuperar y te enviaremos un correo con un código de recuperación." textAlignment="JUSTIFY" wrappingWidth="273.60006667673576">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+                <ImageView fitHeight="145.0" fitWidth="203.0" layoutX="126.0" layoutY="30.0">
+                    <image>
+                        <Image url="@../multimedia/Logo.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </Pane>
+    </children>
 </Pane>

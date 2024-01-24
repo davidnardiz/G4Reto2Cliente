@@ -73,6 +73,20 @@ public class UsuarioRestCliente implements UsuarioInterface {
     }
 
     @Override
+    public <T> T findByCorreo_XML(GenericType<T> responseType, String correo) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioCorreo/{0}", new Object[]{correo}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T findByCorreo_JSON(GenericType<T> responseType, String correo) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioCorreo/{0}", new Object[]{correo}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
+    @Override
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
@@ -84,11 +98,8 @@ public class UsuarioRestCliente implements UsuarioInterface {
 
     @Override
     public <T> T iniciarSesion_XML(GenericType<T> responseType, String correo, String password) throws ClientErrorException {
-        System.out.println(correo);
-        System.out.println(password);
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("iniciarSesion/{0}/{1}", new Object[]{correo, password}));
-        System.out.println(resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

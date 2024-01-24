@@ -5,11 +5,12 @@
  */
 package entities;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -18,11 +19,24 @@ import javax.persistence.ManyToMany;
  *
  * @author Iñigo
  */
-public class Administrador {
+@XmlRootElement(name = "administrador")
+public class Administrador extends Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty numEventos;
     private SimpleObjectProperty<List<Evento>> listaEventos;
+
+    public Administrador(int numEventos, List<Evento> listaEventos, int idUsuario, String nombre, String password, String correo, Date fechaNacimiento) {
+        super(idUsuario, nombre, password, correo, fechaNacimiento);
+        this.numEventos = new SimpleIntegerProperty(numEventos);
+        this.listaEventos = new SimpleObjectProperty<>(listaEventos);
+    }
+
+    public Administrador() {
+        super();
+        this.numEventos = new SimpleIntegerProperty();
+        this.listaEventos = new SimpleObjectProperty<>();
+    }
 
     public Integer getNumEventos() {
         return numEventos.get();

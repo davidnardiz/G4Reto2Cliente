@@ -79,13 +79,17 @@ public class ControllerTiendas {
     @FXML
     private MenuItem menuItemMenuContextoEliminar;
     @FXML
-    private MenuItem menuItemMenuContextoVer;
-    @FXML
     private TextField txtFieldNombre;
+    @FXML
+    private TextField txtFieldNombreColumna;
     @FXML
     private TextField txtFieldEspacio;
     @FXML
+    private TextField txtFieldEspacioColumna;
+    @FXML
     private TextField txtFieldDescripcion;
+    @FXML
+    private TextField txtFieldDescripcionColumna;
     @FXML
     private ComboBox cbTipoPago;
     @FXML
@@ -126,22 +130,30 @@ public class ControllerTiendas {
         stage.setScene(scene);
         stage.setResizable(false);
 
+        //Método cerrar ventana
+        stage.setOnCloseRequest(this::handleCloseWindow);
+
+        //Menú items del menú bar
         miCerrarSesion.setOnAction(this::handleCerrarSesion);
         miPrincipal.setOnAction(this::handleAbrirInicio);
         miProductos.setOnAction(this::handleAbrirProductos);
         miEventos.setOnAction(this::handleAbrirEventos);
         miPerfil.setOnAction(this::handleAbrirPerfil);
 
-        miCerrarSesion.setOnAction(this::handleCerrarSesion);
-        miPrincipal.setOnAction(this::handleAbrirInicio);
-        miProductos.setOnAction(this::handleAbrirProductos);
-        miEventos.setOnAction(this::handleAbrirEventos);
-        miPerfil.setOnAction(this::handleAbrirPerfil);
-
+        //Declaraciones de las columnas de la tabla
         tbTiendas.getColumns().clear();
         tbTiendas.getColumns().addAll(cmnId, cmnNombre, cmnDescripcion, cmnTipoPago, cmnEspacio, cmnFechaCreacion, cmnCliente);
         tbTiendas.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+        cmnId.setCellValueFactory(new PropertyValueFactory<>("idTienda"));
+        cmnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        cmnDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        cmnTipoPago.setCellValueFactory(new PropertyValueFactory<>("tipoPago"));
+        cmnEspacio.setCellValueFactory(new PropertyValueFactory<>("espacio"));
+        cmnFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
+        cmnCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
+
+        //Seleccionar fila
         tbTiendas.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 Tienda tiendaSeleccionada = tbTiendas.getSelectionModel().getSelectedItem();
@@ -161,6 +173,13 @@ public class ControllerTiendas {
 
         });
 
+        //Menú de contexto
+        menuItemMenuContextoCrear.setOnAction(this::handleCreateTienda);
+        menuItemMenuContextoModificar.setOnAction(this::handleEditTienda);
+        menuItemMenuContextoEliminar.setOnAction(this::handleDeleteTienda);
+        //menuItemMenuContextoVer.setOnAction(this::handle);
+
+        //ComboBox
         cbTipoPago.getItems().setAll(FXCollections.observableArrayList(TipoPago.values()));
         cbFiltros.getItems().add("Mostrar todas");
         cbFiltros.getItems().add("Menor espacio");
@@ -168,25 +187,19 @@ public class ControllerTiendas {
         cbFiltros.getItems().add("Entre espacios");
         cbFiltros.getItems().add("Tipo pago");
 
-        cmnId.setCellValueFactory(new PropertyValueFactory<>("idTienda"));
-        cmnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        cmnDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        cmnTipoPago.setCellValueFactory(new PropertyValueFactory<>("tipoPago"));
-        cmnEspacio.setCellValueFactory(new PropertyValueFactory<>("espacio"));
-        cmnFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
-        cmnCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
-
-        stage.setOnCloseRequest(this::handleCloseWindow);
+        //Botones crear, eliminar y editar
         btnCrear.setOnAction(this::handleCreateTienda);
         btnEditar.setOnAction(this::handleEditTienda);
         btnEliminar.setOnAction(this::handleDeleteTienda);
 
-        handleCargeTable();
-
+        //Filtros
         cbFiltros.setOnAction(this::handleFiltros);
         btnFiltrar.setOnAction(this::handleEjecutarFiltros);
         txtFieldFiltro1.setDisable(true);
         txtFieldFiltro2.setDisable(true);
+
+        //Cargar tabla
+        handleCargeTable();
 
         stage.show();
     }
@@ -308,7 +321,6 @@ public class ControllerTiendas {
 
     @FXML
     public void handleDeleteTienda(ActionEvent actionEvent) {
-
         ObservableList<Tienda> tiendasSeleccionadas = tbTiendas.getSelectionModel().getSelectedItems();
 
         TiendaInterface ti = TiendaFactoria.getTiendaInterface();

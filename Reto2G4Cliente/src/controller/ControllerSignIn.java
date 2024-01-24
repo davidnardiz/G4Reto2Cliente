@@ -6,10 +6,12 @@
 package controller;
 
 import static encriptation.ClienteEncriptation.encriptar;
+import entities.Administrador;
 import entities.Cliente;
 import entities.Usuario;
+import exceptions.IncorrectCredentialsException;
 import exceptions.InvalidFormatException;
-import exceptions.NotCompleteException;
+import exceptions.NotCompletedException;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -59,8 +61,8 @@ public class ControllerSignIn {
         stage.show();
 
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario1@example.com");
-        passField.setText("password1");
+        txtFieldEmail.setText("usuario8@example.com");
+        passField.setText("password8");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -95,7 +97,6 @@ public class ControllerSignIn {
         if (accion.get() == ButtonType.OK) {
             Platform.exit();
         }
-
     }
 
     @FXML
@@ -105,26 +106,42 @@ public class ControllerSignIn {
 
         try {
             if (texto.isEmpty() || pass.isEmpty()) {
-                throw new NotCompleteException("Error de inicio de sesión: debes rellenar todos campos!!");
+                throw new NotCompletedException("Error de inicio de sesión:\nDebes rellenar todos campos!!");
             } else if (!checkEmailFormat(texto) || !checkPassFormat(pass)) {
-                throw new InvalidFormatException("Error de inicio de sesión: has introducido algun dato mal!!");
+                throw new InvalidFormatException("Error de inicio de sesión:\nHas introducido algun dato mal!!");
             }
 
             String passCifrada = encriptar(pass);
             System.out.println(pass);
             UsuarioInterface ui = UsuarioFactoria.getUserInterface();
             Usuario us = new Usuario();
-            System.out.println(us.toString());
-            us = ui.iniciarSesion_XML(new GenericType<Cliente>() {
+
+            us = ui.iniciarSesion_XML(new GenericType<Usuario>() {
             }, texto, passCifrada);
             System.out.println(us.toString());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
-            Parent root;
-            root = (Parent) loader.load();
+            if (us == null) {
+                throw new IncorrectCredentialsException("Error de inicio de sesión: \nLas credenciales no son correctas.");
+            }
+            if (us instanceof Cliente) {
+                if (((Cliente) us).getTienda() == null) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CrearTienda.fxml"));
+                    Parent root;
+                    root = (Parent) loader.load();
 
-            ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
-            viewController.setStage(stage, us);
-            viewController.initStage(root);
+                    ControllerCrearTienda viewController = ((ControllerCrearTienda) loader.getController());
+                    viewController.setStage(stage, us);
+                    viewController.initStage(root);
+
+                }
+            } else {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
+                Parent root;
+                root = (Parent) loader.load();
+
+                ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
+                viewController.setStage(stage, us);
+                viewController.initStage(root);
+            }
 
             /*
             if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
@@ -136,13 +153,18 @@ public class ControllerSignIn {
                 viewController2.setStage(stage);
                 viewController2.initStage(root2);
             }*/
-        } catch (NotCompleteException ex) {
-            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Debes rellenar todos los campos!!");
+        } catch (NotCompletedException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
             alerta.setHeaderText(null);
             alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
-            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Has introducido mal los campos!!");
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IncorrectCredentialsException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
             alerta.setHeaderText(null);
             alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
