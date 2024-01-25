@@ -9,9 +9,8 @@ package service;
  *
  * @author Gonzalo
  */
-public class ProductoFactoria {
-    public static ProductoInterface createInterface(){
-        ProductoInterface inter = new ProductoRestCliente();
-        return inter;
+public class ClienteFactoria {
+    public static ClienteInterface getClienteInterface() {
+        return new ClienteRestCliente();
     }
 }

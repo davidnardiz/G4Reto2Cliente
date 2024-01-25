@@ -6,6 +6,7 @@
 package reto2g4cliente;
 
 import controller.ControllerPrincipal;
+import controller.ControllerSignUp;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,11 +33,11 @@ public class Reto2G4Cliente extends Application {
         try {
             // System.out.println(greeting);
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/view/principal.fxml"));
+                    getClass().getResource("/view/signUp.fxml"));
             Parent root = (Parent) loader.load();
             //Get controller for graph 
-            ControllerPrincipal control
-                    = ((ControllerPrincipal) loader.getController());
+            ControllerSignUp control
+                    = ((ControllerSignUp) loader.getController());
             //Set greeting to be used in JavaFX view controller
             control.setStage(primaryStage);
             control.initStage(root);

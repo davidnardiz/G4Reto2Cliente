@@ -7,16 +7,20 @@ package controller;
 
 import entities.Producto;
 import java.awt.Desktop;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -39,6 +43,7 @@ import service.ProductoInterface;
  * @author Gonzalo
  */
 public class ControllerProductos {
+
     private Stage stage;
     private SimpleObjectProperty<LocalDate> date;
     @FXML
@@ -46,7 +51,7 @@ public class ControllerProductos {
     @FXML
     private TableColumn<Producto, Integer> tcId;
     @FXML
-    private TableColumn<Producto, String> tcNombre; 
+    private TableColumn<Producto, String> tcNombre;
     @FXML
     private TableColumn<Producto, Float> tcPrecio;
     @FXML
@@ -82,17 +87,19 @@ public class ControllerProductos {
     @FXML
     private TextField tfNombre;
     @FXML
-    private TextField tfFiltro;
+    private TextField tfFiltro1;
+    @FXML
+    private TextField tfFiltro2;
     @FXML
     private ComboBox cbFiltro;
-    
+
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
         cbFiltro.getItems().add("Mostrar todo");
         cbFiltro.getItems().add("Nombre");
-        cbFiltro.getItems().add("Menor ALtura");
+        cbFiltro.getItems().add("Menor Altura");
         cbFiltro.getItems().add("Mayor Altura");
         cbFiltro.getItems().add("Entre Altura");
         cbFiltro.getItems().add("Menor Precio");
@@ -101,13 +108,13 @@ public class ControllerProductos {
         cbFiltro.getItems().add("Menor Peso");
         cbFiltro.getItems().add("Mayor Peso");
         cbFiltro.getItems().add("Entre peso");
-       
+
         buttonAñadir.setOnAction(this::handleCreateProducto);
         buttonEliminar.setOnAction(this::handleDeleteProducto);
         buttonModificar.setOnAction(this::handleEditProducto);
-        buttonFiltrar.setOnAction(this::handleFiltros);
+        cbFiltro.setOnAction(this::handleFiltros);
+        buttonFiltrar.setOnAction(this::handleFiltrar);
         buttonInforme.setOnAction(this::handleInforme);
-
 
         tbProductos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tcId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
@@ -118,24 +125,25 @@ public class ControllerProductos {
         tcPeso.setCellValueFactory(new PropertyValueFactory<>("peso"));
         tcFecha.setCellValueFactory(new PropertyValueFactory<>("fechacreacion"));
         tcFecha.setCellFactory(column -> {
-            TableCell<Producto, Date> cell = new TableCell<Producto, Date>(){
+            TableCell<Producto, Date> cell = new TableCell<Producto, Date>() {
                 private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
                 @Override
-                protected void updateItem(Date item , boolean empty){
+                protected void updateItem(Date item, boolean empty) {
                     super.updateItem(item, empty);
-                    if(empty){
+                    if (empty) {
                         setText(null);
-                    }else {
-                        if (item != null){
+                    } else {
+                        if (item != null) {
                             setText(format.format(item));
                         }
                     }
                 }
             };
             return cell;
-            
+
         });
-        
+
         tbProductos.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 Producto productoSelecionado = tbProductos.getSelectionModel().getSelectedItem();
@@ -156,22 +164,22 @@ public class ControllerProductos {
             }
 
         });
-        
+
         tbProductos.getColumns().clear();
         tbProductos.getColumns().addAll(tcId, tcNombre, tcPrecio, tcAltura, tcMaterial, tcPeso, tcFecha);
-        
+
         handleCargeTable();
         stage.show();
-        
+
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
+
     private void handleCargeTable() {
         List<Producto> productos = new ArrayList();
-        ProductoInterface ti = ProductoFactoria.createProductoImple();
+        ProductoInterface ti = ProductoFactoria.createInterface();
         productos = ti.findAll_XML(new GenericType<List<Producto>>() {
         });
 
@@ -184,31 +192,318 @@ public class ControllerProductos {
         tbProductos.setItems(productoTabla);
         tbProductos.refresh();
     }
-    
-    private void handleCreateProducto(ActionEvent actionevent){
-        
-    }
-    
-    private void handleEditProducto(ActionEvent actionevent){
-        
-    }
-    
-    private void handleDeleteProducto(ActionEvent actionevent){
-        
+
+    private void handleCreateProducto(ActionEvent actionevent) {
+        try {
+            String nombre = tfNombre.getText();
+            String material = tfMaterial.getText();
+            Float precio = Float.parseFloat(tfPrecio.getText());
+            Integer altura = Integer.parseInt(tfAltura.getText());
+            Float peso = Float.parseFloat(tfPeso.getText());
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaCreacion;
+            fechaCreacion = dateFormat.parse(dpFecha.getValue().toString());
+
+            Producto producto = new Producto();
+            producto.setNombre(nombre);
+            producto.setMaterial(material);
+            producto.setPrecio(precio);
+            producto.setAltura(altura);
+            producto.setPeso(peso);
+            producto.setFechacreacion(fechaCreacion);
+            producto.setCliente(null);
+            producto.setTienda(null);
+
+            ProductoInterface pi = ProductoFactoria.createInterface();
+            pi.create_XML(producto);
+
+            cleanFields();
+            handleCargeTable();
+        } catch (ParseException ex) {
+            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void handleFiltros(ActionEvent actionevent){
-        
+    private void handleEditProducto(ActionEvent actionevent) {
+        try {
+            Producto productoSeleccionado = tbProductos.getSelectionModel().getSelectedItem();
+
+            productoSeleccionado.setNombre(tfNombre.getText());
+            productoSeleccionado.setMaterial(tfMaterial.getText());
+            productoSeleccionado.setPrecio(Integer.parseInt(tfPrecio.getText()));
+            productoSeleccionado.setAltura(Integer.parseInt(tfAltura.getText()));
+            productoSeleccionado.setPeso(Float.parseFloat(tfPeso.getText()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaCreacion;
+            fechaCreacion = dateFormat.parse(dpFecha.getValue().toString());
+            productoSeleccionado.setFechacreacion(fechaCreacion);
+
+            ProductoInterface pi = ProductoFactoria.createInterface();
+            pi.edit_XML(productoSeleccionado, productoSeleccionado.getIdProducto().toString());
+            cleanFields();
+            handleCargeTable();
+        } catch (ParseException ex) {
+            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    private void handleInforme(ActionEvent actionevent){
-        
+
+    private void handleDeleteProducto(ActionEvent actionevent) {
+        ObservableList<Producto> productosSeleccionados = tbProductos.getSelectionModel().getSelectedItems();
+
+        ProductoInterface pi = ProductoFactoria.createInterface();
+
+        for (int i = 0; i < productosSeleccionados.size(); i++) {
+            pi.remove(productosSeleccionados.get(i).getIdProducto().toString());
+        }
+
+        cleanFields();
+        handleCargeTable();
     }
-    
+
+    private void handleFiltros(Event event) {
+        String filtroSeleccionado = (String) cbFiltro.getValue();
+        if (filtroSeleccionado.equalsIgnoreCase("Mostrar todo")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(true);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Nombre")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Menor altura")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Mayor altura")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Entre altura")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(false);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Menor precio")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Mayor precio")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Entre precio")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(false);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Menor peso")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Mayor peso")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(true);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Entre peso")) {
+            tfFiltro1.setText("");
+            tfFiltro2.setText("");
+            tfFiltro1.setDisable(false);
+            tfFiltro2.setDisable(false);
+            cleanFields();
+        }
+    }
+
+    private void handleFiltrar(ActionEvent actionevent) {
+        String filtroSeleccionado = cbFiltro.getValue().toString();
+
+        ProductoInterface pi = ProductoFactoria.createInterface();
+
+        if (filtroSeleccionado.equalsIgnoreCase("Mostrar todo")) {
+            handleCargeTable();
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Nombre")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getNombre().equalsIgnoreCase(tfFiltro1.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Menor altura")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getAltura() >= Integer.parseInt(tfFiltro1.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Mayor altura")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getAltura() <= Integer.parseInt(tfFiltro1.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Entre altura")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getAltura() >= Integer.parseInt(tfFiltro1.getText()) && productos.get(i).getAltura() <= Integer.parseInt(tfFiltro2.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Menor precio")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getPrecio()>= Float.parseFloat(tfFiltro1.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Mayor precio")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getPrecio() <= Float.parseFloat(tfFiltro1.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Entre precio")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getPrecio() >= Float.parseFloat(tfFiltro1.getText()) && productos.get(i).getPrecio() <= Float.parseFloat(tfFiltro2.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Menor peso")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getPeso()>= Float.parseFloat(tfFiltro1.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Mayor peso")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getPeso() <= Float.parseFloat(tfFiltro1.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        } else if (filtroSeleccionado.equalsIgnoreCase("Entre peso")) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+            });
+
+            List<Producto> productoTabla = new ArrayList();
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getPeso() >= Float.parseFloat(tfFiltro1.getText()) && productos.get(i).getPeso() <= Float.parseFloat(tfFiltro2.getText())) {
+                    productoTabla.add(productos.get(i));
+                }
+            }
+            handleChargeFiltro(productoTabla);
+            cleanFields();
+        }
+    }
+
+    private void handleChargeFiltro(List<Producto> productos) {
+        ObservableList<Producto> productosTabla = FXCollections.observableArrayList(productos);
+        for (int i = 0; i < productosTabla.size(); i++) {
+            System.out.println(productosTabla.get(i).toString());
+        }
+
+        tbProductos.setItems(productosTabla);
+        tbProductos.refresh();
+    }
+
+    private void handleInforme(ActionEvent actionevent) {
+
+    }
+
     private void cleanFields() {
         tfId.setText("");
         tfNombre.setText("");
         tfAltura.setText("");
         tfPeso.setText("");
+        tfMaterial.setText("");
+        tfPrecio.setText("");
+        dpFecha.setValue(null);
     }
 }

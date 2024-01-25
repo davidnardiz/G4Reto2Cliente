@@ -41,7 +41,7 @@
             <TableColumn fx:id="tcNombre" minWidth="96.0" prefWidth="81.5999984741211" text="Nombre" />
             <TableColumn fx:id="tcDescripcion" minWidth="96.0" prefWidth="98.4000244140625" text="Descripción" />
             <TableColumn fx:id="tcPrecio" minWidth="96.0" prefWidth="75.99993896484375" text="Precio" />
-            <TableColumn fx:id="tcAltura" minWidth="96.0" prefWidth="64.79998779296875" text="Talla" />
+            <TableColumn fx:id="tcAltura" minWidth="96.0" prefWidth="64.79998779296875" text="Altura" />
             <TableColumn fx:id="tcMaterial" minWidth="96.0" prefWidth="76.00006103515625" text="Material" />
             <TableColumn fx:id="tcPeso" minWidth="96.0" prefWidth="72.00003051757812" text="Peso" />
             <TableColumn fx:id="tcFecha" minWidth="97.0" prefWidth="92.0" text="Fecha" />
