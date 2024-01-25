@@ -6,6 +6,8 @@
 package controller;
 
 import entities.Producto;
+import exceptions.InvalidFormatException;
+import exceptions.NotCompletedException;
 import java.awt.Desktop;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,8 +16,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +29,9 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
@@ -34,6 +41,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
 import service.ProductoFactoria;
 import service.ProductoInterface;
@@ -93,6 +101,14 @@ public class ControllerProductos {
     @FXML
     private ComboBox cbFiltro;
 
+    /**
+     * La venta debe ser Modal La ventana no debe ser redimensionable. La tabla
+     * de productos mostrará la información de todos los productos existentes.
+     * Los campos “Nombre”, “Precio”, “Talla”, “Fecha”, “Material”, “Peso” y
+     * “Descripción” están habilitados. El foco se pone en el campo de “Nombre”.
+     *
+     * @param root
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -115,6 +131,7 @@ public class ControllerProductos {
         cbFiltro.setOnAction(this::handleFiltros);
         buttonFiltrar.setOnAction(this::handleFiltrar);
         buttonInforme.setOnAction(this::handleInforme);
+        stage.setOnCloseRequest(this::handleCloseWindow);
 
         tbProductos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tcId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
@@ -155,6 +172,7 @@ public class ControllerProductos {
                     tfMaterial.setText(productoSelecionado.getMaterial());
                     tfPeso.setText(String.valueOf(productoSelecionado.getPeso()));
                     dpFecha.setValue(productoSelecionado.getFechacreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                    dpFecha.setDisable(true);
                 }
             } else {
                 if (event.getClickCount() == 2) {
@@ -165,6 +183,7 @@ public class ControllerProductos {
 
         });
 
+        tfId.setDisable(true);
         tbProductos.getColumns().clear();
         tbProductos.getColumns().addAll(tcId, tcNombre, tcPrecio, tcAltura, tcMaterial, tcPeso, tcFecha);
 
@@ -177,6 +196,9 @@ public class ControllerProductos {
         this.stage = stage;
     }
 
+    /**
+     * Carga la tabla con todos los Productos
+     */
     private void handleCargeTable() {
         List<Producto> productos = new ArrayList();
         ProductoInterface ti = ProductoFactoria.createInterface();
@@ -193,28 +215,82 @@ public class ControllerProductos {
         tbProductos.refresh();
     }
 
+    /**
+     * Validar que los campos “Nombre” (columnaNombre) , “Precio”
+     * (columnaPrecio), “Talla” (columnaTalla), “Fecha” (columnaFecha),
+     * “Material” (columnaMaterial) , “Peso” (columnaPeso) y “Descripción”
+     * (columnaDescripcion) están informados y tengan un formato correcto. En
+     * caso de que no lo estén, informar al usuario que debe rellenar todos los
+     * campos para poder continuar. En caso de que lo estén, agregar el nuevo
+     * producto a la base de datos, actualizar la tienda y vaciar los campos del
+     * formulario.
+     *
+     * @param actionevent
+     */
     private void handleCreateProducto(ActionEvent actionevent) {
         try {
-            String nombre = tfNombre.getText();
-            String material = tfMaterial.getText();
-            Float precio = Float.parseFloat(tfPrecio.getText());
-            Integer altura = Integer.parseInt(tfAltura.getText());
-            Float peso = Float.parseFloat(tfPeso.getText());
+            checkCompleteFields();
+            Pattern pattern1 = Pattern.compile("[\\d\\W]+");
+            Pattern pattern2 = Pattern.compile("[a-zA-Z]");
+            Producto producto = new Producto();
+
+            if (pattern1.matcher(tfNombre.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un nombre valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfNombre.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                producto.setNombre(tfNombre.getText());
+            }
+
+            if (pattern1.matcher(tfMaterial.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un material valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfMaterial.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                producto.setMaterial(tfMaterial.getText());
+            }
+
+            if (pattern2.matcher(tfPrecio.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un precio valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfPrecio.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                producto.setPrecio(Float.parseFloat(tfPrecio.getText()));
+            }
+
+            if (pattern2.matcher(tfAltura.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca una altura valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfAltura.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                producto.setAltura(Integer.parseInt(tfPrecio.getText()));
+            }
+
+            if (pattern2.matcher(tfPeso.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un peso valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfPeso.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                producto.setPeso(Float.parseFloat(tfPeso.getText()));
+            }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaCreacion;
             fechaCreacion = dateFormat.parse(dpFecha.getValue().toString());
 
-            Producto producto = new Producto();
-            producto.setNombre(nombre);
-            producto.setMaterial(material);
-            producto.setPrecio(precio);
-            producto.setAltura(altura);
-            producto.setPeso(peso);
             producto.setFechacreacion(fechaCreacion);
             producto.setCliente(null);
             producto.setTienda(null);
-
             ProductoInterface pi = ProductoFactoria.createInterface();
             pi.create_XML(producto);
 
@@ -222,18 +298,94 @@ public class ControllerProductos {
             handleCargeTable();
         } catch (ParseException ex) {
             Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotCompletedException ex) {
+            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Comprueba que los campos estan informados
+     *
+     * @throws NotCompletedException
+     */
+    private void checkCompleteFields() throws NotCompletedException {
+        if (tfNombre.getText().isEmpty() || tfAltura.getText().isEmpty() || tfPeso.getText().isEmpty() || tfPrecio.getText().isEmpty() || tfMaterial.getText().isEmpty() || dpFecha.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor rellene todos los campos", ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.show();
+            throw new NotCompletedException();
+        }
+    }
+
+    /**
+     * Comprobar si los datos están rellenados. Si no lo están, informar al
+     * usuario que debe rellenar todos los campos para poder continuar. Si lo
+     * están, comprobar que tienen el formato correcto y guardar los nuevos
+     * datos en la base de datos. Si no lo tienen, informar al usuario y no
+     * actualizar la información.
+     *
+     * @param actionevent
+     */
     private void handleEditProducto(ActionEvent actionevent) {
         try {
+
+            checkCompleteFields();
+            Pattern pattern1 = Pattern.compile("[\\d\\W]+");
+            Pattern pattern2 = Pattern.compile("[a-zA-Z]");
             Producto productoSeleccionado = tbProductos.getSelectionModel().getSelectedItem();
 
-            productoSeleccionado.setNombre(tfNombre.getText());
-            productoSeleccionado.setMaterial(tfMaterial.getText());
-            productoSeleccionado.setPrecio(Integer.parseInt(tfPrecio.getText()));
-            productoSeleccionado.setAltura(Integer.parseInt(tfAltura.getText()));
-            productoSeleccionado.setPeso(Float.parseFloat(tfPeso.getText()));
+            if (pattern1.matcher(tfNombre.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un nombre valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfNombre.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                productoSeleccionado.setNombre(tfNombre.getText());
+            }
+
+            if (pattern1.matcher(tfMaterial.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un material valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfMaterial.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                productoSeleccionado.setMaterial(tfMaterial.getText());
+            }
+
+            if (pattern2.matcher(tfPrecio.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un precio valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfPrecio.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                productoSeleccionado.setPrecio(Float.parseFloat(tfPrecio.getText()));
+            }
+
+            if (pattern2.matcher(tfAltura.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca una altura valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfAltura.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                productoSeleccionado.setAltura(Integer.parseInt(tfPrecio.getText()));
+            }
+
+            if (pattern2.matcher(tfPeso.getText()).find() == true) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un peso valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfPeso.setText("");
+                alert.show();
+                throw new InvalidFormatException();
+            } else {
+                productoSeleccionado.setPeso(Float.parseFloat(tfPeso.getText()));
+            }
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaCreacion;
             fechaCreacion = dateFormat.parse(dpFecha.getValue().toString());
@@ -243,11 +395,28 @@ public class ControllerProductos {
             pi.edit_XML(productoSeleccionado, productoSeleccionado.getIdProducto().toString());
             cleanFields();
             handleCargeTable();
+
         } catch (ParseException ex) {
+            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotCompletedException ex) {
             Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Mostrar un diálogo en el que se pida confirmar al usuario si quiere
+     * borrar el producto: En caso de cancelar, cerrar el diálogo de
+     * confirmación. En caso de confirmar, eliminar producto, actualizar la
+     * tabla, deseleccionar la fila seleccionada de la tabla, vaciar los campos
+     * “Nombre” (txtFieldNombre), “Precio” (txtFieldPrecio), “Talla”
+     * (txtFieldTalla), “Fecha” (dateFecha), “Material” (txtFieldMaterial),
+     * “Peso” (txtFieldPeso) y “Descripción” (txtFieldDescripcion) y enfocar el
+     * campo “Nombre (txtFieldNombre)”.
+     *
+     * @param actionevent
+     */
     private void handleDeleteProducto(ActionEvent actionevent) {
         ObservableList<Producto> productosSeleccionados = tbProductos.getSelectionModel().getSelectedItems();
 
@@ -261,6 +430,11 @@ public class ControllerProductos {
         handleCargeTable();
     }
 
+    /**
+     * Habilita o desabilita los textfield de filtros segun el tipo de filtro seleccionado
+     * en la combobox
+     * @param event
+     */
     private void handleFiltros(Event event) {
         String filtroSeleccionado = (String) cbFiltro.getValue();
         if (filtroSeleccionado.equalsIgnoreCase("Mostrar todo")) {
@@ -332,6 +506,17 @@ public class ControllerProductos {
         }
     }
 
+    /**
+     * Se comprueba si los valores introducidos en los textFields necesarios
+     * para el filtro seleccionado, en caso de que el filtro los necesite,
+     * tienen un formato correcto. 
+     *      En caso de que no lo tenga, se lanza una excepción informando 
+     *      del error. 
+     *      En caso de que tengan un formato correcto, se actualizará la 
+     *      información de la tabla aplicando el filtro seleccionado por el usuario.
+     *
+     * @param actionevent
+     */
     private void handleFiltrar(ActionEvent actionevent) {
         String filtroSeleccionado = cbFiltro.getValue().toString();
 
@@ -404,7 +589,7 @@ public class ControllerProductos {
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
-                if (productos.get(i).getPrecio()>= Float.parseFloat(tfFiltro1.getText())) {
+                if (productos.get(i).getPrecio() >= Float.parseFloat(tfFiltro1.getText())) {
                     productoTabla.add(productos.get(i));
                 }
             }
@@ -446,7 +631,7 @@ public class ControllerProductos {
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
-                if (productos.get(i).getPeso()>= Float.parseFloat(tfFiltro1.getText())) {
+                if (productos.get(i).getPeso() >= Float.parseFloat(tfFiltro1.getText())) {
                     productoTabla.add(productos.get(i));
                 }
             }
@@ -483,6 +668,10 @@ public class ControllerProductos {
         }
     }
 
+    /**
+     * Carga la tabla aplicando los filtros
+     * @param productos 
+     */
     private void handleChargeFiltro(List<Producto> productos) {
         ObservableList<Producto> productosTabla = FXCollections.observableArrayList(productos);
         for (int i = 0; i < productosTabla.size(); i++) {
@@ -497,6 +686,9 @@ public class ControllerProductos {
 
     }
 
+    /**
+     * Vacia los campos del formulario
+     */
     private void cleanFields() {
         tfId.setText("");
         tfNombre.setText("");
@@ -505,5 +697,27 @@ public class ControllerProductos {
         tfMaterial.setText("");
         tfPrecio.setText("");
         dpFecha.setValue(null);
+        dpFecha.setDisable(false);
     }
+
+    /**
+     * Método que solicita confirmación antes de cerrar la ventana cuando se
+     * pulsa la x de la parte superior derecha.
+     *
+     * @param windowEvent
+     */
+    @FXML
+    public void handleCloseWindow(WindowEvent windowEvent) {
+        windowEvent.consume();
+
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION, "¿Quieres cerrar la ventana?");
+        alerta.setHeaderText(null);
+
+        Optional<ButtonType> accion = alerta.showAndWait();
+        if (accion.get() == ButtonType.OK) {
+            Platform.exit();
+        }
+
+    }
+
 }

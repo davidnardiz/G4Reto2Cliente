@@ -6,6 +6,7 @@
 package reto2g4cliente;
 
 import controller.ControllerPrincipal;
+import controller.ControllerProductos;
 import controller.ControllerSignUp;
 import java.io.IOException;
 import java.util.logging.Level;
