@@ -71,6 +71,8 @@ public class ControllerTiendas {
     @FXML
     private MenuItem miPerfil;
     @FXML
+    private MenuItem miAyuda;
+    @FXML
     private ContextMenu contextMenu;
     @FXML
     private MenuItem menuItemMenuContextoCrear;
@@ -145,6 +147,7 @@ public class ControllerTiendas {
         miProductos.setOnAction(this::handleAbrirProductos);
         miEventos.setOnAction(this::handleAbrirEventos);
         miPerfil.setOnAction(this::handleAbrirPerfil);
+        miAyuda.setOnAction(this::handleAbrirAyuda);
 
         //Declaraciones de las columnas de la tabla
         tbTiendas.getColumns().clear();
@@ -505,6 +508,19 @@ public class ControllerTiendas {
             Parent root = loader.load();
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
             viewController.setStage(stage, usuario);
+            viewController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    public void handleAbrirAyuda(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AyudaTiendas.fxml"));
+            Parent root = loader.load();
+            ControllerAyudaTiendas viewController = ((ControllerAyudaTiendas) loader.getController());
+            viewController.setStage(stage);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);

@@ -122,7 +122,8 @@ public class ControllerRecuperarContrasenia {
                 throw new IncorrectCredentialsException("El email introducido no pertenece a ninguna cuenta!!");
             }
 
-            passNueva = enviarEmail(email);
+            passNueva = ui.envioEmail(new GenericType<String>() {
+            }, email);
             System.out.println(passNueva);
             us.setPassword(passNueva);
             System.out.println(us.toString());
@@ -149,54 +150,6 @@ public class ControllerRecuperarContrasenia {
         } catch (InvalidFormatException ex) {
             Logger.getLogger(ControllerRecuperarContrasenia.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private String enviarEmail(String email) {
-        final String ZOHO_HOST = "smtp.zoho.eu";
-        final String TLS_PORT = "897";
-
-        final String SENDER_USERNAME = "g4reto2@zohomail.eu";
-        final String SENDER_PASSWORD = "5t80H73np8Nw";
-
-        Properties props = System.getProperties();
-        props.setProperty("mail.smtps.host", ZOHO_HOST);
-        props.setProperty("mail.smtp.port", TLS_PORT);
-        props.setProperty("mail.smtp.starttls.enable", "true");
-        props.setProperty("mail.smtps.auth", "true");
-
-        props.put("mail.smtps.quitwait", "false");
-
-        Session session = Session.getInstance(props, null);
-
-        String cadena = "";
-
-        try {
-            String banco = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-            for (int x = 0; x < 8; x++) {
-                int indiceAleatorio = numeroAleatorioEnRango(0, banco.length() - 1);
-                char caracterAleatorio = banco.charAt(indiceAleatorio);
-                cadena += caracterAleatorio;
-            }
-
-            final MimeMessage msg = new MimeMessage(session);
-
-            msg.setFrom(new InternetAddress(SENDER_USERNAME));
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false));
-            msg.setSubject("Nueva Contraseña");
-            msg.setText("Ésta es su nueva contraseña: \n" + cadena, "utf-8", "html");
-            msg.setSentDate(new Date());
-
-            Transport transport = session.getTransport("smtps");
-
-            transport.connect(ZOHO_HOST, SENDER_USERNAME, SENDER_PASSWORD);
-            transport.sendMessage(msg, msg.getAllRecipients());
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-
-        }
-        return cadena;
     }
 
     private boolean checkEmailFormat(String texto) {

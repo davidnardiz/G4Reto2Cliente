@@ -134,6 +134,13 @@ public class UsuarioRestCliente implements UsuarioInterface {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
+    @Override
+    public <T> T envioEmail(GenericType<T> responseType, String correo) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("envioEmail/{0}", new Object[]{correo}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
     public void close() {
         client.close();
     }

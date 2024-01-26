@@ -43,6 +43,8 @@ public interface UsuarioInterface {
 
     public <T> T findAll_JSON(GenericType<T> responseType) throws ClientErrorException;
 
+    public <T> T envioEmail(GenericType<T> responseType, String correo) throws ClientErrorException;
+
     public void remove(String id) throws ClientErrorException;
 
 }

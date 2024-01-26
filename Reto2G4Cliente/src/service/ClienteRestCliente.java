@@ -23,7 +23,7 @@ import javax.ws.rs.core.GenericType;
  *
  * @author Gonzalo
  */
-public class ClienteRestCliente implements ClienteInterface {
+public class ClienteRestCliente implements ClienteInterface{
 
     private WebTarget webTarget;
     private Client client;

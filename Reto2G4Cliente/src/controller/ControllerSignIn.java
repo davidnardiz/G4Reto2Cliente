@@ -123,6 +123,7 @@ public class ControllerSignIn {
             us = ui.iniciarSesion_XML(new GenericType<Usuario>() {
             }, texto, passCifrada);
             System.out.println(us.toString());
+
             if (us == null) {
                 throw new IncorrectCredentialsException("Error de inicio de sesión: \nLas credenciales no son correctas.");
             }
@@ -155,7 +156,6 @@ public class ControllerSignIn {
                 viewController.setStage(stage, us);
                 viewController.initStage(root);
             }
-
             /*
             if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
                 FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
@@ -163,7 +163,7 @@ public class ControllerSignIn {
                 root2 = (Parent) loader2.load();
 
                 ControllerPrincipal viewController2 = ((ControllerPrincipal) loader2.getController());
-                viewController2.setStage(stage);
+                viewController2.setStage(stage, us);
                 viewController2.initStage(root2);
             }*/
         } catch (NotCompletedException ex) {
