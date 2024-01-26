@@ -34,11 +34,11 @@ public class Reto2G4Cliente extends Application {
         try {
             // System.out.println(greeting);
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/view/signUp.fxml"));
+                    getClass().getResource("/view/Productos.fxml"));
             Parent root = (Parent) loader.load();
             //Get controller for graph 
-            ControllerSignUp control
-                    = ((ControllerSignUp) loader.getController());
+            ControllerProductos control
+                    = ((ControllerProductos) loader.getController());
             //Set greeting to be used in JavaFX view controller
             control.setStage(primaryStage);
             control.initStage(root);

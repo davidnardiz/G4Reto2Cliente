@@ -25,7 +25,7 @@
             <items>
                   <MenuItem mnemonicParsing="false" text="Perfil" />
               <MenuItem mnemonicParsing="false" text="Productos" />
-                  <MenuItem mnemonicParsing="false" text="Eventos" />
+                  <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
                   <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
             </items>
           </Menu>
