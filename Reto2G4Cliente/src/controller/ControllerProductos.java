@@ -314,7 +314,7 @@ public class ControllerProductos {
      */
     private void checkCompleteFields() throws NotCompletedException {
         if (tfNombre.getText().isEmpty() || tfAltura.getText().isEmpty() || tfPeso.getText().isEmpty() || tfPrecio.getText().isEmpty() || tfMaterial.getText().isEmpty() || dpFecha.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor rellene todos los campos", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error : \nPorfavor rellene todos los campos", ButtonType.OK);
             alert.setHeaderText(null);
             alert.show();
             throw new NotCompletedException();
@@ -332,71 +332,83 @@ public class ControllerProductos {
      */
     private void handleEditProducto(ActionEvent actionevent) {
         try {
-
-            checkCompleteFields();
-            Pattern pattern1 = Pattern.compile("[\\d\\W]+");
-            Pattern pattern2 = Pattern.compile("[a-zA-Z]");
-            Producto productoSeleccionado = tbProductos.getSelectionModel().getSelectedItem();
-
-            if (pattern1.matcher(tfNombre.getText()).find() == true) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un nombre valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
-                alert.setHeaderText(null);
-                tfNombre.setText("");
-                alert.show();
-                throw new InvalidFormatException();
+            Producto productoSelec = tbProductos.getSelectionModel().getSelectedItem();
+            if (productoSelec == null) {
+                try {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de edicion: \nPorfavor seleccione un producto en la tabla", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    alert.show();
+                    throw new NotCompletedException();
+                } catch (NotCompletedException ex) {
+                    Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
-                productoSeleccionado.setNombre(tfNombre.getText());
+
+                checkCompleteFields();
+                Pattern pattern1 = Pattern.compile("[^\\p{L}\\p{M}\\dñÑáéíóúÁÉÍÓÚ\\s]");
+                Pattern pattern2 = Pattern.compile("[a-zA-Z]");
+                Producto productoSeleccionado = tbProductos.getSelectionModel().getSelectedItem();
+
+                if (pattern1.matcher(tfNombre.getText()).find() == true) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de edicion: \nPorfavor introduzca un nombre valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfNombre.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } else {
+                    productoSeleccionado.setNombre(tfNombre.getText());
+                }
+
+                if (pattern1.matcher(tfMaterial.getText()).find() == true) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de edicion: \nPorfavor introduzca un material valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfMaterial.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } else {
+                    productoSeleccionado.setMaterial(tfMaterial.getText());
+                }
+
+                if (pattern2.matcher(tfPrecio.getText()).find() == true) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de edicion: \nPorfavor introduzca un precio valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfPrecio.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } else {
+                    productoSeleccionado.setPrecio(Float.parseFloat(tfPrecio.getText()));
+                }
+
+                if (pattern2.matcher(tfAltura.getText()).find() == true) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de edicion: \nPorfavor introduzca una altura valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfAltura.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } else {
+                    productoSeleccionado.setAltura(Integer.parseInt(tfAltura.getText()));
+                }
+
+                if (pattern2.matcher(tfPeso.getText()).find() == true) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de edicion: \nPorfavor introduzca un peso valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfPeso.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } else {
+                    productoSeleccionado.setPeso(Float.parseFloat(tfPeso.getText()));
+                }
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date fechaCreacion;
+                fechaCreacion = dateFormat.parse(dpFecha.getValue().toString());
+                productoSeleccionado.setFechacreacion(fechaCreacion);
+
+                ProductoInterface pi = ProductoFactoria.createInterface();
+                pi.edit_XML(productoSeleccionado, productoSeleccionado.getIdProducto().toString());
+                cleanFields();
+                handleCargeTable();
             }
-
-            if (pattern1.matcher(tfMaterial.getText()).find() == true) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un material valido que no contenga ni numeros ni caracteres especiales", ButtonType.OK);
-                alert.setHeaderText(null);
-                tfMaterial.setText("");
-                alert.show();
-                throw new InvalidFormatException();
-            } else {
-                productoSeleccionado.setMaterial(tfMaterial.getText());
-            }
-
-            if (pattern2.matcher(tfPrecio.getText()).find() == true) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un precio valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
-                alert.setHeaderText(null);
-                tfPrecio.setText("");
-                alert.show();
-                throw new InvalidFormatException();
-            } else {
-                productoSeleccionado.setPrecio(Float.parseFloat(tfPrecio.getText()));
-            }
-
-            if (pattern2.matcher(tfAltura.getText()).find() == true) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca una altura valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
-                alert.setHeaderText(null);
-                tfAltura.setText("");
-                alert.show();
-                throw new InvalidFormatException();
-            } else {
-                productoSeleccionado.setAltura(Integer.parseInt(tfPrecio.getText()));
-            }
-
-            if (pattern2.matcher(tfPeso.getText()).find() == true) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un peso valido que no contenga ni letras ni caracteres especiales (A excepcion de . y ,)", ButtonType.OK);
-                alert.setHeaderText(null);
-                tfPeso.setText("");
-                alert.show();
-                throw new InvalidFormatException();
-            } else {
-                productoSeleccionado.setPeso(Float.parseFloat(tfPeso.getText()));
-            }
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaCreacion;
-            fechaCreacion = dateFormat.parse(dpFecha.getValue().toString());
-            productoSeleccionado.setFechacreacion(fechaCreacion);
-
-            ProductoInterface pi = ProductoFactoria.createInterface();
-            pi.edit_XML(productoSeleccionado, productoSeleccionado.getIdProducto().toString());
-            cleanFields();
-            handleCargeTable();
 
         } catch (ParseException ex) {
             Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
@@ -405,6 +417,7 @@ public class ControllerProductos {
         } catch (NotCompletedException ex) {
             Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     /**
@@ -420,16 +433,28 @@ public class ControllerProductos {
      * @param actionevent
      */
     private void handleDeleteProducto(ActionEvent actionevent) {
-        ObservableList<Producto> productosSeleccionados = tbProductos.getSelectionModel().getSelectedItems();
+        Producto productoSelec = tbProductos.getSelectionModel().getSelectedItem();
+        if (productoSelec == null) {
+            try {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error de eliminacion: \nPorfavor seleccione un producto en la tabla", ButtonType.OK);
+                alert.setHeaderText(null);
+                alert.show();
+                throw new NotCompletedException();
+            } catch (NotCompletedException ex) {
+                Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            ObservableList<Producto> productosSeleccionados = tbProductos.getSelectionModel().getSelectedItems();
 
-        ProductoInterface pi = ProductoFactoria.createInterface();
+            ProductoInterface pi = ProductoFactoria.createInterface();
 
-        for (int i = 0; i < productosSeleccionados.size(); i++) {
-            pi.remove(productosSeleccionados.get(i).getIdProducto().toString());
+            for (int i = 0; i < productosSeleccionados.size(); i++) {
+                pi.remove(productosSeleccionados.get(i).getIdProducto().toString());
+            }
+
+            cleanFields();
+            handleCargeTable();
         }
-
-        cleanFields();
-        handleCargeTable();
     }
 
     /**
