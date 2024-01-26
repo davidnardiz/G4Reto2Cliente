@@ -37,7 +37,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda">
                <items>
-                  <MenuItem fx:id="miAyuda" mnemonicParsing="false" text="Ayuda" />
+                  <MenuItem fx:id="miAyuda" mnemonicParsing="false" text="¿Qué hace esta ventana?" />
                </items></Menu>
             </menus>
             <padding>

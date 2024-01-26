@@ -37,6 +37,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -104,6 +105,8 @@ public class ControllerProductos {
     private TextField tfFiltro2;
     @FXML
     private ComboBox cbFiltro;
+    @FXML
+    private MenuItem menuItemAyuda;
 
     /**
      * La venta debe ser Modal La ventana no debe ser redimensionable. La tabla
@@ -136,6 +139,7 @@ public class ControllerProductos {
         buttonFiltrar.setOnAction(this::handleFiltrar);
         buttonInforme.setOnAction(this::handleInforme);
         stage.setOnCloseRequest(this::handleCloseWindow);
+        menuItemAyuda.setOnAction(this::handleAyuda);
 
         tbProductos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tcId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
@@ -867,6 +871,19 @@ public class ControllerProductos {
             Platform.exit();
         }
 
+    }
+
+    /**
+     * Maneja el evento de ayuda en la ventana de productos. Este método invoca
+     * el método {@link ControllerAyudas#mostrarVentanaAyudaProductos()} para
+     * mostrar una ventana de ayuda específica para la interfaz de productos.
+     *
+     * @param event El evento de acción que desencadena esta operación.
+     * @see ControllerAyudas#mostrarVentanaAyudaProductos()
+     */
+    @FXML
+    public void handleAyuda(ActionEvent event) {
+        ControllerAyudas.getInstance().mostrarVentanaAyudaProductos();
     }
 
 }

@@ -40,7 +40,7 @@ public class ControllerPerfil {
     private Usuario usuario;
 
     @FXML
-    MenuItem menuItemAyuda;
+    private MenuItem menuItemAyuda;
     @FXML
     private Button btnVolver;
     @FXML
@@ -219,9 +219,17 @@ public class ControllerPerfil {
         }
     }
 
+    /**
+     * Maneja el evento de ayuda en la ventana de perfil. Este método invoca el
+     * método {@link ControllerAyudas#mostrarVentanaAyudaPerfil()} para mostrar
+     * una ventana de ayuda específica para la interfaz de perfil.
+     *
+     * @param event El evento de acción que desencadena esta operación.
+     * @see ControllerAyudas#mostrarVentanaAyudaPerfil()
+     */
     @FXML
     public void handleAyuda(ActionEvent event) {
-        AyudaControllerSingletone.getInstance().mostrarVentanaAyudaPerfil();
+        ControllerAyudas.getInstance().mostrarVentanaAyudaPerfil();
     }
 
 

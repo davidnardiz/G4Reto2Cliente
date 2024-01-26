@@ -93,7 +93,7 @@
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda">
-                    <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Como funciona esta ventana?" />
+                    <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Qué hace esta ventana?" />
                 </Menu>
             </menus>
             <padding>

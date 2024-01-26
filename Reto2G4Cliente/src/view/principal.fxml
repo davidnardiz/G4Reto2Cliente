@@ -25,7 +25,10 @@
                   <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
                </items>
             </Menu>
-            <Menu fx:id="menuItemAyuda" mnemonicParsing="false" text="Ayuda" />
+            <Menu fx:id="menuAyuda" mnemonicParsing="false" text="Ayuda">
+               <items>
+                  <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Qué hace esta ventana?" />
+               </items></Menu>
          </menus>
          <padding>
             <Insets left="8.0" top="5.0" />
