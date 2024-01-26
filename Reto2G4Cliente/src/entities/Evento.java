@@ -6,14 +6,15 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -26,30 +27,33 @@ public class Evento implements Serializable {
     private SimpleIntegerProperty idEvento;
     private SimpleObjectProperty<Date> fecha;
     private SimpleFloatProperty totalRecaudado;
-    private SimpleIntegerProperty cantidadParticipantes;
+    private SimpleIntegerProperty numParticipantes;
     private SimpleObjectProperty<Cliente> cliente;
     private SimpleObjectProperty<Administrador> admin;
-    private SimpleObjectProperty<List<Producto>> productos;
-    private SimpleObjectProperty<List<Evento>> listaEventos;
+    private ArrayList<Object> administradores;
+    private ArrayList<Object> listaTiendasEvento;
+    
 
-    public Evento(Integer idEvento, Float totalRecaudado, Integer cantidadParticipantes, Date fechaCreacion, Administrador admin, Cliente cliente, List<Producto> productos, List<Evento> listaEventos) {
+    public Evento(Integer idEvento, Float totalRecaudado, Integer numParticipantes, Date fechaCreacion, Administrador admin) {
         this.idEvento = new SimpleIntegerProperty(idEvento);
         this.fecha = new SimpleObjectProperty<>(fechaCreacion);
         this.totalRecaudado = new SimpleFloatProperty(totalRecaudado);
-        this.cantidadParticipantes = new SimpleIntegerProperty(cantidadParticipantes);
-        this.cliente = new SimpleObjectProperty<>(cliente);
-        this.productos = new SimpleObjectProperty<>(productos);
-        this.listaEventos = new SimpleObjectProperty<>(listaEventos);
+        this.numParticipantes = new SimpleIntegerProperty(numParticipantes);
+        if (admin == null) {
+        throw new IllegalArgumentException("El administrador no puede ser nulo.");
+            }
+        this.admin = new SimpleObjectProperty<>(admin);
     }
 
     public Evento() {
         this.idEvento = new SimpleIntegerProperty();
         this.fecha = new SimpleObjectProperty<>();
         this.totalRecaudado = new SimpleFloatProperty();
-        this.cantidadParticipantes = new SimpleIntegerProperty();
+        this.numParticipantes = new SimpleIntegerProperty();
         this.cliente = new SimpleObjectProperty<>();
-        this.productos = new SimpleObjectProperty<>();
-        this.listaEventos = new SimpleObjectProperty<>();
+        this.administradores = new ArrayList<>();
+        this.listaTiendasEvento = new ArrayList<>();
+        
     }
 
     public Integer getIdEvento() {
@@ -60,12 +64,12 @@ public class Evento implements Serializable {
         this.idEvento.set(idEvento);
     }
 
-    public Integer getCantidadParticipantes() {
-        return cantidadParticipantes.get();
+    public Integer getNumParticipantes() {
+        return numParticipantes.get();
     }
 
-    public void setCantidadParticipantes(Integer cantidadParticipantes) {
-        this.cantidadParticipantes.set(cantidadParticipantes);
+    public void setNumParticipantes(Integer numParticipantes) {
+        this.numParticipantes.set(numParticipantes);
     }
 
     public Float getTotalRecaudado() {
@@ -92,29 +96,25 @@ public class Evento implements Serializable {
         this.cliente.set(cliente);
     }
 
+   @XmlTransient
     public Administrador getAdministrador() {
-        return admin.get();
+        if (administradores != null && !administradores.isEmpty()) {
+        return (Administrador) administradores.get(0);
+        } else {
+        return null;
     }
+}
 
     public void setAdministrador(Administrador admin) {
         this.admin.set(admin);
     }
-
-    public List<Producto> getProductos() {
-        return productos.get();
+    
+    public ArrayList<Object> getAdministradores() {
+    if (administradores == null) {
+        administradores = new ArrayList<>();
     }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos.set(productos);
-    }
-
-    public List<Evento> getListaEventosEvento() {
-        return listaEventos.get();
-    }
-
-    public void setListaEventosEvento(List<Evento> listaEventosEvento) {
-        this.listaEventos.set(listaEventosEvento);
-    }
+    return administradores;
+}
 
     @Override
     public int hashCode() {
@@ -123,27 +123,26 @@ public class Evento implements Serializable {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Evento other = (Evento) obj;
-        if (this.idEvento != other.idEvento) {
-            return false;
-        }
+   public boolean equals(Object obj) {
+    if (this == obj) {
         return true;
     }
-
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
+    final Evento other = (Evento) obj;
+    if (!Objects.equals(this.idEvento.get(), other.idEvento.get())) {
+        return false;
+    }
+    return true;
+}
+    
     @Override
     public String toString() {
-        return "Evento{" + "idEvento=" + idEvento + ", fecha=" + fecha + ", cantidadParticipantes=" + cantidadParticipantes + "admin=" + admin + '}';
+        return "Evento{" + "idEvento=" + idEvento + ", fecha=" + fecha + ", numParticipantes=" + numParticipantes + "admin=" + admin + '}';
     }
 
 }

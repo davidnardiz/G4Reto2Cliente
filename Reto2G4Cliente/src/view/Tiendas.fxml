@@ -19,17 +19,19 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1016.0" stylesheets="@../resources/styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTiendas">
     <children>
-        <MenuBar prefHeight="39.0" prefWidth="1016.0" styleClass="Inicio">
+        <MenuBar layoutX="1.0" prefHeight="39.0" prefWidth="1016.0" styleClass="Inicio">
             <menus>
                 <Menu mnemonicParsing="false" text="Inicio">
                <items>
                   <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Inicio" />
-               </items></Menu>
+               </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Menú">
                     <items>
                         <MenuItem fx:id="miPerfil" mnemonicParsing="false" text="Perfil" />
                         <MenuItem fx:id="miProductos" mnemonicParsing="false" text="Productos" />
                         <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
+                  <MenuItem fx:id="miTiendas" mnemonicParsing="false" text="Tiendas" />
                         <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
                     </items>
                 </Menu>
@@ -50,12 +52,11 @@
                 <TableColumn fx:id="cmnCliente" prefWidth="75.20001220703125" text="Cliente" />
             </columns>
             <contextMenu>
-                <ContextMenu>
+                <ContextMenu fx:id="menuContexto">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Crear" />
-                        <MenuItem mnemonicParsing="false" text="Modificar" />
-                        <MenuItem mnemonicParsing="false" text="Eliminar" />
-                        <MenuItem mnemonicParsing="false" text="Ver" />
+                        <MenuItem fx:id="menuItemMenuContextoCrear" mnemonicParsing="false" text="Crear" />
+                        <MenuItem fx:id="menuItemMenuContextoModificar" mnemonicParsing="false" text="Modificar" />
+                        <MenuItem fx:id="menuItemMenuContextoEliminar" mnemonicParsing="false" text="Eliminar" />
                     </items>
                 </ContextMenu>
             </contextMenu>

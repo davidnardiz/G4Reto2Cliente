@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
@@ -20,7 +21,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Iñigo
  */
-@XmlRootElement(name = "Usuario")
+@XmlRootElement(name = "usuario")
+@XmlSeeAlso({Cliente.class, Administrador.class})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;

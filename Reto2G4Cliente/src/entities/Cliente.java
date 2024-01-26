@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author David
  */
-@XmlRootElement(name = "Cliente")
+@XmlRootElement(name = "cliente")
 public class Cliente extends Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -64,6 +64,11 @@ public class Cliente extends Usuario implements Serializable {
 
     public void setProductosCreados(List<Producto> productosCreados) {
         this.productosCreados.set(productosCreados);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "Cliente{" + "tipoVenta=" + tipoVenta + ", tienda=" + tienda + ", productosCreados=" + productosCreados + '}';
     }
 
 }

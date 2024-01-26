@@ -8,8 +8,9 @@ package controller;
 import entities.Cliente;
 import entities.Tienda;
 import entities.TipoPago;
+import entities.Usuario;
 import exceptions.InvalidFormatException;
-import exceptions.NotSelectedTiendaException;
+import exceptions.NotSelectedException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +35,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -55,6 +57,7 @@ import service.TiendaInterface;
 public class ControllerTiendas {
 
     private Stage stage;
+    private Usuario usuario;
     @FXML
     private MenuBar menu;
     @FXML
@@ -68,11 +71,25 @@ public class ControllerTiendas {
     @FXML
     private MenuItem miPerfil;
     @FXML
+    private ContextMenu contextMenu;
+    @FXML
+    private MenuItem menuItemMenuContextoCrear;
+    @FXML
+    private MenuItem menuItemMenuContextoModificar;
+    @FXML
+    private MenuItem menuItemMenuContextoEliminar;
+    @FXML
     private TextField txtFieldNombre;
+    @FXML
+    private TextField txtFieldNombreColumna;
     @FXML
     private TextField txtFieldEspacio;
     @FXML
+    private TextField txtFieldEspacioColumna;
+    @FXML
     private TextField txtFieldDescripcion;
+    @FXML
+    private TextField txtFieldDescripcionColumna;
     @FXML
     private ComboBox cbTipoPago;
     @FXML
@@ -113,16 +130,30 @@ public class ControllerTiendas {
         stage.setScene(scene);
         stage.setResizable(false);
 
+        //Método cerrar ventana
+        stage.setOnCloseRequest(this::handleCloseWindow);
+
+        //Menú items del menú bar
         miCerrarSesion.setOnAction(this::handleCerrarSesion);
         miPrincipal.setOnAction(this::handleAbrirInicio);
         miProductos.setOnAction(this::handleAbrirProductos);
         miEventos.setOnAction(this::handleAbrirEventos);
         miPerfil.setOnAction(this::handleAbrirPerfil);
 
+        //Declaraciones de las columnas de la tabla
         tbTiendas.getColumns().clear();
         tbTiendas.getColumns().addAll(cmnId, cmnNombre, cmnDescripcion, cmnTipoPago, cmnEspacio, cmnFechaCreacion, cmnCliente);
         tbTiendas.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+        cmnId.setCellValueFactory(new PropertyValueFactory<>("idTienda"));
+        cmnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        cmnDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        cmnTipoPago.setCellValueFactory(new PropertyValueFactory<>("tipoPago"));
+        cmnEspacio.setCellValueFactory(new PropertyValueFactory<>("espacio"));
+        cmnFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
+        cmnCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
+
+        //Seleccionar fila
         tbTiendas.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 Tienda tiendaSeleccionada = tbTiendas.getSelectionModel().getSelectedItem();
@@ -131,7 +162,7 @@ public class ControllerTiendas {
                     txtFieldEspacio.setText(tiendaSeleccionada.getEspacio() + "");
                     txtFieldDescripcion.setText(tiendaSeleccionada.getDescripcion());
                     cbTipoPago.setValue(tiendaSeleccionada.getTipoPago());
-                    //dpFechaCreacion.setValue(tiendaSeleccionada.getFechaCreacion());
+                    dpFechaCreacion.setValue(tiendaSeleccionada.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                 }
             } else {
                 if (event.getClickCount() == 2) {
@@ -142,6 +173,13 @@ public class ControllerTiendas {
 
         });
 
+        //Menú de contexto
+        menuItemMenuContextoCrear.setOnAction(this::handleCreateTienda);
+        menuItemMenuContextoModificar.setOnAction(this::handleEditTienda);
+        menuItemMenuContextoEliminar.setOnAction(this::handleDeleteTienda);
+        //menuItemMenuContextoVer.setOnAction(this::handle);
+
+        //ComboBox
         cbTipoPago.getItems().setAll(FXCollections.observableArrayList(TipoPago.values()));
         cbFiltros.getItems().add("Mostrar todas");
         cbFiltros.getItems().add("Menor espacio");
@@ -149,31 +187,26 @@ public class ControllerTiendas {
         cbFiltros.getItems().add("Entre espacios");
         cbFiltros.getItems().add("Tipo pago");
 
-        cmnId.setCellValueFactory(new PropertyValueFactory<>("idTienda"));
-        cmnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        cmnDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        cmnTipoPago.setCellValueFactory(new PropertyValueFactory<>("tipoPago"));
-        cmnEspacio.setCellValueFactory(new PropertyValueFactory<>("espacio"));
-        cmnFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
-        cmnCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
-
-        stage.setOnCloseRequest(this::handleCloseWindow);
+        //Botones crear, eliminar y editar
         btnCrear.setOnAction(this::handleCreateTienda);
         btnEditar.setOnAction(this::handleEditTienda);
         btnEliminar.setOnAction(this::handleDeleteTienda);
 
-        handleCargeTable();
-
+        //Filtros
         cbFiltros.setOnAction(this::handleFiltros);
         btnFiltrar.setOnAction(this::handleEjecutarFiltros);
         txtFieldFiltro1.setDisable(true);
         txtFieldFiltro2.setDisable(true);
 
+        //Cargar tabla
+        handleCargeTable();
+
         stage.show();
     }
 
-    public void setStage(Stage stage) {
+    public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
+        this.usuario = usuario;
     }
 
     /**
@@ -255,17 +288,30 @@ public class ControllerTiendas {
 
     @FXML
     public void handleEditTienda(ActionEvent actionEvent) {
-
         Tienda tiendaSeleccionada = tbTiendas.getSelectionModel().getSelectedItem();
         try {
             if (tiendaSeleccionada == null) {
-                throw new NotSelectedTiendaException("No hay seleccionada ninguna tienda!!");
+                throw new NotSelectedException("No hay seleccionada ninguna tienda!!");
             }
+
+            tiendaSeleccionada.setNombre(txtFieldNombre.getText());
+            tiendaSeleccionada.setDescripcion(txtFieldDescripcion.getText());
+            tiendaSeleccionada.setEspacio(Float.parseFloat(txtFieldEspacio.getText()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaCreacion;
+            fechaCreacion = dateFormat.parse(dpFechaCreacion.getValue().toString());
+            tiendaSeleccionada.setFechaCreacion(fechaCreacion);
+            tiendaSeleccionada.setTipoPago((TipoPago) cbTipoPago.getValue());
 
             TiendaInterface ti = TiendaFactoria.getTiendaInterface();
             ti.edit_XML(tiendaSeleccionada, tiendaSeleccionada.getIdTienda().toString());
 
-        } catch (NotSelectedTiendaException ex) {
+        } catch (NotSelectedException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "No hay ninguna tienda seleccionada!!");
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
         }
         cleanFields();
@@ -275,7 +321,6 @@ public class ControllerTiendas {
 
     @FXML
     public void handleDeleteTienda(ActionEvent actionEvent) {
-
         ObservableList<Tienda> tiendasSeleccionadas = tbTiendas.getSelectionModel().getSelectedItems();
 
         TiendaInterface ti = TiendaFactoria.getTiendaInterface();
@@ -405,7 +450,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root = loader.load();
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -418,7 +463,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Productos.fxml"));
             Parent root = loader.load();
             ControllerProductos viewController = ((ControllerProductos) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -431,7 +476,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
             Parent root = loader.load();
             ControllerEventos viewController = ((ControllerEventos) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -444,7 +489,7 @@ public class ControllerTiendas {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Perfil.fxml"));
             Parent root = loader.load();
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
-            viewController.setStage(stage);
+            viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);

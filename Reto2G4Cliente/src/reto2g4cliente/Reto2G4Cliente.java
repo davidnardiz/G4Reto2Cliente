@@ -23,7 +23,6 @@ public class Reto2G4Cliente extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // System.out.println(greeting);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root;

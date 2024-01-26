@@ -5,10 +5,12 @@
  */
 package controller;
 
+import static encriptation.ClienteEncriptation.encriptar;
 import entities.Cliente;
 import entities.Usuario;
+import exceptions.IncorrectCredentialsException;
 import exceptions.InvalidFormatException;
-import exceptions.NotCompleteException;
+import exceptions.NotCompletedException;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -58,8 +60,8 @@ public class ControllerSignIn {
         stage.show();
 
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario3@example.com");
-        passField.setText("password3");
+        txtFieldEmail.setText("usuario1@example.com");
+        passField.setText("password1");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -70,7 +72,7 @@ public class ControllerSignIn {
         hplNoCuenta.setOnAction(this::handleOpenSignUp);
 
         //Método para abrir el registrarse
-        //hplRecuperarPass.setOnAction(this::handleRecoverPass);
+        hplRecuperarPass.setOnAction(this::handleRecoverPass);
     }
 
     public void setStage(Stage stage) {
@@ -94,7 +96,6 @@ public class ControllerSignIn {
         if (accion.get() == ButtonType.OK) {
             Platform.exit();
         }
-
     }
 
     @FXML
@@ -103,41 +104,70 @@ public class ControllerSignIn {
         String pass = passField.getText();
 
         try {
-            if (texto == null || pass == null) {
-                throw new NotCompleteException("Error de inicio de sesión: debes rellenar todos campos!!");
+            if (texto.isEmpty() || pass.isEmpty()) {
+                throw new NotCompletedException("Error de inicio de sesión:\nDebes rellenar todos campos!!");
             } else if (!checkEmailFormat(texto) || !checkPassFormat(pass)) {
-                throw new InvalidFormatException("Error de inicio de sesión: has introducido algun dato mal!!");
+                throw new InvalidFormatException("Error de inicio de sesión:\nHas introducido algun dato mal!!");
             }
 
+            String passCifrada = encriptar(pass);
+            System.out.println(pass);
             UsuarioInterface ui = UsuarioFactoria.getUserInterface();
             Usuario us = new Usuario();
+/*
+            us = ui.iniciarSesion_XML(new GenericType<Usuario>() {
+            }, texto, passCifrada);
             System.out.println(us.toString());
-            us = ui.iniciarSesion_XML(new GenericType<Cliente>() {
-            }, texto, pass);
-            System.out.println(us.toString());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
-            Parent root;
-            root = (Parent) loader.load();
+            if (us == null) {
+                throw new IncorrectCredentialsException("Error de inicio de sesión: \nLas credenciales no son correctas.");
+            }
+            if (us instanceof Cliente) {
+                if (((Cliente) us).getTienda() == null) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CrearTienda.fxml"));
+                    Parent root;
+                    root = (Parent) loader.load();
 
-            ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
-            viewController.setStage(stage);
-            viewController.initStage(root);
+                    ControllerCrearTienda viewController = ((ControllerCrearTienda) loader.getController());
+                    viewController.setStage(stage, us);
+                    viewController.initStage(root);
 
+                }
+            } else {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
+                Parent root;
+                root = (Parent) loader.load();
+
+                ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
+                viewController.setStage(stage, us);
+                viewController.initStage(root);
+            }
+*/
+            
             if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
                 FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
                 Parent root2;
-                root2 = (Parent) loader.load();
+                root2 = (Parent) loader2.load();
 
-                ControllerPrincipal viewController2 = ((ControllerPrincipal) loader.getController());
-                viewController.setStage(stage);
-                viewController.initStage(root2);
+                ControllerPrincipal viewController2 = ((ControllerPrincipal) loader2.getController());
+                viewController2.setStage(stage,us);
+                viewController2.initStage(root2);
             }
-
-        } catch (NotCompleteException ex) {
+        } catch (NotCompletedException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } /*catch (IncorrectCredentialsException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
+        }*/ catch (IOException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -166,7 +196,7 @@ public class ControllerSignIn {
     }
 
     @FXML
-    public void handleRecoverPass(WindowEvent windowEvent) {
+    public void handleRecoverPass(ActionEvent actionEvent) {
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecuperarContrasenia.fxml"));

@@ -8,6 +8,7 @@ package service;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:AdministradorFacadeREST
@@ -41,25 +42,25 @@ public class AdministradorRestCliente {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T encontrarUsuarioPorMinNumeroEventos_XML(Class<T> responseType, String numEventos) throws ClientErrorException {
+    public <T> T encontrarUsuarioPorMinNumeroEventos_XML(GenericType<T> responseType, String numEventos) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorMinNumeroEventos/{0}", new Object[]{numEventos}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarUsuarioPorMinNumeroEventos_JSON(Class<T> responseType, String numEventos) throws ClientErrorException {
+    public <T> T encontrarUsuarioPorMinNumeroEventos_JSON(GenericType<T> responseType, String numEventos) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorMinNumeroEventos/{0}", new Object[]{numEventos}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T find_XML(Class<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T find_JSON(Class<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_JSON(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -73,24 +74,24 @@ public class AdministradorRestCliente {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T encontrarUsuarioPorMaxNumeroEventos_XML(Class<T> responseType, String numEventos) throws ClientErrorException {
+    public <T> T encontrarUsuarioPorMaxNumeroEventos_XML(GenericType<T> responseType, String numEventos) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorMaxNumeroEventos/{0}", new Object[]{numEventos}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T encontrarUsuarioPorMaxNumeroEventos_JSON(Class<T> responseType, String numEventos) throws ClientErrorException {
+    public <T> T encontrarUsuarioPorMaxNumeroEventos_JSON(GenericType<T> responseType, String numEventos) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorMaxNumeroEventos/{0}", new Object[]{numEventos}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findAll_JSON(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll_JSON(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
@@ -102,5 +103,5 @@ public class AdministradorRestCliente {
     public void close() {
         client.close();
     }
-    
+
 }

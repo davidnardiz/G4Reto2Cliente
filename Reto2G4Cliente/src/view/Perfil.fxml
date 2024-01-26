@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerPerfil">
    <children>
       <Pane layoutX="311.0" layoutY="74.0" prefHeight="262.0" prefWidth="256.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
          <effect>
@@ -93,13 +93,18 @@
             <Menu mnemonicParsing="false" text="Inicio" />
             <Menu mnemonicParsing="false" text="Menú">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Perfil" />
-                  <MenuItem mnemonicParsing="false" text="Productos" />
-                  <MenuItem mnemonicParsing="false" text="Eventos" />
-                  <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
+                  <MenuItem fx:id="miPerfil" mnemonicParsing="false" text="Perfil" />
+                  <MenuItem fx:id="miTiendas" mnemonicParsing="false" text="Tiendas" />
+                  <MenuItem fx:id="miProductos" mnemonicParsing="false" text="Productos" />
+                  <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
+                  <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+                  <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Principal" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Ayuda" />
+            <Menu fx:id="menuAyuda" mnemonicParsing="false" text="Ayuda">
+               <items>
+                  <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Qué hace esta ventana?" />
+               </items></Menu>
          </menus>
          <padding>
             <Insets left="8.0" top="5.0" />
