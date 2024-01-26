@@ -10,11 +10,14 @@ import entities.Tienda;
 import entities.TipoPago;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
+import exceptions.NotCompletedException;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -29,13 +32,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javax.ws.rs.core.GenericType;
 import service.ClienteFactoria;
 import service.ClienteInterface;
 import service.TiendaFactoria;
 import service.TiendaInterface;
-import service.UsuarioFactoria;
-import service.UsuarioInterface;
 
 /**
  *
@@ -82,20 +83,23 @@ public class ControllerCrearTienda {
      */
     @FXML
     public void handleCreateTienda(ActionEvent actionEvent) {
+        //Obtenemos los datos del formulario.
         String nombre = txtFieldNombre.getText();
         String descripcion = txtFieldDescripcion.getText();
-        float espacio = Float.parseFloat(txtFieldEspacio.getText());
+        String espacio = txtFieldEspacio.getText();
         TipoPago tipoPago = (TipoPago) comboBoxTipoPago.getValue();
 
         try {
+            //Comprobamos que si ha rellenado todos los datos.
+            if (txtFieldNombre.getText().isEmpty() || txtFieldDescripcion.getText().isEmpty() || txtFieldEspacio.getText().isEmpty() || comboBoxTipoPago.getValue() == null || datePickerFechaCreacion.getValue() == null) {
+                throw new NotCompletedException("Debes rellenar todos los datos!!");
+            }
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaCreacion;
             fechaCreacion = dateFormat.parse(datePickerFechaCreacion.getValue().toString());
-            /*
-            if (!checkNameFormat(nombre) || !checkDescriptionFormat(descripcion) || !checkSpaceFormat(espacio) || checkDateFormat(fechaCreacion) || !checkTypeFormat(tipoPago)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
-            }
-             */
+
+            //Comprobamos el formato de los datos obtenidos.
             if (!checkNameFormat(nombre)) {
                 throw new InvalidFormatException("Debes introducir bien los datos!!");
             } else if (!checkDescriptionFormat(descripcion)) {
@@ -108,30 +112,33 @@ public class ControllerCrearTienda {
                 throw new InvalidFormatException("Debes introducir bien los datos!!");
             }
 
+            //Creamos una nueva tienda y le asignamos los datos.
             Tienda tienda = new Tienda();
             tienda.setNombre(nombre);
             tienda.setDescripcion(descripcion);
-            tienda.setEspacio(espacio);
+            tienda.setEspacio(Float.parseFloat(espacio));
             tienda.setFechaCreacion(fechaCreacion);
             tienda.setTipoPago(tipoPago);
+            //tienda.setCliente((Cliente) usuario);
 
-            ((Cliente) usuario).setTienda(tienda);
+            //LLamamos al metodo correspondiente que se encarga de crear la tienda
             TiendaInterface ti = TiendaFactoria.getTiendaInterface();
             ti.create_XML(tienda);
+            List<Tienda> tiendas = ti.findAll_XML(new GenericType<List<Tienda>>() {
+            });
+            tienda.setIdTienda(tiendas.get(tiendas.size() - 1).getIdTienda());
 
-            ClienteInterface ci = ClienteFactoria.getClienteInterface();
-            ci.edit_XML(usuario, usuario.getIdUsuario().toString());
-
-            System.out.println(usuario.toString());
-
+            //Abrimos la ventana principal.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root;
             root = (Parent) loader.load();
 
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
             viewController.setStage(stage, usuario);
+            viewController.setTiendaACliente(tienda);
             viewController.initStage(root);
 
+            //Informamos al usuario que la tienda se ha creado correctamente.
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Se ha creado correctamente la tienda!!");
             alerta.setHeaderText(null);
             alerta.show();
@@ -145,6 +152,11 @@ public class ControllerCrearTienda {
             Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ControllerCrearTienda.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotCompletedException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerCrearTienda.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -156,8 +168,8 @@ public class ControllerCrearTienda {
         return descripcion.length() > 15;
     }
 
-    private boolean checkSpaceFormat(float espacio) {
-        return espacio > 0;
+    private boolean checkSpaceFormat(String espacio) {
+        return Float.parseFloat(espacio) > 0;
     }
 
     private boolean checkDateFormat(Date fechaCreacion) {

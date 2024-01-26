@@ -5,6 +5,7 @@
  */
 package service;
 
+import exceptions.LogicException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.GenericType;
 

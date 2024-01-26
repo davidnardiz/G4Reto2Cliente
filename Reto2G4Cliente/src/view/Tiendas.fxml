@@ -44,12 +44,11 @@
         <TableView fx:id="tbTiendas" layoutX="75.0" layoutY="251.0" prefHeight="336.0" prefWidth="880.0">
             <columns>
                 <TableColumn fx:id="cmnId" prefWidth="30.39996337890625" text="Id" />
-                <TableColumn fx:id="cmnNombre" prefWidth="165.59999084472656" text="Nombre" />
-                <TableColumn fx:id="cmnDescripcion" prefWidth="253.60000610351562" text="Descripción" />
-                <TableColumn fx:id="cmnTipoPago" prefWidth="116.79998779296875" text="Tipo de pago" />
-                <TableColumn fx:id="cmnEspacio" prefWidth="74.4000244140625" text="Espacio" />
-                <TableColumn fx:id="cmnFechaCreacion" prefWidth="161.5999755859375" text="Fecha de creción" />
-                <TableColumn fx:id="cmnCliente" prefWidth="75.20001220703125" text="Cliente" />
+                <TableColumn fx:id="cmnNombre" prefWidth="196.8000030517578" text="Nombre" />
+                <TableColumn fx:id="cmnDescripcion" prefWidth="242.4000244140625" text="Descripción" />
+                <TableColumn fx:id="cmnTipoPago" prefWidth="132.00006103515625" text="Tipo de pago" />
+                <TableColumn fx:id="cmnEspacio" prefWidth="76.0" text="Espacio" />
+                <TableColumn fx:id="cmnFechaCreacion" prefWidth="204.7999267578125" text="Fecha de creción" />
             </columns>
             <contextMenu>
                 <ContextMenu fx:id="menuContexto">

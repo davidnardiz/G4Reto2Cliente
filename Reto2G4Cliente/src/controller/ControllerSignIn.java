@@ -11,6 +11,7 @@ import entities.Cliente;
 import entities.Usuario;
 import exceptions.IncorrectCredentialsException;
 import exceptions.InvalidFormatException;
+import exceptions.LogicException;
 import exceptions.NotCompletedException;
 import java.io.IOException;
 import java.util.Optional;
@@ -32,6 +33,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.GenericType;
 import service.UsuarioFactoria;
 import service.UsuarioInterface;
@@ -61,8 +65,8 @@ public class ControllerSignIn {
         stage.show();
 
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario8@example.com");
-        passField.setText("password8");
+        txtFieldEmail.setText("usuario9@example.com");
+        passField.setText("password9");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -132,8 +136,17 @@ public class ControllerSignIn {
                     viewController.setStage(stage, us);
                     viewController.initStage(root);
 
+                } else {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
+                    Parent root;
+                    root = (Parent) loader.load();
+
+                    ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
+                    viewController.setStage(stage, us);
+                    viewController.initStage(root);
                 }
-            } else {
+
+            } else {//bien
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
                 Parent root;
                 root = (Parent) loader.load();
@@ -170,6 +183,17 @@ public class ControllerSignIn {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ProcessingException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "No se ha podido conectar con el servidor!!");
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InternalServerErrorException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Credenciales incorrectas.");
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
+
         }
     }
 

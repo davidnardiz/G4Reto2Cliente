@@ -14,7 +14,7 @@
          <menus>
             <Menu mnemonicParsing="false" text="Inicio">
                <items>
-                  <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Unspecified Action" />
+                  <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Inicio" />
                </items></Menu>
             <Menu mnemonicParsing="false" text="Menú">
                <items>

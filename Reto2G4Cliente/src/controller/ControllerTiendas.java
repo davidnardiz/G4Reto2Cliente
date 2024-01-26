@@ -122,8 +122,6 @@ public class ControllerTiendas {
     private TableColumn<Tienda, Integer> cmnEspacio;
     @FXML
     private TableColumn<Tienda, Date> cmnFechaCreacion;
-    @FXML
-    private TableColumn<Tienda, Cliente> cmnCliente;
 
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -133,6 +131,14 @@ public class ControllerTiendas {
         //Método cerrar ventana
         stage.setOnCloseRequest(this::handleCloseWindow);
 
+        //Diferencias entre cliente y usuario
+        if (usuario instanceof Cliente) {
+            btnCrear.setDisable(true);
+            btnEliminar.setDisable(true);
+        } else {
+            btnCrear.setDisable(false);
+            btnEliminar.setDisable(false);
+        }
         //Menú items del menú bar
         miCerrarSesion.setOnAction(this::handleCerrarSesion);
         miPrincipal.setOnAction(this::handleAbrirInicio);
@@ -142,7 +148,7 @@ public class ControllerTiendas {
 
         //Declaraciones de las columnas de la tabla
         tbTiendas.getColumns().clear();
-        tbTiendas.getColumns().addAll(cmnId, cmnNombre, cmnDescripcion, cmnTipoPago, cmnEspacio, cmnFechaCreacion, cmnCliente);
+        tbTiendas.getColumns().addAll(cmnId, cmnNombre, cmnDescripcion, cmnTipoPago, cmnEspacio, cmnFechaCreacion);
         tbTiendas.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         cmnId.setCellValueFactory(new PropertyValueFactory<>("idTienda"));
@@ -151,7 +157,6 @@ public class ControllerTiendas {
         cmnTipoPago.setCellValueFactory(new PropertyValueFactory<>("tipoPago"));
         cmnEspacio.setCellValueFactory(new PropertyValueFactory<>("espacio"));
         cmnFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
-        cmnCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
 
         //Seleccionar fila
         tbTiendas.setOnMouseClicked(event -> {
@@ -163,6 +168,7 @@ public class ControllerTiendas {
                     txtFieldDescripcion.setText(tiendaSeleccionada.getDescripcion());
                     cbTipoPago.setValue(tiendaSeleccionada.getTipoPago());
                     dpFechaCreacion.setValue(tiendaSeleccionada.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
                 }
             } else {
                 if (event.getClickCount() == 2) {
@@ -303,8 +309,17 @@ public class ControllerTiendas {
             tiendaSeleccionada.setFechaCreacion(fechaCreacion);
             tiendaSeleccionada.setTipoPago((TipoPago) cbTipoPago.getValue());
 
-            TiendaInterface ti = TiendaFactoria.getTiendaInterface();
-            ti.edit_XML(tiendaSeleccionada, tiendaSeleccionada.getIdTienda().toString());
+            if (usuario instanceof Cliente) {
+                if (((Cliente) usuario).getTienda().getIdTienda() == tiendaSeleccionada.getIdTienda()) {
+                    TiendaInterface ti = TiendaFactoria.getTiendaInterface();
+                    ti.edit_XML(tiendaSeleccionada, tiendaSeleccionada.getIdTienda().toString());
+                } else {
+                    cleanFields();
+                }
+            } else {
+                TiendaInterface ti = TiendaFactoria.getTiendaInterface();
+                ti.edit_XML(tiendaSeleccionada, tiendaSeleccionada.getIdTienda().toString());
+            }
 
         } catch (NotSelectedException ex) {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, "No hay ninguna tienda seleccionada!!");

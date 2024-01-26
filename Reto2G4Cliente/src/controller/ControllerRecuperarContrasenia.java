@@ -65,7 +65,7 @@ public class ControllerRecuperarContrasenia {
         txtFieldEmail.setText("daviznardiz2004@gmail.com");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
-        btnCancelar.setOnAction(this::handleCancelar);
+        btnCancelar.setOnAction(this::handleVolver);
         btnEnviar.setOnAction(this::handleEnviar);
 
     }
@@ -88,7 +88,7 @@ public class ControllerRecuperarContrasenia {
     }
 
     @FXML
-    public void handleCancelar(ActionEvent actionEvent) {
+    public void handleVolver(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root;
@@ -117,7 +117,7 @@ public class ControllerRecuperarContrasenia {
             UsuarioInterface ui = UsuarioFactoria.getUserInterface();
             Usuario us = ui.findByCorreo_XML(new GenericType<Usuario>() {
             }, email);
-
+            System.out.println(us.toString());
             if (us == null) {
                 throw new IncorrectCredentialsException("El email introducido no pertenece a ninguna cuenta!!");
             }
@@ -134,7 +134,7 @@ public class ControllerRecuperarContrasenia {
             alerta.setHeaderText(null);
             alerta.show();
 
-            handleCancelar(actionEvent);
+            handleVolver(actionEvent);
 
         } catch (NotCompletedException ex) {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage(), ButtonType.OK);

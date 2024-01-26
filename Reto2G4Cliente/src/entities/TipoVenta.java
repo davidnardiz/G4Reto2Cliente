@@ -9,6 +9,6 @@ package entities;
  *
  * @author Gonzalo
  */
-public class TipoVenta {
-    
+public enum TipoVenta {
+    ROPA, JUGUETES, MOBILIARIO, COCINA, COMIDA, HERRAMIENTAS, INFORMATICA
 }

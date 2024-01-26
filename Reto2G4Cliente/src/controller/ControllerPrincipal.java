@@ -6,6 +6,7 @@
 package controller;
 
 import entities.Cliente;
+import entities.Tienda;
 import entities.Usuario;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -19,6 +20,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import service.ClienteFactoria;
+import service.ClienteInterface;
 
 /**
  *
@@ -73,6 +76,15 @@ public class ControllerPrincipal {
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
         this.usuario = usuario;
+    }
+
+    public void setTiendaACliente(Tienda tienda) {
+        //Actualizamos la informacion del usuario para asignarle la tienda que ha creado.
+        System.out.println(tienda.toString());
+        ((Cliente) usuario).setTienda(tienda);
+        System.out.println(usuario.toString());
+        ClienteInterface ci = ClienteFactoria.getClienteInterface();
+        ci.edit_XML(usuario, usuario.getIdUsuario().toString());
     }
 
     @FXML
