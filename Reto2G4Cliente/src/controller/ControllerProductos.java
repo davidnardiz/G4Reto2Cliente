@@ -184,6 +184,8 @@ public class ControllerProductos {
         });
 
         tfId.setDisable(true);
+        tfFiltro1.setDisable(true);
+        tfFiltro2.setDisable(true);
         tbProductos.getColumns().clear();
         tbProductos.getColumns().addAll(tcId, tcNombre, tcPrecio, tcAltura, tcMaterial, tcPeso, tcFecha);
 
@@ -431,8 +433,9 @@ public class ControllerProductos {
     }
 
     /**
-     * Habilita o desabilita los textfield de filtros segun el tipo de filtro seleccionado
-     * en la combobox
+     * Habilita o desabilita los textfield de filtros segun el tipo de filtro
+     * seleccionado en la combobox
+     *
      * @param event
      */
     private void handleFiltros(Event event) {
@@ -464,6 +467,8 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Entre altura")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("Valor Minimo");
+            tfFiltro2.setPromptText("Valor Maximo");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(false);
             cleanFields();
@@ -482,6 +487,8 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Entre precio")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("Valor Minimo");
+            tfFiltro2.setPromptText("Valor Maximo");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(false);
             cleanFields();
@@ -500,6 +507,8 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Entre peso")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("Valor Minimo");
+            tfFiltro2.setPromptText("Valor Maximo");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(false);
             cleanFields();
@@ -509,11 +518,10 @@ public class ControllerProductos {
     /**
      * Se comprueba si los valores introducidos en los textFields necesarios
      * para el filtro seleccionado, en caso de que el filtro los necesite,
-     * tienen un formato correcto. 
-     *      En caso de que no lo tenga, se lanza una excepción informando 
-     *      del error. 
-     *      En caso de que tengan un formato correcto, se actualizará la 
-     *      información de la tabla aplicando el filtro seleccionado por el usuario.
+     * tienen un formato correcto. En caso de que no lo tenga, se lanza una
+     * excepción informando del error. En caso de que tengan un formato
+     * correcto, se actualizará la información de la tabla aplicando el filtro
+     * seleccionado por el usuario.
      *
      * @param actionevent
      */
@@ -568,19 +576,33 @@ public class ControllerProductos {
             handleChargeFiltro(productoTabla);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Entre altura")) {
-            List<Producto> productos = new ArrayList();
-            ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
-
-            List<Producto> productoTabla = new ArrayList();
-            for (int i = 0; i < productos.size(); i++) {
-                if (productos.get(i).getAltura() >= Integer.parseInt(tfFiltro1.getText()) && productos.get(i).getAltura() <= Integer.parseInt(tfFiltro2.getText())) {
-                    productoTabla.add(productos.get(i));
+            if (Integer.parseInt(tfFiltro1.getText()) > Integer.parseInt(tfFiltro2.getText())) {
+                try {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de filtro: \nPorfavor introduzca en el campo superior el valor mas pequeño y en el inferior el mas grande", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfFiltro1.setText("");
+                    tfFiltro2.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } catch (InvalidFormatException ex) {
+                    Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+                List<Producto> productos = new ArrayList();
+                ProductoInterface ti = ProductoFactoria.createInterface();
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+
+                List<Producto> productoTabla = new ArrayList();
+                for (int i = 0; i < productos.size(); i++) {
+                    if (productos.get(i).getAltura() >= Integer.parseInt(tfFiltro1.getText()) && productos.get(i).getAltura() <= Integer.parseInt(tfFiltro2.getText())) {
+                        productoTabla.add(productos.get(i));
+                    }
+                }
+                handleChargeFiltro(productoTabla);
+                cleanFields();
             }
-            handleChargeFiltro(productoTabla);
-            cleanFields();
+
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor precio")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
@@ -610,19 +632,32 @@ public class ControllerProductos {
             handleChargeFiltro(productoTabla);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Entre precio")) {
-            List<Producto> productos = new ArrayList();
-            ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
-
-            List<Producto> productoTabla = new ArrayList();
-            for (int i = 0; i < productos.size(); i++) {
-                if (productos.get(i).getPrecio() >= Float.parseFloat(tfFiltro1.getText()) && productos.get(i).getPrecio() <= Float.parseFloat(tfFiltro2.getText())) {
-                    productoTabla.add(productos.get(i));
+            if (Integer.parseInt(tfFiltro1.getText()) > Integer.parseInt(tfFiltro2.getText())) {
+                try {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de filtro: \nPorfavor introduzca en el campo superior el valor mas pequeño y en el inferior el mas grande", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfFiltro1.setText("");
+                    tfFiltro2.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } catch (InvalidFormatException ex) {
+                    Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+                List<Producto> productos = new ArrayList();
+                ProductoInterface ti = ProductoFactoria.createInterface();
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+
+                List<Producto> productoTabla = new ArrayList();
+                for (int i = 0; i < productos.size(); i++) {
+                    if (productos.get(i).getPrecio() >= Float.parseFloat(tfFiltro1.getText()) && productos.get(i).getPrecio() <= Float.parseFloat(tfFiltro2.getText())) {
+                        productoTabla.add(productos.get(i));
+                    }
+                }
+                handleChargeFiltro(productoTabla);
+                cleanFields();
             }
-            handleChargeFiltro(productoTabla);
-            cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor peso")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
@@ -652,25 +687,39 @@ public class ControllerProductos {
             handleChargeFiltro(productoTabla);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Entre peso")) {
-            List<Producto> productos = new ArrayList();
-            ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
-
-            List<Producto> productoTabla = new ArrayList();
-            for (int i = 0; i < productos.size(); i++) {
-                if (productos.get(i).getPeso() >= Float.parseFloat(tfFiltro1.getText()) && productos.get(i).getPeso() <= Float.parseFloat(tfFiltro2.getText())) {
-                    productoTabla.add(productos.get(i));
+            if (Integer.parseInt(tfFiltro1.getText()) > Integer.parseInt(tfFiltro2.getText())) {
+                try {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error de filtro: \nPorfavor introduzca en el campo superior el valor mas pequeño y en el inferior el mas grande", ButtonType.OK);
+                    alert.setHeaderText(null);
+                    tfFiltro1.setText("");
+                    tfFiltro2.setText("");
+                    alert.show();
+                    throw new InvalidFormatException();
+                } catch (InvalidFormatException ex) {
+                    Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+                List<Producto> productos = new ArrayList();
+                ProductoInterface ti = ProductoFactoria.createInterface();
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+
+                List<Producto> productoTabla = new ArrayList();
+                for (int i = 0; i < productos.size(); i++) {
+                    if (productos.get(i).getPeso() >= Float.parseFloat(tfFiltro1.getText()) && productos.get(i).getPeso() <= Float.parseFloat(tfFiltro2.getText())) {
+                        productoTabla.add(productos.get(i));
+                    }
+                }
+                handleChargeFiltro(productoTabla);
+                cleanFields();
             }
-            handleChargeFiltro(productoTabla);
-            cleanFields();
         }
     }
 
     /**
      * Carga la tabla aplicando los filtros
-     * @param productos 
+     *
+     * @param productos
      */
     private void handleChargeFiltro(List<Producto> productos) {
         ObservableList<Producto> productosTabla = FXCollections.observableArrayList(productos);
