@@ -5,12 +5,14 @@
  */
 package controller;
 
-import entities.Administrador;
 import entities.Evento;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
 import exceptions.NotSelectedException;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,8 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +37,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -44,9 +45,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import service.EventoFactoria;
 import service.EventoInterface;
 
@@ -55,7 +65,7 @@ import service.EventoInterface;
  * Controlador para la ventana de Eventos. Permite realizar operaciones CRUD
  * (Crear, Leer, Actualizar, Eliminar) respecto a eventos. Tambíen se pueden
  * aplicar filtros para visualizar eventos en base a párametros. El menú permite
- * navegar en la aplicación.
+ * navegar en la aplicación y mostrar una ventana de ayuda con instrucciones.
  *
  * @author Iñigo
  */
@@ -63,6 +73,7 @@ public class ControllerEventos {
 
     private Stage stage;
     private Usuario usuario;
+
     private MenuBar menu;
     @FXML
     private MenuItem menuItemCerrarSesion;
@@ -74,6 +85,8 @@ public class ControllerEventos {
     private MenuItem menuItemEventos;
     @FXML
     private MenuItem menuItemPerfil;
+    @FXML
+    MenuItem menuItemAyuda;
     @FXML
     private TextField txtFieldId;
     @FXML
@@ -90,6 +103,8 @@ public class ControllerEventos {
     private Button btnEliminar;
     @FXML
     private Button btnFiltrar;
+    @FXML
+    private Button btnImprimir;
     @FXML
     private ComboBox comboFiltros;
     @FXML
@@ -139,6 +154,7 @@ public class ControllerEventos {
         menuItemProductos.setOnAction(this::handleAbrirProductos);
         menuItemEventos.setOnAction(this::handleAbrirEventos);
         menuItemPerfil.setOnAction(this::handleAbrirPerfil);
+        menuItemAyuda.setOnAction(this::handleAyuda);
 
         tbEventos.getColumns().clear();
         tbEventos.getColumns().addAll(columnaId, columnaFecha, columnaNumParticipantes, columnaTotalRecaudado);
@@ -169,9 +185,9 @@ public class ControllerEventos {
         comboFiltros.getItems().add("Menor recaudado que");
         comboFiltros.getItems().add("Mayor recaudado que");
         comboFiltros.getItems().add("Cantidad recaudada entre");
-        comboFiltros.getItems().add("Menos participantes");
-        comboFiltros.getItems().add("Más recaudado que");
-        comboFiltros.getItems().add("Recaudado entre");
+        comboFiltros.getItems().add("Menos participantes que");
+        comboFiltros.getItems().add("Más participantes que");
+        comboFiltros.getItems().add("Participantes entre");
 
         columnaId.setCellValueFactory(new PropertyValueFactory<>("idEvento"));
         columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
@@ -182,9 +198,10 @@ public class ControllerEventos {
         btnCrear.setOnAction(this::handleCreateEvento);
         btnEditar.setOnAction(this::handleEditEvento);
         btnEliminar.setOnAction(this::handleDeleteEvento);
+        btnImprimir.setOnAction(this::handleImprimirEvento);
 
         handleCargeTable();
-        //comboFiltros.setOnAction(this::handleFiltros);
+        comboFiltros.setOnAction(this::handleFiltros);
         btnFiltrar.setOnAction(this::handleEjecutarFiltros);
         txtFieldParametro1.setDisable(true);
         txtFieldParametro2.setDisable(true);
@@ -232,11 +249,11 @@ public class ControllerEventos {
             fecha = dateFormat.parse(dpfechaEvento.getValue().toString());
 
             if (!checkDateFormat(fecha)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("La fecha del evento debe ser posterior a hoy");
             } else if (!checkTotalFormat(total)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("El total recaudado debe ser un número entero o decimal");
             } else if (!checkParticipantesFormat(numParticipantes)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Deben haber al menos dos participante sara crear un Evento");
             }
 
             Evento evento = new Evento();
@@ -246,6 +263,11 @@ public class ControllerEventos {
 
             EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
             eventoInterface.create_XML(evento);
+
+            // Después de crear el evento, actualiza la tabla
+            handleCargeTable();
+            cleanFields();
+
         } catch (InvalidFormatException ex) {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Debes introducir bien los datos!!");
             alerta.setHeaderText(null);
@@ -254,8 +276,6 @@ public class ControllerEventos {
         } catch (ParseException ex) {
             Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        cleanFields();
-        handleCargeTable();
 
     }
 
@@ -276,13 +296,33 @@ public class ControllerEventos {
             if (eventoSeleccionado == null) {
                 throw new NotSelectedException("Para editar un Evento debes seleccionarlo.");
             }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                Date fechaEvento = dateFormat.parse(dpfechaEvento.getValue().toString());
+                eventoSeleccionado.setFecha(fechaEvento);
+            } catch (ParseException ex) {
+                // Manejo de errores al convertir la fecha
+                ex.printStackTrace();
+            }
+
+            eventoSeleccionado.setTotalRecaudado(Float.parseFloat(txtFieldTotalRecaudado.getText()));
+            eventoSeleccionado.setNumParticipantes(Integer.parseInt(txtFieldNumParticipantes.getText()));
+
             EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
             eventoInterface.edit_XML(eventoSeleccionado, eventoSeleccionado.getIdEvento().toString());
+
+            // Después de editar el evento, actualiza la tabla
+            handleCargeTable();
+
         } catch (NotSelectedException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Debes seleccionar un evento para editarlo.");
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
         }
         cleanFields();
-        handleCargeTable();
     }
 
     /**
@@ -334,7 +374,7 @@ public class ControllerEventos {
      * la tabla.
      */
     private void handleCargeTableFiltro(List<Evento> eventos) {
-        ObservableList<Evento> eventosTabla = FXCollections.observableArrayList(eventosData);
+        ObservableList<Evento> eventosTabla = FXCollections.observableArrayList(eventos);
 
         for (int i = 0; i < eventosTabla.size(); i++) {
             System.out.println(eventosTabla.get(i).toString());
@@ -344,7 +384,17 @@ public class ControllerEventos {
         tbEventos.refresh();
     }
 
-    private void handleFiltros(Evento evento) {
+    /**
+     * Maneja la selección de filtros en respuesta a un evento.
+     *
+     * Este método se encarga de gestionar los diferentes casos según el filtro
+     * seleccionado en un componente de interfaz de usuario. Deshabilita o
+     * habilita campos de entrada de acuerdo con la opción seleccionada y
+     * realiza limpieza de campos en caso necesario.
+     *
+     * @param event El evento que desencadena la llamada a este método.
+     */
+    private void handleFiltros(Event event) {
         String filtroSeleccionado = (String) comboFiltros.getValue();
         if (filtroSeleccionado.equalsIgnoreCase("Mostrar todos")) {
             txtFieldParametro1.setDisable(true);
@@ -390,7 +440,11 @@ public class ControllerEventos {
         EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
 
         if (filtroSeleccionado.equalsIgnoreCase("Mostrar todas")) {
-            handleCargeTable();
+            GenericType<List<Evento>> responseType = new GenericType<List<Evento>>() {
+            };
+            List<Evento> eventos = eventoInterface.findAll_XML(responseType);
+            handleCargeTableFiltro(eventos);
+
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor recaudado que")) {
             String total = txtFieldParametro1.getText();
             if (checkTotalFormat(Float.parseFloat(total))) {
@@ -444,6 +498,14 @@ public class ControllerEventos {
         }
     }
 
+    /**
+     * Maneja el evento de cerrar sesión. Carga la interfaz de inicio de sesión
+     * (signIn.fxml) utilizando un FXMLLoader y establece el controlador
+     * correspondiente. Después, inicializa y muestra la nueva ventana de inicio
+     * de sesión.
+     *
+     * @param event El evento que desencadena la llamada a este método.
+     */
     private void handleCerrarSesion(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
@@ -456,6 +518,33 @@ public class ControllerEventos {
             viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Maneja el evento de impresión de un informe de eventos. Compila un
+     * informe Jasper a partir de un archivo JRXML, lo llena con datos de
+     * eventos, lo exporta a un archivo PDF ("informe_eventos.pdf") y finalmente
+     * abre el archivo PDF con el visor de PDF predeterminado en el sistema.
+     *
+     * @param actionEvent El evento que desencadena la llamada a este método.
+     */
+    @FXML
+    public void handleImprimirEvento(ActionEvent actionEvent) {
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/resources/informe.jrxml");
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(eventosData);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "informe_eventos.pdf");
+
+            File file = new File("informe_eventos.pdf");
+            Desktop.getDesktop().open(file);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -479,6 +568,14 @@ public class ControllerEventos {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de productos. Carga la vista de
+     * productos, establece el escenario y el controlador, y muestra la nueva
+     * ventana.
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana de
+     * productos.
+     */
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {
         try {
@@ -493,8 +590,8 @@ public class ControllerEventos {
     }
 
     /**
-     * Maneja el evento de abrir la ventana de productos. Carga la vista de
-     * productos, establece el escenario y el controlador, y muestra la nueva
+     * Maneja el evento de abrir la ventana de eventos. Carga la vista de
+     * eventos, establece el escenario y el controlador, y muestra la nueva
      * ventana.
      *
      * @param actionEvent Evento que desencadenó la apertura de la ventana de
@@ -535,21 +632,6 @@ public class ControllerEventos {
     }
 
     /**
-     * Verifica si el formato del identificador proporcionado cumple con el
-     * patrón especificado.
-     *
-     * @param id El identificador a ser validado.
-     * @return true si el formato del identificador es válido; false en caso
-     * contrario.
-     */
-    public static boolean checkIdFormat(String id) {
-        String patronId = "^\\d+$";
-        Pattern pattern = Pattern.compile(patronId);
-        Matcher matcher = pattern.matcher(id);
-        return matcher.matches();
-    }
-
-    /**
      * Verifica si el formato del valor total proporcionado cumple con los
      * requisitos especificados.
      *
@@ -561,6 +643,13 @@ public class ControllerEventos {
         return total > 0;
     }
 
+    /**
+     * Verifica si la fecha proporcionada es posterior a la fecha actual.
+     *
+     * @param fecha La fecha que se va a comparar con la fecha actual.
+     * @return true si la fecha es posterior a la fecha actual, false de lo
+     * contrario.
+     */
     private boolean checkDateFormat(Date fecha) {
         Date date = null;
         try {
@@ -606,4 +695,89 @@ public class ControllerEventos {
         txtFieldParametro1.setText("");
         txtFieldParametro2.setText("");
     }
+
+    /**
+     * Genera un informe de eventos y lo muestra en un archivo PDF. Utiliza un
+     * diseño de informe (.jrxml) para compilar y llenar el informe con datos de
+     * eventos. Exporta el informe a un formato PDF y abre el archivo resultante
+     * en el visor de PDF predeterminado del sistema.
+     *
+     * @param eventos Lista de eventos que se utilizarán para llenar el informe.
+     */
+    public void generarInformeEventos(List<Evento> eventos) {
+        try {
+
+            String rutaInforme = "C:\\Users\\inigo\\Desktop\\MarketMaker\\G4Reto2Servidor\\G4Reto2Cliente\\G4Reto2Cliente\\Reto2G4Cliente\\src\\reports\\tiendaReport.jrxml";
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(rutaInforme);
+            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(eventos);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+            String desktopPath = System.getProperty("user.home") + "/Desktop/";
+            String pdfFilePath = desktopPath + "informe_eventos.pdf";
+
+            JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFilePath);
+
+            Desktop.getDesktop().open(new File(pdfFilePath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Maneja el evento de ayuda. Llama al método que muestra una ventana de
+     * ayuda con información sobre la funcionalidad de la ventana de eventos.
+     *
+     * @param actionEvent El evento que desencadena la llamada a este método.
+     */
+    /*@FXML
+    public void handleAyuda(ActionEvent actionEvent) {
+        mostrarVentanaAyuda();
+    } */
+    @FXML
+    public void handleAyuda(ActionEvent event) {
+        AyudaControllerSingletone.getInstance().mostrarVentanaAyudaEvento();
+    }
+
+    /**
+     * Muestra una ventana de ayuda que describe la funcionalidad de la ventana
+     * de eventos. La información incluye detalles sobre el formulario de gestor
+     * de eventos, creación y edición de eventos, tabla de eventos, formulario
+     * de filtrado y funcionalidad adicional.
+     */
+    private void mostrarVentanaAyuda() {
+        Stage ventanaAyuda = new Stage();
+        ventanaAyuda.initModality(Modality.APPLICATION_MODAL);
+        ventanaAyuda.setTitle("¿Qué hace esta ventana?");
+
+        VBox vbox = new VBox(10);
+
+        Label contenidoAyuda = new Label(
+                "Esta es la ventana de Eventos:\n\n"
+                + "- Formulario de gestor de eventos: Crear, editar o eliminar eventos en la tabla.\n\n"
+                + "- Crear eventos: Rellenar campos y hacer clic en \"Crear\".\n\n"
+                + "- Editar eventos: Seleccionar evento en la tabla, editar y clic en \"Modificar\".\n\n"
+                + "- Eliminar eventos: Seleccionar evento y clic en \"Eliminar\".\n\n"
+                + "- Tabla: Ver todos los eventos, los cambios se reflejan desde el formulario.\n\n"
+                + "- Formulario de filtrado: Filtrar eventos según criterios.\n\n"
+                + "- Funcionalidad adicional: Clic en \"Informe\" para generar un documento con datos de eventos.\n\n"
+        );
+
+        vbox.getChildren().add(contenidoAyuda);
+
+        String rutaImagen = "C:\\Users\\inigo\\Desktop\\MarketMaker\\IMAGENES\\Eventos.png";
+
+        ImageView imageView = new ImageView("file:" + rutaImagen);
+
+        imageView.setFitWidth(400);
+        imageView.setFitHeight(300);
+
+        vbox.getChildren().add(imageView);
+
+        Scene escena = new Scene(vbox, 400, 500);
+        ventanaAyuda.setScene(escena);
+        ventanaAyuda.showAndWait();
+    }
+
 }

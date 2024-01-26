@@ -6,7 +6,6 @@
 package controller;
 
 import static encriptation.ClienteEncriptation.encriptar;
-import entities.Administrador;
 import entities.Cliente;
 import entities.Usuario;
 import exceptions.IncorrectCredentialsException;
@@ -65,8 +64,8 @@ public class ControllerSignIn {
         stage.show();
 
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario9@example.com");
-        passField.setText("password9");
+        txtFieldEmail.setText("usuario4@example.com");
+        passField.setText("password4");
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -147,7 +146,7 @@ public class ControllerSignIn {
                     viewController.initStage(root);
                 }
 
-            } else {//bien
+            } else {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
                 Parent root;
                 root = (Parent) loader.load();
@@ -163,7 +162,7 @@ public class ControllerSignIn {
                 root2 = (Parent) loader2.load();
 
                 ControllerPrincipal viewController2 = ((ControllerPrincipal) loader2.getController());
-                viewController2.setStage(stage, us);
+                viewController2.setStage(stage,us);
                 viewController2.initStage(root2);
             }*/
         } catch (NotCompletedException ex) {
@@ -176,12 +175,12 @@ public class ControllerSignIn {
             alerta.setHeaderText(null);
             alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IncorrectCredentialsException ex) {
+        } /*catch (IncorrectCredentialsException ex) {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
             alerta.setHeaderText(null);
             alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        }*/ catch (IOException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ProcessingException ex) {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, "No se ha podido conectar con el servidor!!");
@@ -194,6 +193,8 @@ public class ControllerSignIn {
             alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
 
+        } catch (IncorrectCredentialsException ex) {
+            Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

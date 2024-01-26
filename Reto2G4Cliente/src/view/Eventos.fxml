@@ -17,7 +17,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1016.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerEventos">
     <children>
-        <TableView fx:id="tbEventos" layoutX="59.0" layoutY="314.0" prefHeight="325.0" prefWidth="737.0">
+        <TableView fx:id="tbEventos" layoutX="59.0" layoutY="295.0" prefHeight="355.0" prefWidth="737.0">
             <columns>
                 <TableColumn fx:id="columnaId" prefWidth="67.19995498657227" text="ID" />
                 <TableColumn fx:id="columnaFecha" prefWidth="262.3999481201172" text="Fecha" />
@@ -26,10 +26,10 @@
             </columns>
         </TableView>
         <Label />
-        <ComboBox fx:id="comboFiltros" layoutX="822.0" layoutY="365.0" prefHeight="38.0" prefWidth="172.0" promptText="Selecciona tu filtro" />
-        <TextField fx:id="txtFieldParametro1" layoutX="821.0" layoutY="416.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
-        <TextField fx:id="txtFieldParametro2" layoutX="821.0" layoutY="461.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
-        <Button fx:id="btnFiltrar" layoutX="823.0" layoutY="526.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
+        <ComboBox fx:id="comboFiltros" layoutX="826.0" layoutY="295.0" prefHeight="38.0" prefWidth="172.0" promptText="Selecciona tu filtro" />
+        <TextField fx:id="txtFieldParametro1" layoutX="825.0" layoutY="346.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+        <TextField fx:id="txtFieldParametro2" layoutX="825.0" layoutY="391.0" prefHeight="37.0" prefWidth="172.0" promptText="Escribe aquí" />
+        <Button fx:id="btnFiltrar" layoutX="826.0" layoutY="438.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Filtrar" textFill="#f2f2f2">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
@@ -92,16 +92,23 @@
                   <MenuItem fx:id="menuItemTiendas" mnemonicParsing="false" text="Tiendas" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Ayuda" />
+                <Menu mnemonicParsing="false" text="Ayuda">
+                    <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Como funciona esta ventana?" />
+                </Menu>
             </menus>
             <padding>
                 <Insets left="8.0" top="5.0" />
             </padding>
         </MenuBar>
-        <Button fx:id="btnInforme" layoutX="821.0" layoutY="314.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Informe" textFill="#f2f2f2">
+        <Button fx:id="btnImprimir" layoutX="826.0" layoutY="562.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Informe" textFill="#f2f2f2">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
         </Button>
+      <Button fx:id="btnAdjuntar" layoutX="826.0" layoutY="602.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" style="-fx-background-color: #2F2F2F;" text="Adjuntar" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
     </children>
 </Pane>

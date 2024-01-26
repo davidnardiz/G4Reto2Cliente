@@ -14,15 +14,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerPerfil">
    <children>
       <Pane layoutX="311.0" layoutY="74.0" prefHeight="262.0" prefWidth="256.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
          <effect>
             <DropShadow blurType="TWO_PASS_BOX" color="#6c6969" />
          </effect>
          <children>
-            <TextField layoutX="41.0" layoutY="172.0" prefHeight="25.0" prefWidth="185.0" promptText="Repite la contraseña" style="-fx-background-color: #F2F2F2;">
+            <TextField fx:id="txtFieldRepetirContrasenia" layoutX="41.0" layoutY="172.0" prefHeight="25.0" prefWidth="185.0" promptText="Repite la contraseña" style="-fx-background-color: #F2F2F2;">
                <effect>
                   <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
                </effect>
@@ -32,7 +31,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button layoutX="41.0" layoutY="210.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="185.0" style="-fx-background-color: #2F2F2F;" text="Aceptar" textFill="#f2f2f2">
+            <Button fx:id="btnAceptar" layoutX="41.0" layoutY="210.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="185.0" style="-fx-background-color: #2F2F2F;" text="Aceptar" textFill="#f2f2f2">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -42,7 +41,7 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <TextField layoutX="42.0" layoutY="138.0" prefHeight="25.0" prefWidth="185.0" promptText="Nueva contraseña" style="-fx-background-color: #F2F2F2;">
+            <TextField fx:id="txtFieldNuevaContrasenia" layoutX="42.0" layoutY="138.0" prefHeight="25.0" prefWidth="185.0" promptText="Nueva contraseña" style="-fx-background-color: #F2F2F2;">
                <effect>
                   <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
                </effect>
@@ -84,7 +83,7 @@
             <Label layoutX="152.0" layoutY="123.0" text="22/7/1922" />
          </children>
       </Pane>
-      <Button layoutX="40.0" layoutY="349.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #2F2F2F;" text="Volver" textFill="#f2f2f2">
+      <Button fx:id="btnVolver" layoutX="40.0" layoutY="349.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #2F2F2F;" text="Volver" textFill="#f2f2f2">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -94,13 +93,18 @@
             <Menu mnemonicParsing="false" text="Inicio" />
             <Menu mnemonicParsing="false" text="Menú">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Perfil" />
-                  <MenuItem mnemonicParsing="false" text="Productos" />
-                  <MenuItem mnemonicParsing="false" text="Eventos" />
-                  <MenuItem mnemonicParsing="false" text="Cerrar sesión" />
+                  <MenuItem fx:id="miPerfil" mnemonicParsing="false" text="Perfil" />
+                  <MenuItem fx:id="miTiendas" mnemonicParsing="false" text="Tiendas" />
+                  <MenuItem fx:id="miProductos" mnemonicParsing="false" text="Productos" />
+                  <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
+                  <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+                  <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Principal" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Ayuda" />
+            <Menu fx:id="menuAyuda" mnemonicParsing="false" text="Ayuda">
+               <items>
+                  <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Qué hace esta ventana?" />
+               </items></Menu>
          </menus>
          <padding>
             <Insets left="8.0" top="5.0" />

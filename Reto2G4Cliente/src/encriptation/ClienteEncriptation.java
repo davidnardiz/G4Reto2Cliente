@@ -20,7 +20,7 @@ public class ClienteEncriptation {
         String p = null;
         try {
             // Load Private Key
-            FileInputStream fis = new FileInputStream("C:\\Users\\Daviz\\Desktop\\clave\\publicKey.der");
+            FileInputStream fis = new FileInputStream("C:\\Users\\inigo\\Desktop\\MarketMaker\\Encript\\publicKey.der");
             byte[] publicKeyBytes = new byte[fis.available()];
             fis.read(publicKeyBytes);
             fis.close();

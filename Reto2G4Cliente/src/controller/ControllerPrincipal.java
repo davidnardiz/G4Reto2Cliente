@@ -152,7 +152,6 @@ public class ControllerPrincipal {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
         try {
@@ -161,9 +160,9 @@ public class ControllerPrincipal {
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
+
         } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, "Error loading Perfil.fxml", ex);
         }
     }
-
 }
