@@ -7,6 +7,8 @@ package controller;
 
 import entities.Usuario;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,8 +22,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -58,9 +61,15 @@ public class ControllerPerfil {
     @FXML
     private MenuItem miPerfil;
     @FXML
-    private TextField txtFieldNuevaContrasenia;
+    private Label labelNombre;
     @FXML
-    private TextField txtFieldRepetirContrasenia;
+    private Label labelEmail;
+    @FXML
+    private Label labelFecha;
+    @FXML
+    private PasswordField passwordFieldNuevaContrasenia;
+    @FXML
+    private PasswordField passwordFieldRepetirContrasenia;
 
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -77,6 +86,8 @@ public class ControllerPerfil {
         btnVolver.setOnAction(this::handleVolver);
         btnAceptar.setOnAction(this::handleCambiarContrasenia);
         menuItemAyuda.setOnAction(this::handleAyuda);
+
+        cargarDatosUsuario();
 
     }
 
@@ -200,8 +211,8 @@ public class ControllerPerfil {
 
     @FXML
     private void handleCambiarContrasenia(ActionEvent event) {
-        String nuevaContrasenia = txtFieldNuevaContrasenia.getText();
-        String repetirContrasenia = txtFieldRepetirContrasenia.getText();
+        String nuevaContrasenia = passwordFieldNuevaContrasenia.getText();
+        String repetirContrasenia = passwordFieldRepetirContrasenia.getText();
 
         if (nuevaContrasenia.equals(repetirContrasenia)) {
             usuario.setPassword(nuevaContrasenia);
@@ -217,6 +228,20 @@ public class ControllerPerfil {
             alert.setContentText("Las contraseñas no coinciden. Por favor, inténtalo de nuevo.");
             alert.showAndWait();
         }
+    }
+
+    private void cargarDatosUsuario() {
+        String nombreUsuario = usuario.getNombre();
+        String emailUsuario = usuario.getCorreo();
+        Date fechaUsuario = usuario.getFechaNacimiento();
+
+        labelNombre.setText(nombreUsuario);
+        labelEmail.setText(emailUsuario);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada = dateFormat.format(fechaUsuario);
+        labelFecha.setText(fechaFormateada);
+
     }
 
     /**

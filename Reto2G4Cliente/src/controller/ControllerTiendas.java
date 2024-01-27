@@ -580,7 +580,7 @@ public class ControllerTiendas {
      */
     @FXML
     public void handleAyuda(ActionEvent event) {
-        ControllerAyudas.getInstance().mostrarVentanaAyudaEvento();
+        ControllerAyudas.getInstance().mostrarVentanaAyudaTienda();
     }
 
 
