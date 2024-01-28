@@ -7,19 +7,19 @@ package exceptions;
 
 /**
  *
- * @author Gonzalo
+ * @author David
  */
 public class InvalidFormatException extends Exception {
 
     /**
-     * Creates a new instance of <code>InvalidFormatException</code> without
+     * Creates a new instance of <code>invalidFormatException</code> without
      * detail message.
      */
     public InvalidFormatException() {
     }
 
     /**
-     * Constructs an instance of <code>InvalidFormatException</code> with the
+     * Constructs an instance of <code>invalidFormatException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.

@@ -8,6 +8,7 @@ package service;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:ClienteFacadeREST
@@ -34,14 +35,14 @@ public class ClienteRestCliente implements ClienteInterface{
     }
 
     @Override
-    public <T> T encontrarUsuarioSegunTipoVenta_XML(Class<T> responseType, String tipoVenta) throws ClientErrorException {
+    public <T> T encontrarUsuarioSegunTipoVenta_XML(GenericType<T> responseType, String tipoVenta) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorTipoVenta/{0}", new Object[]{tipoVenta}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T encontrarUsuarioSegunTipoVenta_JSON(Class<T> responseType, String tipoVenta) throws ClientErrorException {
+    public <T> T encontrarUsuarioSegunTipoVenta_JSON(GenericType<T> responseType, String tipoVenta) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorTipoVenta/{0}", new Object[]{tipoVenta}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -58,14 +59,14 @@ public class ClienteRestCliente implements ClienteInterface{
     }
 
     @Override
-    public <T> T find_XML(Class<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T find_JSON(Class<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_JSON(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -82,13 +83,13 @@ public class ClienteRestCliente implements ClienteInterface{
     }
 
     @Override
-    public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T findAll_JSON(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll_JSON(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
@@ -101,5 +102,5 @@ public class ClienteRestCliente implements ClienteInterface{
     public void close() {
         client.close();
     }
-    
+
 }

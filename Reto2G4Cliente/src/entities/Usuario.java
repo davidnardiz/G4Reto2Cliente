@@ -11,12 +11,18 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
- * @author Gonzalo
+ * Clase base para representar a todos los usuarios de MarketMaker, ya sean
+ * clientes o administradores. Las clases Cliente y Administrador heredan de
+ * esta clase. Contiene atributos genéricos comunes.
+ *
+ * @author Iñigo
  */
-@XmlRootElement
+@XmlRootElement(name = "usuario")
+@XmlSeeAlso({Cliente.class, Administrador.class})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,9 +87,10 @@ public class Usuario implements Serializable {
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento.set(fechaNacimiento);
     }
-    
 
-    
+    @Override
+    public String toString() {
+        return "Usuario{" + "idUsuario=" + idUsuario + ", nombre=" + nombre + ", password=" + password + ", correo=" + correo + ", fechaNacimiento=" + fechaNacimiento + '}';
+    }
 
-    
 }

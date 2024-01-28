@@ -13,7 +13,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Gonzalo
+ * Clase que representa a un cliente en MarketMakers. Hereda de la clase base
+ * Usuario. Contiene información específica de los clientes, como el tipo de
+ * venta y la tienda asociada.
+ *
+ * @author David
  */
 @XmlRootElement(name = "cliente")
 public class Cliente extends Usuario implements Serializable {

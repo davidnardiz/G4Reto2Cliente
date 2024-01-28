@@ -5,6 +5,7 @@
  */
 package service;
 
+import exceptions.LogicException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -23,7 +24,7 @@ import javax.ws.rs.core.GenericType;
  *
  * @author Gonzalo
  */
-public class UsuarioRestCliente implements UsuarioInterface{
+public class UsuarioRestCliente implements UsuarioInterface {
 
     private WebTarget webTarget;
     private Client client;
@@ -36,9 +37,14 @@ public class UsuarioRestCliente implements UsuarioInterface{
 
     @Override
     public <T> T encontrarUsuarioPorNombre_XML(GenericType<T> responseType, String nombre) throws ClientErrorException {
+        /*try {*/
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorNombre/{0}", new Object[]{nombre}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        /*} catch (LogicException ex) {
+            throw new LogicException("Ha habido un error!!");
+        }*/
+
     }
 
     @Override
@@ -73,6 +79,20 @@ public class UsuarioRestCliente implements UsuarioInterface{
     }
 
     @Override
+    public <T> T findByCorreo_XML(GenericType<T> responseType, String correo) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioCorreo/{0}", new Object[]{correo}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T findByCorreo_JSON(GenericType<T> responseType, String correo) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioCorreo/{0}", new Object[]{correo}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
+    @Override
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
@@ -87,6 +107,7 @@ public class UsuarioRestCliente implements UsuarioInterface{
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("iniciarSesion/{0}/{1}", new Object[]{correo, password}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+
     }
 
     @Override
@@ -113,8 +134,15 @@ public class UsuarioRestCliente implements UsuarioInterface{
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
+    @Override
+    public <T> T envioEmail(GenericType<T> responseType, String correo) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("envioEmail/{0}", new Object[]{correo}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
     public void close() {
         client.close();
     }
-    
+
 }

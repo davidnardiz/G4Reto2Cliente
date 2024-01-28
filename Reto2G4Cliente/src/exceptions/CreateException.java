@@ -9,22 +9,22 @@ package exceptions;
  *
  * @author David
  */
-public class NotCompletedException extends Exception {
+public class CreateException extends Exception {
 
     /**
-     * Creates a new instance of <code>notCompleteException</code> without
-     * detail message.
+     * Creates a new instance of <code>CreateException</code> without detail
+     * message.
      */
-    public NotCompletedException() {
+    public CreateException() {
     }
 
     /**
-     * Constructs an instance of <code>notCompleteException</code> with the
-     * specified detail message.
+     * Constructs an instance of <code>CreateException</code> with the specified
+     * detail message.
      *
      * @param msg the detail message.
      */
-    public NotCompletedException(String msg) {
+    public CreateException(String msg) {
         super(msg);
     }
 }

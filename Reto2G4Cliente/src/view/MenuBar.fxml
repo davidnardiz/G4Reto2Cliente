@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.HBox?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="1016.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar prefHeight="51.0" prefWidth="1037.0" styleClass="Inicio">
+         <menus>
+            <Menu mnemonicParsing="false" text="Inicio">
+               <items>
+                  <MenuItem fx:id="miPrincipal" mnemonicParsing="false" text="Inicio" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Menú">
+               <items>
+                  <MenuItem fx:id="menuItemPerfil" mnemonicParsing="false" text="Perfil" />
+                  <MenuItem fx:id="menuItemProductos" mnemonicParsing="false" text="Productos" />
+                  <MenuItem fx:id="menuItemEventos" mnemonicParsing="false" text="Eventos" />
+                  <MenuItem fx:id="menuItemTiendas" mnemonicParsing="false" text="Tiendas" />
+                  <MenuItem fx:id="menuItemCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Ayuda">
+               <items>
+                  <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="Ayuda" />
+               </items>
+            </Menu>
+         </menus>
+         <padding>
+            <Insets left="8.0" top="5.0" />
+         </padding>
+      </MenuBar>
+   </children>
+</HBox>

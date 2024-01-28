@@ -5,14 +5,16 @@
  */
 package service;
 
+import exceptions.LogicException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.GenericType;
 
 /**
  *
- * @author Gonzalo
+ * @author David
  */
 public interface UsuarioInterface {
+
     public <T> T encontrarUsuarioPorNombre_XML(GenericType<T> responseType, String nombre) throws ClientErrorException;
 
     public <T> T encontrarUsuarioPorNombre_JSON(GenericType<T> responseType, String nombre) throws ClientErrorException;
@@ -24,6 +26,10 @@ public interface UsuarioInterface {
     public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException;
 
     public <T> T find_JSON(GenericType<T> responseType, String id) throws ClientErrorException;
+
+    public <T> T findByCorreo_XML(GenericType<T> responseType, String correo) throws ClientErrorException;
+
+    public <T> T findByCorreo_JSON(GenericType<T> responseType, String correo) throws ClientErrorException;
 
     public void create_XML(Object requestEntity) throws ClientErrorException;
 
@@ -37,5 +43,8 @@ public interface UsuarioInterface {
 
     public <T> T findAll_JSON(GenericType<T> responseType) throws ClientErrorException;
 
+    public <T> T envioEmail(GenericType<T> responseType, String correo) throws ClientErrorException;
+
     public void remove(String id) throws ClientErrorException;
+
 }

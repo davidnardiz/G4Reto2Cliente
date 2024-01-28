@@ -20,7 +20,10 @@
    <children>
       <MenuBar prefHeight="39.0" prefWidth="1016.0" styleClass="Inicio">
         <menus>
-          <Menu mnemonicParsing="false" text="Inicio" />
+          <Menu mnemonicParsing="false" text="Inicio">
+               <items>
+                  <MenuItem fx:id="menuItemInicio" mnemonicParsing="false" text="Inicio" />
+               </items></Menu>
           <Menu mnemonicParsing="false" text="Menú">
             <items>
                   <MenuItem mnemonicParsing="false" text="Perfil" />

@@ -7,9 +7,10 @@ package service;
 
 /**
  *
- * @author Gonzalo
+ * @author David
  */
 public class ClienteFactoria {
+
     public static ClienteInterface getClienteInterface() {
         return new ClienteRestCliente();
     }

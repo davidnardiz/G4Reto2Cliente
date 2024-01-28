@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entities;
+package service;
 
 /**
  *
- * @author Gonzalo
+ * @author David
  */
-public enum TipoVenta {
-    ROPA, JUGUETES, MOBILIARIO, COCINA, COMIDA, HERRAMIENTAS, INFORMATICA
+public class TiendaFactoria {
+
+    public static TiendaInterface getTiendaInterface() {
+        return new TiendaRestCliente();
+    }
 }
