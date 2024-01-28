@@ -86,7 +86,9 @@ public class ControllerEventos {
     @FXML
     private MenuItem menuItemPerfil;
     @FXML
-    MenuItem menuItemAyuda;
+    private MenuItem menuItemAyuda;
+    @FXML
+    private MenuItem menuItemTiendas;
     @FXML
     private TextField txtFieldId;
     @FXML
@@ -155,6 +157,7 @@ public class ControllerEventos {
         menuItemEventos.setOnAction(this::handleAbrirEventos);
         menuItemPerfil.setOnAction(this::handleAbrirPerfil);
         menuItemAyuda.setOnAction(this::handleAyuda);
+        menuItemTiendas.setOnAction(this::handleAbrirTiendas);
 
         tbEventos.getColumns().clear();
         tbEventos.getColumns().addAll(columnaId, columnaFecha, columnaNumParticipantes, columnaTotalRecaudado);
@@ -187,7 +190,7 @@ public class ControllerEventos {
         comboFiltros.getItems().add("Cantidad recaudada entre");
         comboFiltros.getItems().add("Menos participantes que");
         comboFiltros.getItems().add("Más participantes que");
-        comboFiltros.getItems().add("Participantes entre");
+        comboFiltros.getItems().add("Cantidad participantes entre");
 
         columnaId.setCellValueFactory(new PropertyValueFactory<>("idEvento"));
         columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
@@ -420,7 +423,7 @@ public class ControllerEventos {
             txtFieldParametro1.setDisable(false);
             txtFieldParametro2.setDisable(true);
             cleanFields();
-        } else if (filtroSeleccionado.equalsIgnoreCase("Participantes entre")) {
+        } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad participantes entre")) {
             txtFieldParametro1.setDisable(false);
             txtFieldParametro2.setDisable(false);
             cleanFields();
@@ -439,7 +442,7 @@ public class ControllerEventos {
 
         EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
 
-        if (filtroSeleccionado.equalsIgnoreCase("Mostrar todas")) {
+        if (filtroSeleccionado.equalsIgnoreCase("Mostrar todos")) {
             GenericType<List<Evento>> responseType = new GenericType<List<Evento>>() {
             };
             List<Evento> eventos = eventoInterface.findAll_XML(responseType);
@@ -454,8 +457,8 @@ public class ControllerEventos {
                 handleCargeTableFiltro(eventos);
             }
         } else if (filtroSeleccionado.equalsIgnoreCase("Mayor recaudado que")) {
-            String total = txtFieldParametro2.getText();
-            if (checkTotalFormat(Integer.parseInt(total))) {
+            String total = txtFieldParametro1.getText();
+            if (checkTotalFormat(Float.parseFloat(total))) {
                 List<Evento> eventos = new ArrayList();
                 eventos = eventoInterface.encontrarEventoMayorRecaudado_XML(new GenericType<List<Evento>>() {
                 }, total);
@@ -464,7 +467,7 @@ public class ControllerEventos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad recaudada entre")) {
             String total = txtFieldParametro1.getText();
             String total2 = txtFieldParametro2.getText();
-            if (checkTotalFormat(Integer.parseInt(total)) && checkTotalFormat(Integer.parseInt(total2))) {
+            if (checkTotalFormat(Float.parseFloat(total)) && checkTotalFormat(Float.parseFloat(total2))) {
                 List<Evento> eventos = new ArrayList();
                 eventos = eventoInterface.encontrarEventoEntreRecaudado_XML(new GenericType<List<Evento>>() {
                 }, total, total2);
@@ -482,17 +485,17 @@ public class ControllerEventos {
             String numParticipantes = txtFieldParametro1.getText();
             if (checkParticipantesFormat(Integer.parseInt(numParticipantes))) {
                 List<Evento> eventos = new ArrayList();
-                eventos = eventoInterface.encontrarEventoMayorRecaudado_XML(new GenericType<List<Evento>>() {
+                eventos = eventoInterface.encontrarEventoMayorNumParticipantes_XML(new GenericType<List<Evento>>() {
                 }, numParticipantes);
                 handleCargeTableFiltro(eventos);
             }
         } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad participantes entre")) {
-            String numPartcipantes = txtFieldParametro1.getText();
-            String numPartcipantes2 = txtFieldParametro2.getText();
-            if (checkParticipantesFormat(Integer.parseInt(numPartcipantes)) && checkParticipantesFormat(Integer.parseInt(numPartcipantes2))) {
+            String numParticipantes = txtFieldParametro1.getText();
+            String numParticipantes2 = txtFieldParametro2.getText();
+            if (checkParticipantesFormat(Integer.parseInt(numParticipantes)) && checkParticipantesFormat(Integer.parseInt(numParticipantes2))) {
                 List<Evento> eventos = new ArrayList();
                 eventos = eventoInterface.encontrarEventoEntreParticipantes_XML(new GenericType<List<Evento>>() {
-                }, numPartcipantes, numPartcipantes2);
+                }, numParticipantes, numParticipantes2);
                 handleCargeTableFiltro(eventos);
             }
         }
@@ -605,6 +608,27 @@ public class ControllerEventos {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
             Parent root = loader.load();
             ControllerEventos viewController = ((ControllerEventos) loader.getController());
+            viewController.setStage(stage, usuario);
+            viewController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Maneja el evento de abrir la ventana de tiendas. Carga la ventana desde
+     * el archivo FXML correspondiente y configura el controlador de la ventana
+     * de tiendas. Finalmente, muestra la ventana.
+     *
+     * @param actionEvent El evento que desencadena la apertura de la ventana de
+     * tiendas.
+     */
+    @FXML
+    public void handleAbrirTiendas(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Tiendas.fxml"));
+            Parent root = loader.load();
+            ControllerTiendas viewController = ((ControllerTiendas) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
         } catch (IOException ex) {
