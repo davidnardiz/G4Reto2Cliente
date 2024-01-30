@@ -5,14 +5,14 @@
  */
 package controller;
 
+import entities.Cliente;
 import entities.Evento;
+import entities.Tienda;
+import entities.TiendaEvento;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
 import exceptions.NotSelectedException;
-import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -37,7 +37,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -45,12 +44,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
+import service.ClienteFactoria;
+import service.ClienteInterface;
 //import net.sf.jasperreports.engine.JasperCompileManager;
 //import net.sf.jasperreports.engine.JasperExportManager;
 //import net.sf.jasperreports.engine.JasperFillManager;
@@ -59,6 +57,10 @@ import javax.ws.rs.core.GenericType;
 //import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import service.EventoFactoria;
 import service.EventoInterface;
+import service.TiendaEventoFactoria;
+import service.TiendaEventoInterface;
+import service.TiendaFactoria;
+import service.TiendaInterface;
 
 /**
  *
@@ -105,6 +107,8 @@ public class ControllerEventos {
     private Button btnEliminar;
     @FXML
     private Button btnFiltrar;
+    @FXML
+    private Button btnAdjuntar;
     @FXML
     private Button btnImprimir;
     @FXML
@@ -191,6 +195,7 @@ public class ControllerEventos {
         comboFiltros.getItems().add("Menos participantes que");
         comboFiltros.getItems().add("Más participantes que");
         comboFiltros.getItems().add("Cantidad participantes entre");
+        comboFiltros.setValue("Mostrar todos");
 
         columnaId.setCellValueFactory(new PropertyValueFactory<>("idEvento"));
         columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
@@ -199,9 +204,18 @@ public class ControllerEventos {
 
         stage.setOnCloseRequest(this::handleCloseWindow);
         btnCrear.setOnAction(this::handleCreateEvento);
+        btnCrear.setDefaultButton(true);
         btnEditar.setOnAction(this::handleEditEvento);
         btnEliminar.setOnAction(this::handleDeleteEvento);
         //btnImprimir.setOnAction(this::handleImprimirEvento);
+
+        if (usuario instanceof Cliente) {
+            btnAdjuntar.setText("Apuntarse");
+            btnAdjuntar.setOnAction(this::handleApuntarse);
+        } else {
+            btnAdjuntar.setText("Adjuntarse");
+            btnAdjuntar.setOnAction(this::handleAdjuntarOrganizador);
+        }
 
         handleCargeTable();
         comboFiltros.setOnAction(this::handleFiltros);
@@ -442,63 +456,113 @@ public class ControllerEventos {
 
         EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
 
-        if (filtroSeleccionado.equalsIgnoreCase("Mostrar todos")) {
-            GenericType<List<Evento>> responseType = new GenericType<List<Evento>>() {
-            };
-            List<Evento> eventos = eventoInterface.findAll_XML(responseType);
-            handleCargeTableFiltro(eventos);
+        try {
+            if (filtroSeleccionado.equalsIgnoreCase("Mostrar todos")) {
+                GenericType<List<Evento>> responseType = new GenericType<List<Evento>>() {
+                };
+                List<Evento> eventos = eventoInterface.findAll_XML(responseType);
+                handleCargeTableFiltro(eventos);
 
-        } else if (filtroSeleccionado.equalsIgnoreCase("Menor recaudado que")) {
-            String total = txtFieldParametro1.getText();
-            if (checkTotalFormat(Float.parseFloat(total))) {
-                List<Evento> eventos = new ArrayList();
-                eventos = eventoInterface.encontrarEventoMenorRecaudado_XML(new GenericType<List<Evento>>() {
-                }, total);
-                handleCargeTableFiltro(eventos);
+            } else if (filtroSeleccionado.equalsIgnoreCase("Menor recaudado que")) {
+                String total = txtFieldParametro1.getText();
+                if (checkTotalFormat(Float.parseFloat(total)) && Float.parseFloat(total) > 0) {
+                    List<Evento> eventos = new ArrayList();
+                    eventos = eventoInterface.encontrarEventoMenorRecaudado_XML(new GenericType<List<Evento>>() {
+                    }, total);
+                    handleCargeTableFiltro(eventos);
+                } else {
+                    throw new InvalidFormatException("El valor introducido no tiene el formato correcto!!");
+                }
+            } else if (filtroSeleccionado.equalsIgnoreCase("Mayor recaudado que")) {
+                String total = txtFieldParametro1.getText();
+                if (checkTotalFormat(Float.parseFloat(total)) && Float.parseFloat(total) > 0) {
+                    List<Evento> eventos = new ArrayList();
+                    eventos = eventoInterface.encontrarEventoMayorRecaudado_XML(new GenericType<List<Evento>>() {
+                    }, total);
+                    handleCargeTableFiltro(eventos);
+                } else {
+                    throw new InvalidFormatException("El valor introducido no tiene el formato correcto!!");
+                }
+            } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad recaudada entre")) {
+                String total = txtFieldParametro1.getText();
+                String total2 = txtFieldParametro2.getText();
+                if (checkTotalFormat(Float.parseFloat(total)) && checkTotalFormat(Float.parseFloat(total2)) && Float.parseFloat(total) > 0 && Float.parseFloat(total2) > 0) {
+                    List<Evento> eventos = new ArrayList();
+                    eventos = eventoInterface.encontrarEventoEntreRecaudado_XML(new GenericType<List<Evento>>() {
+                    }, total, total2);
+                    handleCargeTableFiltro(eventos);
+                } else {
+                    throw new InvalidFormatException("El valor introducido no tiene el formato correcto!!");
+                }
+            } else if (filtroSeleccionado.equalsIgnoreCase("Menos participantes que")) {
+                String numParticipantes = txtFieldParametro1.getText();
+                if (checkParticipantesFormat(Integer.parseInt(numParticipantes)) && Float.parseFloat(numParticipantes) > 0) {
+                    List<Evento> eventos = new ArrayList();
+                    eventos = eventoInterface.encontrarEventoMenorNumParticipantes_XML(new GenericType<List<Evento>>() {
+                    }, numParticipantes);
+                    handleCargeTableFiltro(eventos);
+                } else {
+                    throw new InvalidFormatException("El valor introducido no tiene el formato correcto!!");
+                }
+            } else if (filtroSeleccionado.equalsIgnoreCase("Más participantes que")) {
+                String numParticipantes = txtFieldParametro1.getText();
+                if (checkParticipantesFormat(Integer.parseInt(numParticipantes)) && Float.parseFloat(numParticipantes) > 0) {
+                    List<Evento> eventos = new ArrayList();
+                    eventos = eventoInterface.encontrarEventoMayorNumParticipantes_XML(new GenericType<List<Evento>>() {
+                    }, numParticipantes);
+                    handleCargeTableFiltro(eventos);
+                } else {
+                    throw new InvalidFormatException("El valor introducido no tiene el formato correcto!!");
+                }
+            } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad participantes entre")) {
+                String numParticipantes = txtFieldParametro1.getText();
+                String numParticipantes2 = txtFieldParametro2.getText();
+                if (checkParticipantesFormat(Integer.parseInt(numParticipantes)) && checkParticipantesFormat(Integer.parseInt(numParticipantes2)) && Float.parseFloat(numParticipantes) > 0 && Float.parseFloat(numParticipantes2) > 0) {
+                    List<Evento> eventos = new ArrayList();
+                    eventos = eventoInterface.encontrarEventoEntreParticipantes_XML(new GenericType<List<Evento>>() {
+                    }, numParticipantes, numParticipantes2);
+                    handleCargeTableFiltro(eventos);
+                } else {
+                    throw new InvalidFormatException("El/los valores introducidos no tienen el formato correcto!!");
+                }
+            } else {
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Debes seleccionar un filtro!!");
+                alerta.setHeaderText(null);
+                alerta.show();
             }
-        } else if (filtroSeleccionado.equalsIgnoreCase("Mayor recaudado que")) {
-            String total = txtFieldParametro1.getText();
-            if (checkTotalFormat(Float.parseFloat(total))) {
-                List<Evento> eventos = new ArrayList();
-                eventos = eventoInterface.encontrarEventoMayorRecaudado_XML(new GenericType<List<Evento>>() {
-                }, total);
-                handleCargeTableFiltro(eventos);
-            }
-        } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad recaudada entre")) {
-            String total = txtFieldParametro1.getText();
-            String total2 = txtFieldParametro2.getText();
-            if (checkTotalFormat(Float.parseFloat(total)) && checkTotalFormat(Float.parseFloat(total2))) {
-                List<Evento> eventos = new ArrayList();
-                eventos = eventoInterface.encontrarEventoEntreRecaudado_XML(new GenericType<List<Evento>>() {
-                }, total, total2);
-                handleCargeTableFiltro(eventos);
-            }
-        } else if (filtroSeleccionado.equalsIgnoreCase("Menos participantes que")) {
-            String numParticipantes = txtFieldParametro1.getText();
-            if (checkParticipantesFormat(Integer.parseInt(numParticipantes))) {
-                List<Evento> eventos = new ArrayList();
-                eventos = eventoInterface.encontrarEventoMenorNumParticipantes_XML(new GenericType<List<Evento>>() {
-                }, numParticipantes);
-                handleCargeTableFiltro(eventos);
-            }
-        } else if (filtroSeleccionado.equalsIgnoreCase("Más participantes que")) {
-            String numParticipantes = txtFieldParametro1.getText();
-            if (checkParticipantesFormat(Integer.parseInt(numParticipantes))) {
-                List<Evento> eventos = new ArrayList();
-                eventos = eventoInterface.encontrarEventoMayorNumParticipantes_XML(new GenericType<List<Evento>>() {
-                }, numParticipantes);
-                handleCargeTableFiltro(eventos);
-            }
-        } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad participantes entre")) {
-            String numParticipantes = txtFieldParametro1.getText();
-            String numParticipantes2 = txtFieldParametro2.getText();
-            if (checkParticipantesFormat(Integer.parseInt(numParticipantes)) && checkParticipantesFormat(Integer.parseInt(numParticipantes2))) {
-                List<Evento> eventos = new ArrayList();
-                eventos = eventoInterface.encontrarEventoEntreParticipantes_XML(new GenericType<List<Evento>>() {
-                }, numParticipantes, numParticipantes2);
-                handleCargeTableFiltro(eventos);
-            }
+
+        } catch (InvalidFormatException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    public void handleApuntarse(ActionEvent actionEvent) {
+
+        ObservableList<Evento> eventosSeleccionados = tbEventos.getSelectionModel().getSelectedItems();
+
+        try {
+            for (int i = 0; i < eventosSeleccionados.size(); i++) {
+                TiendaEventoInterface ti = TiendaEventoFactoria.getTiendaEventoInterface();
+                TiendaEvento te = new TiendaEvento();
+                te.setIdTienda(((Cliente) usuario).getTienda().getIdTienda());
+                te.setIdEvento(eventosSeleccionados.get(i).getIdEvento());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                te.setFechaInscripcion(dateFormat.parse(LocalDate.now().toString()));
+                ti.create_XML(te);
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        cleanFields();
+    }
+
+    @FXML
+    public void handleAdjuntarOrganizador(ActionEvent actionEvent) {
+
     }
 
     /**
@@ -531,28 +595,26 @@ public class ControllerEventos {
      * abre el archivo PDF con el visor de PDF predeterminado en el sistema.
      *
      * @param actionEvent El evento que desencadena la llamada a este método.
-     
-       @FXML
-    public void handleImprimirEvento(ActionEvent actionEvent) {
-        try {
-            InputStream inputStream = getClass().getResourceAsStream("/resources/informe.jrxml");
-
-            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
-
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(eventosData);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-
-            JasperExportManager.exportReportToPdfFile(jasperPrint, "informe_eventos.pdf");
-
-            File file = new File("informe_eventos.pdf");
-            Desktop.getDesktop().open(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    *
+     *
+     * @FXML public void handleImprimirEvento(ActionEvent actionEvent) { try {
+     * InputStream inputStream =
+     * getClass().getResourceAsStream("/resources/informe.jrxml");
+     *
+     * JasperReport jasperReport =
+     * JasperCompileManager.compileReport(inputStream);
+     *
+     * JRBeanCollectionDataSource dataSource = new
+     * JRBeanCollectionDataSource(eventosData); JasperPrint jasperPrint =
+     * JasperFillManager.fillReport(jasperReport, null, dataSource);
+     *
+     * JasperExportManager.exportReportToPdfFile(jasperPrint,
+     * "informe_eventos.pdf");
+     *
+     * File file = new File("informe_eventos.pdf");
+     * Desktop.getDesktop().open(file); } catch (Exception e) {
+     * e.printStackTrace(); } }
+     *
      */
-
     /**
      * Maneja el evento de cerrar sesión. Carga la vista de inicio de
      * sesión,establece el escenario y el controlador, y muestra la nueva
@@ -697,7 +759,7 @@ public class ControllerEventos {
      * en caso contrario.
      */
     private boolean checkParticipantesFormat(int numParticipantes) {
-        return numParticipantes > 2;
+        return numParticipantes >= 2;
     }
 
     /**
@@ -729,30 +791,29 @@ public class ControllerEventos {
      * en el visor de PDF predeterminado del sistema.
      *
      * @param eventos Lista de eventos que se utilizarán para llenar el informe.
-     
-       public void generarInformeEventos(List<Evento> eventos) {
-        try {
-
-            String rutaInforme = "C:\\Users\\inigo\\Desktop\\MarketMaker\\G4Reto2Servidor\\G4Reto2Cliente\\G4Reto2Cliente\\Reto2G4Cliente\\src\\reports\\tiendaReport.jrxml";
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(rutaInforme);
-            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
-
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(eventos);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-
-            String desktopPath = System.getProperty("user.home") + "/Desktop/";
-            String pdfFilePath = desktopPath + "informe_eventos.pdf";
-
-            JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFilePath);
-
-            Desktop.getDesktop().open(new File(pdfFilePath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    *
+     *
+     * public void generarInformeEventos(List<Evento> eventos) { try {
+     *
+     * String rutaInforme =
+     * "C:\\Users\\inigo\\Desktop\\MarketMaker\\G4Reto2Servidor\\G4Reto2Cliente\\G4Reto2Cliente\\Reto2G4Cliente\\src\\reports\\tiendaReport.jrxml";
+     * InputStream inputStream =
+     * getClass().getClassLoader().getResourceAsStream(rutaInforme);
+     * JasperReport jasperReport =
+     * JasperCompileManager.compileReport(inputStream);
+     *
+     * JRBeanCollectionDataSource dataSource = new
+     * JRBeanCollectionDataSource(eventos); JasperPrint jasperPrint =
+     * JasperFillManager.fillReport(jasperReport, null, dataSource);
+     *
+     * String desktopPath = System.getProperty("user.home") + "/Desktop/";
+     * String pdfFilePath = desktopPath + "informe_eventos.pdf";
+     *
+     * JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFilePath);
+     *
+     * Desktop.getDesktop().open(new File(pdfFilePath)); } catch (Exception e) {
+     * e.printStackTrace(); } }
+     *
      */
-
     /**
      * Maneja el evento de ayuda. Llama al método que muestra una ventana de
      * ayuda con información sobre la funcionalidad de la ventana de eventos.

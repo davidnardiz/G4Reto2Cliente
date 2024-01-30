@@ -5,6 +5,7 @@
  */
 package controller;
 
+import static encriptation.ClienteEncriptation.encriptar;
 import entities.Usuario;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import service.ClienteFactoria;
+import service.ClienteInterface;
 
 /**
  *
@@ -215,7 +218,9 @@ public class ControllerPerfil {
         String repetirContrasenia = passwordFieldRepetirContrasenia.getText();
 
         if (nuevaContrasenia.equals(repetirContrasenia)) {
-            usuario.setPassword(nuevaContrasenia);
+            usuario.setPassword(encriptar(nuevaContrasenia));
+            ClienteInterface ci = ClienteFactoria.getClienteInterface();
+            ci.edit_XML(usuario, usuario.getIdUsuario().toString());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Cambiar Contraseña");
             alert.setHeaderText(null);
@@ -256,6 +261,5 @@ public class ControllerPerfil {
     public void handleAyuda(ActionEvent event) {
         ControllerAyudas.getInstance().mostrarVentanaAyudaPerfil();
     }
-
 
 }

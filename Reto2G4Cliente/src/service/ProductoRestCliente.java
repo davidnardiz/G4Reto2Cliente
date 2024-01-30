@@ -5,6 +5,7 @@
  */
 package service;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -23,13 +24,12 @@ import javax.ws.rs.core.GenericType;
  *
  * @author Gonzalo
  */
-public class ProductoRestCliente implements ProductoInterface{
+public class ProductoRestCliente implements ProductoInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2G4Server/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("multimedia.url").getString("BASE_URI");
 
-    
     public ProductoRestCliente() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("entities.producto");
@@ -229,5 +229,5 @@ public class ProductoRestCliente implements ProductoInterface{
     public void close() {
         client.close();
     }
-    
+
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -13,9 +14,9 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="428.0" prefWidth="603.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerSignUp">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="749.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerSignUp">
    <children>
-      <Pane layoutX="130.0" layoutY="24.0" prefHeight="371.0" prefWidth="337.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;" styleClass="RellenarDatos">
+      <Pane layoutX="130.0" layoutY="24.0" prefHeight="497.0" prefWidth="506.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 25;" styleClass="RellenarDatos">
          <effect>
             <DropShadow>
                <color>
@@ -24,47 +25,53 @@
             </DropShadow>
          </effect>
          <children>
-            <Label layoutX="30.0" layoutY="91.0" prefHeight="33.0" prefWidth="120.0" text="Email:" textFill="#2f2f2f">
+            <Label layoutX="87.0" layoutY="161.0" prefHeight="33.0" prefWidth="157.0" text="Email:" textFill="#2f2f2f">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="txtFieldUsuario1" layoutX="153.0" layoutY="94.0" prefHeight="25.0" prefWidth="150.0" />
-            <Label layoutX="30.0" layoutY="126.0" prefHeight="33.0" prefWidth="120.0" text="Usuario:" textFill="#2f2f2f">
+            <TextField fx:id="txtFieldUsuario1" layoutX="270.0" layoutY="165.0" prefHeight="25.0" prefWidth="150.0" />
+            <Label layoutX="87.0" layoutY="196.0" prefHeight="33.0" prefWidth="150.0" text="Usuario:" textFill="#2f2f2f">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="txtFieldUsuario" layoutX="153.0" layoutY="129.0" prefHeight="25.0" prefWidth="150.0" />
-            <Label layoutX="30.0" layoutY="163.0" prefHeight="33.0" prefWidth="120.0" text="Contraseña:" textFill="#2f2f2f">
+            <TextField fx:id="txtFieldUsuario" layoutX="270.0" layoutY="200.0" prefHeight="25.0" prefWidth="150.0" />
+            <Label layoutX="87.0" layoutY="233.0" prefHeight="33.0" prefWidth="150.0" text="Contraseña:" textFill="#2f2f2f">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <PasswordField fx:id="PassFieldR" layoutX="153.0" layoutY="166.0" prefHeight="25.0" prefWidth="150.0" />
-            <Label layoutX="30.0" layoutY="196.0" prefHeight="33.0" prefWidth="120.0" text="Repetir contraseña:" textFill="#2f2f2f">
+            <PasswordField fx:id="PassFieldR" layoutX="270.0" layoutY="237.0" prefHeight="25.0" prefWidth="150.0" />
+            <Label layoutX="87.0" layoutY="266.0" prefHeight="33.0" prefWidth="150.0" text="Repetir contraseña:" textFill="#2f2f2f">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <PasswordField fx:id="PassFieldR1" layoutX="153.0" layoutY="200.0" prefHeight="25.0" prefWidth="150.0" />
-            <Label layoutX="30.0" layoutY="229.0" prefHeight="33.0" prefWidth="120.0" text="Fecha de nacimiento:" textFill="#2f2f2f">
+            <PasswordField fx:id="PassFieldR1" layoutX="270.0" layoutY="270.0" prefHeight="25.0" prefWidth="150.0" />
+            <Label layoutX="87.0" layoutY="303.0" prefHeight="33.0" prefWidth="150.0" text="Fecha de nacimiento:" textFill="#2f2f2f">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <DatePicker fx:id="dpFehcaNace" layoutX="153.0" layoutY="233.0" prefHeight="25.0" prefWidth="150.0" />
-            <Button fx:id="btnRegistrarse" layoutX="105.0" layoutY="310.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="127.0" style="-fx-background-color: #233D28;" text="Registrarse" textFill="#f2f2f2">
+            <DatePicker fx:id="dpFehcaNace" layoutX="270.0" layoutY="307.0" prefHeight="25.0" prefWidth="150.0" />
+            <Button fx:id="btnRegistrarse" layoutX="192.0" layoutY="409.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="127.0" style="-fx-background-color: #233D28;" text="Registrarse" textFill="#f2f2f2">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Hyperlink fx:id="hyperLinkR" layoutX="83.0" layoutY="272.0" prefHeight="23.0" prefWidth="175.0" text="¿Ya tienes cuenta? Inicia sesión" textFill="#565b56" />
-            <ImageView fitHeight="94.0" fitWidth="113.0" layoutX="110.0" layoutY="12.0">
+            <Hyperlink fx:id="hyperLinkR" layoutX="170.0" layoutY="378.0" prefHeight="23.0" prefWidth="175.0" text="¿Ya tienes cuenta? Inicia sesión" textFill="#565b56" />
+            <ImageView fitHeight="116.0" fitWidth="139.0" layoutX="188.0" layoutY="23.0">
                <image>
-                  <Image url="@LogoMM.png" />
+                  <Image url="@../multimedia/Logo.png" />
                </image>
             </ImageView>
+            <Label layoutX="87.0" layoutY="340.0" prefHeight="33.0" prefWidth="150.0" text="Tipo de venta:" textFill="#2f2f2f">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="cbTipoVenta" layoutX="270.0" layoutY="344.0" prefWidth="150.0" />
          </children>
       </Pane>
    </children>

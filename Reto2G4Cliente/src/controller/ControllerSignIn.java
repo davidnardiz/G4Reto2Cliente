@@ -10,7 +10,6 @@ import entities.Cliente;
 import entities.Usuario;
 import exceptions.IncorrectCredentialsException;
 import exceptions.InvalidFormatException;
-import exceptions.LogicException;
 import exceptions.NotCompletedException;
 import java.io.IOException;
 import java.util.Optional;
@@ -32,7 +31,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.GenericType;
@@ -44,6 +42,9 @@ import service.UsuarioInterface;
  * @author Gonzalo
  */
 public class ControllerSignIn {
+
+    String correo;
+    String pass;
 
     private Stage stage;
     @FXML
@@ -63,9 +64,15 @@ public class ControllerSignIn {
         stage.setResizable(false);
         stage.show();
 
+        btnIniciarSesion.setDefaultButton(true);
+
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario4@example.com");
-        passField.setText("password4");
+        txtFieldEmail.setText("usuario10@example.com");
+        passField.setText("password10");
+        if (correo != null) {
+            txtFieldEmail.setText(correo);
+            passField.setText(pass);
+        }
 
         stage.setOnCloseRequest(this::handleCloseWindow);
 
@@ -81,6 +88,11 @@ public class ControllerSignIn {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void setCredenciales(String correo, String pass) {
+        this.correo = correo;
+        this.pass = pass;
     }
 
     /**

@@ -5,7 +5,9 @@
  */
 package controller;
 
+import static encriptation.ClienteEncriptation.encriptar;
 import entities.Cliente;
+import entities.TipoVenta;
 import exceptions.InvalidEmailFormatException;
 import exceptions.InvalidFormatException;
 import exceptions.NotCompletedException;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
@@ -57,6 +61,8 @@ public class ControllerSignUp {
     @FXML
     private DatePicker dpFehcaNace;
     @FXML
+    private ComboBox cbTipoVenta;
+    @FXML
     private Hyperlink hyperLinkR;
 
     /**
@@ -77,6 +83,8 @@ public class ControllerSignUp {
         btnRegistrarse.setDefaultButton(true);
         btnRegistrarse.setOnAction(this::handleSignUp);
         hyperLinkR.setOnAction(this::handleOpenSignIn);
+
+        cbTipoVenta.getItems().setAll(FXCollections.observableArrayList(TipoVenta.values()));
 
         stage.setOnCloseRequest(this::handleCloseRequest);
         stage.show();
@@ -106,14 +114,14 @@ public class ControllerSignUp {
             Pattern pattern2 = Pattern.compile("^[a-zA-Z0-9]{8,}$");
 
             cl.setCorreo(txtFieldUsuario1.getText());
-            if (pattern1.matcher(txtFieldUsuario.getText()).find() == false) {
+            /*if (pattern1.matcher(txtFieldUsuario.getText()).find() == false) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un nombre valido que no contenga caracteres especiales y como maximo 20 caracteres o digitos", ButtonType.OK);
                 alert.setHeaderText(null);
                 alert.show();
                 throw new InvalidFormatException();
-            } else {
-                cl.setNombre(txtFieldUsuario.getText());
-            }
+            } else {*/
+            cl.setNombre(txtFieldUsuario.getText());
+            //}
 
             if (pattern2.matcher(PassFieldR.getText()).find() == false) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un nombre valido que no contenga caracteres especiales y como minimo 8 letras o digitos", ButtonType.OK);
@@ -126,17 +134,28 @@ public class ControllerSignUp {
                 alert.show();
                 throw new InvalidFormatException();
             } else {
+                encriptar(PassFieldR.getText());
                 cl.setPassword(PassFieldR.getText());
             }
-            
+
+            if (cbTipoVenta.getValue() == null) {
+                throw new NotCompletedException("Debes seleccionar una opcion de venta!!");
+            }
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaCreacion;
             fechaCreacion = dateFormat.parse(dpFehcaNace.getValue().toString());
             cl.setFechaNacimiento(fechaCreacion);
+            TipoVenta tipoVenta = (TipoVenta) cbTipoVenta.getValue();
+            cl.setTipoVenta(tipoVenta);
             System.out.println("Correo: " + cl.getCorreo());
             ClienteInterface ci = ClienteFactoria.getClienteInterface();
             ci.create_XML(cl);
             handleOpenSignIn(event);
+
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Se ha creado correctamente el usuario!!");
+            alerta.setHeaderText(null);
+            alerta.show();
 
         } catch (ParseException ex) {
             Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
@@ -158,13 +177,12 @@ public class ControllerSignUp {
     @FXML
     public void handleOpenSignIn(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/view/signIn.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root = (Parent) loader.load();
-            ControllerSignIn viewController
-                    = ((ControllerSignIn) loader.getController());
-//            viewController.setStage(stage);
-//            viewController.initStage(root);
+            ControllerSignIn viewController = ((ControllerSignIn) loader.getController());
+            viewController.setStage(stage);
+            viewController.setCredenciales(txtFieldUsuario1.getText(), PassFieldR.getText());
+            viewController.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -192,7 +210,7 @@ public class ControllerSignUp {
      * @throws NotCompleteExceptionException
      */
     private void checkCompleteFields() throws NotCompletedException {
-        if (txtFieldUsuario1.getText().isEmpty() || PassFieldR.getText().isEmpty() || PassFieldR1.getText().isEmpty() || txtFieldUsuario.getText().isEmpty()||dpFehcaNace.getValue() == null) {
+        if (txtFieldUsuario1.getText().isEmpty() || PassFieldR.getText().isEmpty() || PassFieldR1.getText().isEmpty() || txtFieldUsuario.getText().isEmpty() || dpFehcaNace.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor rellene todos los campos", ButtonType.OK);
             alert.setHeaderText(null);
             alert.show();

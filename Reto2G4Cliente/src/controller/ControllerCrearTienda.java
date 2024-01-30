@@ -91,7 +91,7 @@ public class ControllerCrearTienda {
 
         try {
             //Comprobamos que si ha rellenado todos los datos.
-            if (txtFieldNombre.getText().isEmpty() || txtFieldDescripcion.getText().isEmpty() || txtFieldEspacio.getText().isEmpty() || comboBoxTipoPago.getValue() == null || datePickerFechaCreacion.getValue() == null) {
+            if (nombre.isEmpty() || descripcion.isEmpty() || espacio.isEmpty() || tipoPago == null || datePickerFechaCreacion.getValue() == null) {
                 throw new NotCompletedException("Debes rellenar todos los datos!!");
             }
 
@@ -112,6 +112,7 @@ public class ControllerCrearTienda {
                 throw new InvalidFormatException("Debes introducir bien los datos!!");
             }
 
+            System.out.println("hola");
             //Creamos una nueva tienda y le asignamos los datos.
             Tienda tienda = new Tienda();
             tienda.setNombre(nombre);
@@ -119,8 +120,10 @@ public class ControllerCrearTienda {
             tienda.setEspacio(Float.parseFloat(espacio));
             tienda.setFechaCreacion(fechaCreacion);
             tienda.setTipoPago(tipoPago);
-            //tienda.setCliente((Cliente) usuario);
+            System.out.println("joder" + usuario.toString());
+            tienda.setCliente((Cliente) usuario);
 
+            System.out.println("Creando tienda --> " + tienda.toString());
             //LLamamos al metodo correspondiente que se encarga de crear la tienda
             TiendaInterface ti = TiendaFactoria.getTiendaInterface();
             ti.create_XML(tienda);

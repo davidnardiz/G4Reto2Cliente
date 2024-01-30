@@ -5,6 +5,7 @@
  */
 package service;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -27,7 +28,7 @@ public class TiendaRestCliente implements TiendaInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2G4Server/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("multimedia.url").getString("BASE_URI");
 
     public TiendaRestCliente() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

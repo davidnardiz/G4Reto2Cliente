@@ -17,8 +17,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +35,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -47,6 +51,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+import service.ClienteFactoria;
+import service.ClienteInterface;
 import service.TiendaFactoria;
 import service.TiendaInterface;
 
@@ -103,6 +116,8 @@ public class ControllerTiendas {
     @FXML
     private Button btnEliminar;
     @FXML
+    private Button btnInforme;
+    @FXML
     private ComboBox cbFiltros;
     @FXML
     private TextField txtFieldFiltro1;
@@ -147,9 +162,7 @@ public class ControllerTiendas {
         miProductos.setOnAction(this::handleAbrirProductos);
         miEventos.setOnAction(this::handleAbrirEventos);
         miPerfil.setOnAction(this::handleAbrirPerfil);
-        miAyuda.setOnAction(this::handleAbrirAyuda);
         miAyuda.setOnAction(this::handleAyuda);
-
 
         //Declaraciones de las columnas de la tabla
         tbTiendas.getColumns().clear();
@@ -191,16 +204,20 @@ public class ControllerTiendas {
 
         //ComboBox
         cbTipoPago.getItems().setAll(FXCollections.observableArrayList(TipoPago.values()));
+        cbTipoPago.setValue("Efectivo");
         cbFiltros.getItems().add("Mostrar todas");
         cbFiltros.getItems().add("Menor espacio");
         cbFiltros.getItems().add("Mayor espacio");
         cbFiltros.getItems().add("Entre espacios");
         cbFiltros.getItems().add("Tipo pago");
+        cbFiltros.setValue("Mostrar todos");
 
         //Botones crear, eliminar y editar
         btnCrear.setOnAction(this::handleCreateTienda);
+        btnCrear.setDefaultButton(true);
         btnEditar.setOnAction(this::handleEditTienda);
         btnEliminar.setOnAction(this::handleDeleteTienda);
+        btnInforme.setOnAction(this::handleCrearInforme);
 
         //Filtros
         cbFiltros.setOnAction(this::handleFiltros);
@@ -343,12 +360,40 @@ public class ControllerTiendas {
         ObservableList<Tienda> tiendasSeleccionadas = tbTiendas.getSelectionModel().getSelectedItems();
 
         TiendaInterface ti = TiendaFactoria.getTiendaInterface();
+        ClienteInterface ci = ClienteFactoria.getClienteInterface();
 
-        for (int i = 0; i < tiendasSeleccionadas.size(); i++) {
-            ti.remove(tiendasSeleccionadas.get(i).getIdTienda().toString());
+        for (int j = 0; j < tiendasSeleccionadas.size(); j++) {
+            Tienda t = tiendasSeleccionadas.get(j);
+
+            System.out.println("Eliminando tienda --> " + t.toString());
+
+            Cliente c = t.getCliente();
+            c.setTienda(null);
+            ci.edit_XML(c, c.getIdUsuario() + "");
+            System.out.println(tiendasSeleccionadas.toString());
+            ti.remove(t.getIdTienda() + "");
         }
+
         cleanFields();
+
         handleCargeTable();
+    }
+
+    @FXML
+    public void handleCrearInforme(ActionEvent actionEvent) {
+        try {
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/reports/tiendaReport.jrxml"));
+            JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<Tienda>) this.tbTiendas.getItems());
+            Map<String, Object> parameters = new HashMap<>();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            jasperViewer.setVisible(true);
+        } catch (JRException e) {
+            Alert alerta = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
+        }
+
     }
 
     private void handleCargeTable() {
@@ -458,8 +503,10 @@ public class ControllerTiendas {
             ControllerSignIn viewController = ((ControllerSignIn) loader.getController());
             viewController.setStage(stage);
             viewController.initStage(root);
+
         } catch (IOException ex) {
-            Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerTiendas.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -471,8 +518,10 @@ public class ControllerTiendas {
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
+
         } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerPrincipal.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -484,8 +533,10 @@ public class ControllerTiendas {
             ControllerProductos viewController = ((ControllerProductos) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
+
         } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerPrincipal.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -497,8 +548,10 @@ public class ControllerTiendas {
             ControllerEventos viewController = ((ControllerEventos) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
+
         } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerPrincipal.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -510,21 +563,10 @@ public class ControllerTiendas {
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
-    @FXML
-    public void handleAbrirAyuda(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AyudaTiendas.fxml"));
-            Parent root = loader.load();
-            ControllerAyudaTiendas viewController = ((ControllerAyudaTiendas) loader.getController());
-            viewController.setStage(stage);
-            viewController.initStage(root);
         } catch (IOException ex) {
-            Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerPrincipal.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -546,8 +588,10 @@ public class ControllerTiendas {
             LocalDate localDate = LocalDate.now();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             date = dateFormat.parse(localDate.toString());
+
         } catch (ParseException ex) {
-            Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerTiendas.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return fechaCreacion.before(date);
     }
@@ -582,6 +626,5 @@ public class ControllerTiendas {
     public void handleAyuda(ActionEvent event) {
         ControllerAyudas.getInstance().mostrarVentanaAyudaTienda();
     }
-
 
 }

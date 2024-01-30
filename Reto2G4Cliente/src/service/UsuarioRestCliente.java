@@ -5,7 +5,8 @@
  */
 package service;
 
-import exceptions.LogicException;
+import java.util.ResourceBundle;
+import javax.annotation.Resource;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -28,7 +29,7 @@ public class UsuarioRestCliente implements UsuarioInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2G4Server/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("multimedia.url").getString("BASE_URI");
 
     public UsuarioRestCliente() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

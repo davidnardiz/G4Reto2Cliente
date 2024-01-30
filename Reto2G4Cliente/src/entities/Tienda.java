@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -105,11 +106,13 @@ public class Tienda implements Serializable {
         this.fechaCreacion.set(fechaCreacion);
     }
 
+    @XmlTransient
     public Cliente getCliente() {
         return cliente.get();
     }
 
     public void setCliente(Cliente cliente) {
+        System.out.println("Cliente setCliente() --> " + cliente.toString());
         this.cliente.set(cliente);
     }
 
