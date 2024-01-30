@@ -5,6 +5,7 @@
  */
 package controller;
 
+import entities.Cliente;
 import entities.Producto;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
@@ -16,8 +17,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +41,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -46,6 +51,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import service.ProductoFactoria;
 import service.ProductoInterface;
 
@@ -104,6 +116,20 @@ public class ControllerProductos {
     private TextField tfFiltro2;
     @FXML
     private ComboBox cbFiltro;
+    @FXML
+    private MenuItem miInicio;
+    @FXML
+    private MenuItem miPerfil;
+    @FXML
+    private MenuItem miProductos;
+    @FXML
+    private MenuItem miTiendas;
+    @FXML
+    private MenuItem miEventos;
+    @FXML
+    private MenuItem miCerrarSesion;
+    @FXML
+    private MenuItem miAyuda;
 
     /**
      * La venta debe ser Modal La ventana no debe ser redimensionable. La tabla
@@ -136,6 +162,15 @@ public class ControllerProductos {
         buttonFiltrar.setOnAction(this::handleFiltrar);
         buttonInforme.setOnAction(this::handleInforme);
         stage.setOnCloseRequest(this::handleCloseWindow);
+
+        //MenuBar
+        miInicio.setOnAction(this::handleAbrirInicio);
+        miPerfil.setOnAction(this::handleAbrirPerfil);
+        miProductos.setOnAction(this::handleAbrirProductos);
+        miTiendas.setOnAction(this::handleAbrirTiendas);
+        miEventos.setOnAction(this::handleAbrirEventos);
+        miCerrarSesion.setOnAction(this::handleCerrarSesion);
+        miAyuda.setOnAction(this::handleAbrirAyuda);
 
         tbProductos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tcId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
@@ -193,7 +228,16 @@ public class ControllerProductos {
         tbProductos.getColumns().clear();
         tbProductos.getColumns().addAll(tcId, tcNombre, tcPrecio, tcAltura, tcMaterial, tcPeso, tcFecha);
 
-        handleCargeTable();
+        if (usuario instanceof Cliente) {
+            List<Producto> productos = new ArrayList();
+            ProductoInterface ti = ProductoFactoria.createInterface();
+            productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+            }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+            handleChargeFiltro(productos);
+        } else {
+            handleCargeTable();
+        }
+
         stage.show();
 
     }
@@ -211,6 +255,14 @@ public class ControllerProductos {
         ProductoInterface ti = ProductoFactoria.createInterface();
         productos = ti.findAll_XML(new GenericType<List<Producto>>() {
         });
+        ObservableList<Producto> productosTabla = FXCollections.observableArrayList(productos);
+        for (int i = 0; i < productosTabla.size(); i++) {
+            System.out.println(productosTabla.get(i).toString());
+        }
+
+        tbProductos.setItems(productosTabla);
+        tbProductos.refresh();
+
     }
 
     @FXML
@@ -292,6 +344,12 @@ public class ControllerProductos {
         }
     }
 
+    @FXML
+    public void handleAbrirAyuda(ActionEvent actionEvent) {
+        AyudaControllerSingletone.getInstance().mostrarVentanaAyudaProductos();
+
+    }
+
     /**
      * Validar que los campos “Nombre” (columnaNombre) , “Precio”
      * (columnaPrecio), “Talla” (columnaTalla), “Fecha” (columnaFecha),
@@ -366,13 +424,34 @@ public class ControllerProductos {
             fechaCreacion = dateFormat.parse(dpFecha.getValue().toString());
 
             producto.setFechacreacion(fechaCreacion);
-            producto.setCliente(null);
-            producto.setTienda(null);
-            ProductoInterface pi = ProductoFactoria.createInterface();
-            pi.create_XML(producto);
-
-            cleanFields();
-            handleCargeTable();
+            if (usuario instanceof Cliente) {
+                producto.setCliente((Cliente) usuario);
+                producto.setTienda(((Cliente) usuario).getTienda());
+                System.out.println("Tienda: " + producto.getTienda());
+                ProductoInterface pi = ProductoFactoria.createInterface();
+                pi.create_XML(producto);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Se ha creado correctamente el producto", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfNombre.setText("");
+                alert.show();
+                cleanFields();
+                List<Producto> productos = new ArrayList();
+                ProductoInterface ti = ProductoFactoria.createInterface();
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                producto.setCliente(null);
+                producto.setTienda(null);
+                ProductoInterface pi = ProductoFactoria.createInterface();
+                pi.create_XML(producto);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Se ha creado correctamente el producto", ButtonType.OK);
+                alert.setHeaderText(null);
+                tfNombre.setText("");
+                alert.show();
+                cleanFields();
+                handleCargeTable();
+            }
         } catch (ParseException ex) {
             Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotCompletedException ex) {
@@ -481,15 +560,25 @@ public class ControllerProductos {
 
                 ProductoInterface pi = ProductoFactoria.createInterface();
                 pi.edit_XML(productoSeleccionado, productoSeleccionado.getIdProducto().toString());
-                cleanFields();
-                handleCargeTable();
+                if (usuario instanceof Cliente) {
+                    List<Producto> productos = new ArrayList();
+                    ProductoInterface ti = ProductoFactoria.createInterface();
+                    productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                    }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Se ha editado conrrectamenta el producto");
+                    alert.setHeaderText(null);
+                    alert.show();
+                    handleChargeFiltro(productos);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Se ha editado conrrectamenta el producto");
+                    alert.setHeaderText(null);
+                    alert.show();
+                    cleanFields();
+                    handleCargeTable();
+                }
             }
 
-        } catch (ParseException ex) {
-            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidFormatException ex) {
-            Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotCompletedException ex) {
+        } catch (ParseException | InvalidFormatException | NotCompletedException ex) {
             Logger.getLogger(ControllerProductos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -528,7 +617,15 @@ public class ControllerProductos {
             }
 
             cleanFields();
-            handleCargeTable();
+            if (usuario instanceof Cliente) {
+                List<Producto> productos = new ArrayList();
+                ProductoInterface ti = ProductoFactoria.createInterface();
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                handleCargeTable();
+            }
         }
     }
 
@@ -543,24 +640,32 @@ public class ControllerProductos {
         if (filtroSeleccionado.equalsIgnoreCase("Mostrar todo")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(true);
             tfFiltro2.setDisable(true);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Nombre")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(true);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor altura")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(true);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Mayor altura")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(true);
             cleanFields();
@@ -575,12 +680,16 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor precio")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(true);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Mayor precio")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(true);
             cleanFields();
@@ -595,12 +704,16 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor peso")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(true);
             cleanFields();
         } else if (filtroSeleccionado.equalsIgnoreCase("Mayor peso")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
+            tfFiltro1.setPromptText("");
+            tfFiltro2.setPromptText("");
             tfFiltro1.setDisable(false);
             tfFiltro2.setDisable(true);
             cleanFields();
@@ -631,14 +744,30 @@ public class ControllerProductos {
         ProductoInterface pi = ProductoFactoria.createInterface();
 
         if (filtroSeleccionado.equalsIgnoreCase("Mostrar todo")) {
-            handleCargeTable();
-            cleanFields();
+            if (usuario instanceof Cliente) {
+                List<Producto> productos = new ArrayList();
+                ProductoInterface ti = ProductoFactoria.createInterface();
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+                cleanFields();
+
+            } else {
+                handleCargeTable();
+                cleanFields();
+
+            }
         } else if (filtroSeleccionado.equalsIgnoreCase("Nombre")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
-
+            if (usuario instanceof Cliente) {
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+            }
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
                 if (productos.get(i).getNombre().equalsIgnoreCase(tfFiltro1.getText())) {
@@ -647,11 +776,18 @@ public class ControllerProductos {
             }
             handleChargeFiltro(productoTabla);
             cleanFields();
+
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor altura")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
+            if (usuario instanceof Cliente) {
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+            }
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
@@ -664,8 +800,14 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Mayor altura")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
+            if (usuario instanceof Cliente) {
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+            }
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
@@ -690,8 +832,14 @@ public class ControllerProductos {
             } else {
                 List<Producto> productos = new ArrayList();
                 ProductoInterface ti = ProductoFactoria.createInterface();
-                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-                });
+                if (usuario instanceof Cliente) {
+                    productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                    }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                    handleChargeFiltro(productos);
+                } else {
+                    productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                    });
+                }
 
                 List<Producto> productoTabla = new ArrayList();
                 for (int i = 0; i < productos.size(); i++) {
@@ -706,8 +854,14 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor precio")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
+            if (usuario instanceof Cliente) {
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+            }
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
@@ -720,8 +874,14 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Mayor precio")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
+            if (usuario instanceof Cliente) {
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+            }
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
@@ -746,8 +906,14 @@ public class ControllerProductos {
             } else {
                 List<Producto> productos = new ArrayList();
                 ProductoInterface ti = ProductoFactoria.createInterface();
-                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-                });
+                if (usuario instanceof Cliente) {
+                    productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                    }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                    handleChargeFiltro(productos);
+                } else {
+                    productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                    });
+                }
 
                 List<Producto> productoTabla = new ArrayList();
                 for (int i = 0; i < productos.size(); i++) {
@@ -761,8 +927,14 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor peso")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
+            if (usuario instanceof Cliente) {
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+            }
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
@@ -775,8 +947,14 @@ public class ControllerProductos {
         } else if (filtroSeleccionado.equalsIgnoreCase("Mayor peso")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
-            productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-            });
+            if (usuario instanceof Cliente) {
+                productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                handleChargeFiltro(productos);
+            } else {
+                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                });
+            }
 
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
@@ -801,8 +979,14 @@ public class ControllerProductos {
             } else {
                 List<Producto> productos = new ArrayList();
                 ProductoInterface ti = ProductoFactoria.createInterface();
-                productos = ti.findAll_XML(new GenericType<List<Producto>>() {
-                });
+                if (usuario instanceof Cliente) {
+                    productos = ti.encontrarProductoTodosTienda_XML(new GenericType<List<Producto>>() {
+                    }, String.valueOf(((Cliente) usuario).getTienda().getIdTienda()));
+                    handleChargeFiltro(productos);
+                } else {
+                    productos = ti.findAll_XML(new GenericType<List<Producto>>() {
+                    });
+                }
 
                 List<Producto> productoTabla = new ArrayList();
                 for (int i = 0; i < productos.size(); i++) {
@@ -831,8 +1015,21 @@ public class ControllerProductos {
         tbProductos.refresh();
     }
 
+    @FXML
     private void handleInforme(ActionEvent actionevent) {
-
+        try {
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/reports/productoReport.jrxml"));
+            JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<Producto>) this.tbProductos.getItems());
+            Map<String, Object> parameters = new HashMap<>();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            jasperViewer.setVisible(true);
+        } catch (JRException e) {
+            Alert alerta = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alerta.setHeaderText(null);
+            System.out.println(e.getMessage());
+            alerta.show();
+        }
     }
 
     /**

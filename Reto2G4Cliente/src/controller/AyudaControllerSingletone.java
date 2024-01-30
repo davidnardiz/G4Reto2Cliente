@@ -51,4 +51,17 @@ public class AyudaControllerSingletone {
         stage.show();
     }
 
+    public void mostrarVentanaAyudaProductos() {
+        WebView webView = new WebView();
+        webView.getEngine().load(getClass().getResource("/view/AyudaProductos.html").toExternalForm());
+
+        ScrollPane scrollPane = new ScrollPane(webView);
+        Scene scene = new Scene(new StackPane(scrollPane), 800, 600);
+
+        Stage stage = new Stage();
+        stage.setTitle("Ayuda - Ventana de Productos");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
 }
