@@ -5,6 +5,7 @@
  */
 package controller;
 
+import entities.Cliente;
 import entities.Evento;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
@@ -108,6 +109,8 @@ public class ControllerEventos {
     @FXML
     private Button btnImprimir;
     @FXML
+    private Button btnAdjuntar;
+    @FXML
     private ComboBox comboFiltros;
     @FXML
     private TextField txtFieldParametro1;
@@ -208,6 +211,13 @@ public class ControllerEventos {
         btnFiltrar.setOnAction(this::handleEjecutarFiltros);
         txtFieldParametro1.setDisable(true);
         txtFieldParametro2.setDisable(true);
+        
+        if(usuario instanceof Cliente){
+            btnCrear.setDisable(true);
+            btnEditar.setDisable(true);
+            btnEliminar.setDisable(true);
+            btnAdjuntar.setText("Apuntarse");
+        }
 
         stage.show();
     }

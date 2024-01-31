@@ -154,6 +154,7 @@ public class ControllerProductos {
         cbFiltro.getItems().add("Mayor Peso");
         cbFiltro.getItems().add("Entre peso");
 
+        //Metodos de los botones
         buttonAñadir.setOnAction(this::handleCreateProducto);
         buttonEliminar.setOnAction(this::handleDeleteProducto);
         buttonModificar.setOnAction(this::handleEditProducto);
@@ -171,6 +172,7 @@ public class ControllerProductos {
         miCerrarSesion.setOnAction(this::handleCerrarSesion);
         miAyuda.setOnAction(this::handleAyuda);
 
+        //Asignar las celdas de la tabla
         tbProductos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tcId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
         tcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -199,6 +201,7 @@ public class ControllerProductos {
 
         });
 
+        //Seleccionar un objeto de la tabla
         tbProductos.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 Producto productoSelecionado = tbProductos.getSelectionModel().getSelectedItem();
@@ -220,13 +223,14 @@ public class ControllerProductos {
             }
 
         });
-
+        
         tfId.setDisable(true);
         tfFiltro1.setDisable(true);
         tfFiltro2.setDisable(true);
         tbProductos.getColumns().clear();
         tbProductos.getColumns().addAll(tcId, tcNombre, tcPrecio, tcAltura, tcMaterial, tcPeso, tcFecha);
 
+        //Carga la tabla con distintos datos en funcion del tipo 
         if (usuario instanceof Cliente) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
@@ -241,6 +245,7 @@ public class ControllerProductos {
 
     }
 
+    //Pasar la stage y el usuario en la clase
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
         this.usuario = usuario;
@@ -264,6 +269,10 @@ public class ControllerProductos {
 
     }
 
+    /**
+     * Accion del menubar para ir a la ventana de tiendas
+     * @param actionEvent 
+     */
     @FXML
     public void handleAbrirTiendas(ActionEvent actionEvent) {
         try {
@@ -279,6 +288,10 @@ public class ControllerProductos {
 
     }
 
+    /**
+     * Accion del menubar para volver a la pagina de SignIn
+     * @param event 
+     */
     private void handleCerrarSesion(Event event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
@@ -291,6 +304,10 @@ public class ControllerProductos {
         }
     }
 
+    /**
+     * Accion del menubar para abrir la pagina principal de la aplicacion
+     * @param actionEvent 
+     */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
         try {
@@ -304,6 +321,10 @@ public class ControllerProductos {
         }
     }
 
+    /**
+     * Accion de menubar para abrir la ventana de productos
+     * @param actionEvent 
+     */
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {
         try {
@@ -317,6 +338,10 @@ public class ControllerProductos {
         }
     }
 
+    /**
+     * Accion de menubar para abrir la ventana de eventos
+     * @param actionEvent 
+     */
     @FXML
     public void handleAbrirEventos(ActionEvent actionEvent) {
         try {
@@ -330,6 +355,10 @@ public class ControllerProductos {
         }
     }
 
+    /**
+     * Accion de menubar para abrir la ventana de perfil
+     * @param actionEvent 
+     */
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
         try {
@@ -1011,6 +1040,10 @@ public class ControllerProductos {
         tbProductos.refresh();
     }
 
+    /**
+     * Metodo para generar un imforme con los datos de la tabla de productos
+     * @param actionevent 
+     */
     @FXML
     private void handleInforme(ActionEvent actionevent) {
         try {
