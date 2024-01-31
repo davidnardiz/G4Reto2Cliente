@@ -88,12 +88,12 @@
                         <MenuItem fx:id="menuItemPerfil" mnemonicParsing="false" text="Perfil" />
                         <MenuItem fx:id="menuItemProductos" mnemonicParsing="false" text="Productos" />
                         <MenuItem fx:id="menuItemEventos" mnemonicParsing="false" text="Eventos" />
-                        <MenuItem fx:id="menuItemCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
                   <MenuItem fx:id="menuItemTiendas" mnemonicParsing="false" text="Tiendas" />
+                        <MenuItem fx:id="menuItemCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda">
-                    <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Como funciona esta ventana?" />
+                    <MenuItem fx:id="menuItemAyuda" mnemonicParsing="false" text="¿Qué hace esta ventana?" />
                 </Menu>
             </menus>
             <padding>

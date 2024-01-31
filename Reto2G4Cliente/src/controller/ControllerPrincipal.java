@@ -49,6 +49,8 @@ public class ControllerPrincipal {
     private Button buttonTiendas;
     @FXML
     private Button buttonEventos;
+    @FXML
+    private MenuItem menuItemAyuda;
 
     /**
      * Metodo para inicializar la ventana
@@ -67,6 +69,8 @@ public class ControllerPrincipal {
         miEventos.setOnAction(this::handleAbrirEventos);
         miTiendas.setOnAction(this::handleAbrirTiendas);
         miPerfil.setOnAction(this::handleAbrirPerfil);
+        menuItemAyuda.setOnAction(this::handleAyuda);
+
 
         buttonProductos.setOnAction(this::handleAbrirProductos);
         buttonTiendas.setOnAction(this::handleAbrirTiendas);
@@ -165,4 +169,18 @@ public class ControllerPrincipal {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, "Error loading Perfil.fxml", ex);
         }
     }
+
+    /**
+     * Maneja el evento de ayuda en la ventana principal. Este método invoca el
+     * método {@link ControllerAyudas#mostrarVentanaAyudaPrincipal()} para
+     * mostrar una ventana de ayuda específica para la ventana principal.
+     *
+     * @param event El evento de acción que desencadena esta operación.
+     * @see ControllerAyudas#mostrarVentanaAyudaPrincipal()
+     */
+    @FXML
+    public void handleAyuda(ActionEvent event) {
+        ControllerAyudas.getInstance().mostrarVentanaAyudaPrincipal();
+    }
+
 }

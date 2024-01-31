@@ -148,6 +148,8 @@ public class ControllerTiendas {
         miEventos.setOnAction(this::handleAbrirEventos);
         miPerfil.setOnAction(this::handleAbrirPerfil);
         miAyuda.setOnAction(this::handleAbrirAyuda);
+        miAyuda.setOnAction(this::handleAyuda);
+
 
         //Declaraciones de las columnas de la tabla
         tbTiendas.getColumns().clear();
@@ -160,7 +162,6 @@ public class ControllerTiendas {
         cmnTipoPago.setCellValueFactory(new PropertyValueFactory<>("tipoPago"));
         cmnEspacio.setCellValueFactory(new PropertyValueFactory<>("espacio"));
         cmnFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
-
         //Seleccionar fila
         tbTiendas.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
@@ -568,5 +569,19 @@ public class ControllerTiendas {
         txtFieldFiltro1.setText("");
         txtFieldFiltro2.setText("");
     }
+
+    /**
+     * Maneja el evento de ayuda en la interfaz gráfica de eventos. Este método
+     * invoca el método {@link ControllerAyudas#mostrarVentanaAyudaEvento()}
+     * para mostrar una ventana de ayuda específica para la interfaz de eventos.
+     *
+     * @param event El evento de acción que desencadena esta operación.
+     * @see ControllerAyudas#mostrarVentanaAyudaEvento()
+     */
+    @FXML
+    public void handleAyuda(ActionEvent event) {
+        ControllerAyudas.getInstance().mostrarVentanaAyudaTienda();
+    }
+
 
 }

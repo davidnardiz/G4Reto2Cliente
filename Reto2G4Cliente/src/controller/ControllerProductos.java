@@ -169,7 +169,7 @@ public class ControllerProductos {
         miTiendas.setOnAction(this::handleAbrirTiendas);
         miEventos.setOnAction(this::handleAbrirEventos);
         miCerrarSesion.setOnAction(this::handleCerrarSesion);
-        miAyuda.setOnAction(this::handleAbrirAyuda);
+        miAyuda.setOnAction(this::handleAyuda);
 
         tbProductos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tcId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
@@ -341,12 +341,6 @@ public class ControllerProductos {
         } catch (IOException ex) {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @FXML
-    public void handleAbrirAyuda(ActionEvent actionEvent) {
-        AyudaControllerSingletone.getInstance().mostrarVentanaAyudaProductos();
-
     }
 
     /**
@@ -1066,6 +1060,19 @@ public class ControllerProductos {
             Platform.exit();
         }
 
+    }
+
+    /**
+     * Maneja el evento de ayuda en la ventana de productos. Este método invoca
+     * el método {@link ControllerAyudas#mostrarVentanaAyudaProductos()} para
+     * mostrar una ventana de ayuda específica para la interfaz de productos.
+     *
+     * @param event El evento de acción que desencadena esta operación.
+     * @see ControllerAyudas#mostrarVentanaAyudaProductos()
+     */
+    @FXML
+    public void handleAyuda(ActionEvent event) {
+        ControllerAyudas.getInstance().mostrarVentanaAyudaProductos();
     }
 
 }

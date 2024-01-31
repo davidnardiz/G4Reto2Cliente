@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,81 +14,82 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerPerfil">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerPerfil">
    <children>
-      <Pane layoutX="311.0" layoutY="74.0" prefHeight="262.0" prefWidth="256.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
+      <Pane layoutX="399.0" layoutY="68.0" prefHeight="424.0" prefWidth="388.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
          <effect>
             <DropShadow blurType="TWO_PASS_BOX" color="#6c6969" />
          </effect>
          <children>
-            <TextField fx:id="txtFieldRepetirContrasenia" layoutX="41.0" layoutY="172.0" prefHeight="25.0" prefWidth="185.0" promptText="Repite la contraseña" style="-fx-background-color: #F2F2F2;">
-               <effect>
-                  <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
-               </effect>
-            </TextField>
-            <Label layoutX="41.0" layoutY="59.0" prefHeight="30.0" prefWidth="203.0" text="Cambiar contraseña" textFill="#2f2f2f">
+            <Label layoutX="67.0" layoutY="52.0" prefHeight="30.0" prefWidth="279.0" text="Cambiar contraseña" textFill="#2f2f2f">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="System Bold" size="29.0" />
                </font>
             </Label>
-            <Button fx:id="btnAceptar" layoutX="41.0" layoutY="210.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="185.0" style="-fx-background-color: #2F2F2F;" text="Aceptar" textFill="#f2f2f2">
+            <Button fx:id="btnAceptar" layoutX="109.0" layoutY="315.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" style="-fx-background-color: #2F2F2F;" text="Aceptar" textFill="#f2f2f2">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
             </Button>
-            <Text fontSmoothingType="LCD" layoutX="41.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aquí puedes cambiar tu contraseña. Debes escribirla por duplicado y luego pulsar en &quot;Aceptar&quot;." textAlignment="JUSTIFY" wrappingWidth="185.22518157958984">
+            <Text fontSmoothingType="LCD" layoutX="67.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aquí puedes cambiar tu contraseña. Debes escribirla por duplicado y luego pulsar en &quot;Aceptar&quot;." textAlignment="JUSTIFY" wrappingWidth="267.99999864399433">
                <font>
-                  <Font size="10.0" />
+                  <Font size="14.0" />
                </font>
             </Text>
-            <TextField fx:id="txtFieldNuevaContrasenia" layoutX="42.0" layoutY="138.0" prefHeight="25.0" prefWidth="185.0" promptText="Nueva contraseña" style="-fx-background-color: #F2F2F2;">
-               <effect>
-                  <DropShadow blurType="TWO_PASS_BOX" height="2.885" radius="1.4137499999999998" width="4.77" />
-               </effect>
-            </TextField>
             <ImageView fitHeight="30.0" fitWidth="32.0" layoutX="112.0" layoutY="19.0">
                <image>
                   <Image url="@../../Downloads/IconoCerradura.png" />
                </image>
             </ImageView>
+            <PasswordField fx:id="passwordFieldNuevaContrasenia" layoutX="67.0" layoutY="215.0" prefHeight="38.0" prefWidth="268.0" promptText="Nueva contraseña" />
+            <PasswordField fx:id="passwordFieldRepetirContrasenia" layoutX="67.0" layoutY="258.0" prefHeight="38.0" prefWidth="268.0" promptText="Repetir contraseña" />
          </children>
       </Pane>
-      <Pane layoutX="40.0" layoutY="74.0" prefHeight="262.0" prefWidth="256.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
+      <Pane layoutX="40.0" layoutY="66.0" prefHeight="376.0" prefWidth="334.0" style="-fx-background-color: #F2F2F2; -fx-background-radius: 22;">
          <effect>
             <DropShadow blurType="TWO_PASS_BOX" color="#6c6969" />
          </effect>
          <children>
-            <Label layoutX="24.0" layoutY="26.0" text="Tu perfil" textFill="#2f2f2f">
+            <Label layoutX="27.0" layoutY="30.0" prefHeight="48.0" prefWidth="177.0" text="Tu perfil" textFill="#2f2f2f">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="System Bold" size="29.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="68.0" text="Nombre:">
+            <Label layoutX="31.0" layoutY="99.0" text="Nombre:">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="95.0" text="Email:">
+            <Label layoutX="31.0" layoutY="126.0" text="Email:">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="123.0" text="Fecha de nacimiento:">
+            <Label layoutX="31.0" layoutY="154.0" text="Fecha de nacimiento:">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="82.0" layoutY="68.0" text="David" />
-            <Label layoutX="68.0" layoutY="95.0" text="david@gmail.com" />
-            <Label layoutX="152.0" layoutY="123.0" text="22/7/1922" />
+            <Label fx:id="labelNombre" layoutX="115.0" layoutY="99.0" prefHeight="26.0" prefWidth="198.0">
+               <font>
+                  <Font size="17.0" />
+               </font></Label>
+            <Label fx:id="labelEmail" layoutX="96.0" layoutY="126.0" prefHeight="26.0" prefWidth="209.0">
+               <font>
+                  <Font size="17.0" />
+               </font></Label>
+            <Label fx:id="labelFecha" layoutX="209.0" layoutY="154.0" prefHeight="26.0" prefWidth="114.0">
+               <font>
+                  <Font size="17.0" />
+               </font></Label>
          </children>
       </Pane>
-      <Button fx:id="btnVolver" layoutX="40.0" layoutY="349.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #2F2F2F;" text="Volver" textFill="#f2f2f2">
+      <Button fx:id="btnVolver" layoutX="40.0" layoutY="453.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" style="-fx-background-color: #2F2F2F;" text="Volver" textFill="#f2f2f2">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="17.0" />
          </font>
       </Button>
-      <MenuBar prefHeight="39.0" prefWidth="600.0" styleClass="Inicio">
+      <MenuBar prefHeight="39.0" prefWidth="822.0" styleClass="Inicio">
          <menus>
             <Menu mnemonicParsing="false" text="Inicio" />
             <Menu mnemonicParsing="false" text="Menú">
