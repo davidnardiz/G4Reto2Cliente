@@ -10,7 +10,6 @@ import entities.Producto;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
 import exceptions.NotCompletedException;
-import java.awt.Desktop;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -144,7 +143,7 @@ public class ControllerProductos {
         stage.setScene(scene);
         stage.setResizable(false);
         cbFiltro.getItems().add("Mostrar todo");
-        cbFiltro.getItems().add("Nombre");
+        cbFiltro.getItems().add("Por Nombre");
         cbFiltro.getItems().add("Menor Altura");
         cbFiltro.getItems().add("Mayor Altura");
         cbFiltro.getItems().add("Entre Altura");
@@ -614,6 +613,9 @@ public class ControllerProductos {
 
             for (int i = 0; i < productosSeleccionados.size(); i++) {
                 pi.remove(productosSeleccionados.get(i).getIdProducto().toString());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Eliminacion realizada correctamente");
+                alert.setHeaderText(null);
+                alert.show();
             }
 
             cleanFields();
@@ -645,7 +647,7 @@ public class ControllerProductos {
             tfFiltro1.setDisable(true);
             tfFiltro2.setDisable(true);
             cleanFields();
-        } else if (filtroSeleccionado.equalsIgnoreCase("Nombre")) {
+        } else if (filtroSeleccionado.equalsIgnoreCase("Por Nombre")) {
             tfFiltro1.setText("");
             tfFiltro2.setText("");
             tfFiltro1.setPromptText("");
@@ -757,7 +759,7 @@ public class ControllerProductos {
                 cleanFields();
 
             }
-        } else if (filtroSeleccionado.equalsIgnoreCase("Nombre")) {
+        } else if (filtroSeleccionado.equalsIgnoreCase("Por Nombre")) {
             List<Producto> productos = new ArrayList();
             ProductoInterface ti = ProductoFactoria.createInterface();
             if (usuario instanceof Cliente) {
@@ -770,7 +772,7 @@ public class ControllerProductos {
             }
             List<Producto> productoTabla = new ArrayList();
             for (int i = 0; i < productos.size(); i++) {
-                if (productos.get(i).getNombre().equalsIgnoreCase(tfFiltro1.getText())) {
+                if (productos.get(i).getNombre().toLowerCase().contains(tfFiltro1.getText().toLowerCase())) {
                     productoTabla.add(productos.get(i));
                 }
             }
