@@ -378,6 +378,8 @@ public class ControllerProductos {
 
     }
 
+    
+
     /**
      * Validar que los campos “Nombre” (columnaNombre) , “Precio”
      * (columnaPrecio), “Talla” (columnaTalla), “Fecha” (columnaFecha),
