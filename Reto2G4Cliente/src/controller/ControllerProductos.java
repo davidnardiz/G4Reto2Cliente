@@ -372,6 +372,12 @@ public class ControllerProductos {
         }
     }
 
+    @FXML
+    public void handleAbrirAyuda(ActionEvent actionEvent) {
+        AyudaControllerSingletone.getInstance().mostrarVentanaAyudaProductos();
+
+    }
+
     /**
      * Validar que los campos “Nombre” (columnaNombre) , “Precio”
      * (columnaPrecio), “Talla” (columnaTalla), “Fecha” (columnaFecha),
