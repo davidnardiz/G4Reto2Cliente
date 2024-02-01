@@ -139,6 +139,7 @@ public class ControladorTestProducto extends ApplicationTest {
                 productos.stream().filter(u -> u.getNombre().equals("NTestMod")).count(), 0);
 
     }
+    
     //Test que comprueba el boton de filtrar Productos
     @Ignore
     @Test
