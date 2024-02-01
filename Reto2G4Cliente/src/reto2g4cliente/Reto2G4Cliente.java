@@ -6,9 +6,7 @@
 package reto2g4cliente;
 
 import controller.ControllerPrincipal;
-import controller.ControllerProductos;
 import controller.ControllerSignIn;
-import entities.Cliente;
 import entities.Usuario;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,7 +21,7 @@ import javafx.stage.Stage;
  * @author Gonzalo
  */
 public class Reto2G4Cliente extends Application {
-    
+
     @Override
     public void start(Stage primaryStage) {
 
