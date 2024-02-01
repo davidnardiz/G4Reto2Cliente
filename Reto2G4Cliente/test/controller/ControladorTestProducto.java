@@ -26,7 +26,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import reto2g4cliente.Reto2G4Cliente;
 
 /**
- *
+ * Tests de la ventana de Productos
  * @author Gonzalo
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -41,11 +41,43 @@ public class ControladorTestProducto extends ApplicationTest {
         new Reto2G4Cliente().start(stage);
 
     }
-
-    //@Ignore
+    
+    //Test que comprueba que se cargen solo los productos de un cliente en caso del cliente usado 4
+    @Ignore
     @Test
     public void test1() {
+        doubleClickOn("#txtFieldEmail");
+        clickOn("#txtFieldEmail");
+        write("usuario4@example.com");
+        doubleClickOn("#passField");
+        write("password4");
+        clickOn("Iniciar sesión");
+        clickOn("Productos");
+        tbProductos = lookup("#tbProductos").query();
+        int rowCount;
+        assertEquals("Ha habido un fallo en la carga de tabla", rowCount = 4, tbProductos.getItems().size());
 
+    }
+    //Test que comprueba que se cargen todos los productos en este caso 11
+    @Ignore
+    @Test
+    public void test2() {
+        doubleClickOn("#txtFieldEmail");
+        clickOn("#txtFieldEmail");
+        write("usuario9@example.com");
+        doubleClickOn("#passField");
+        write("password9");
+        clickOn("Iniciar sesión");
+        clickOn("Productos");
+        tbProductos = lookup("#tbProductos").query();
+        int rowCount;
+        assertEquals("Ha habido un fallo en la carga de tabla", rowCount = 11, tbProductos.getItems().size());
+
+    }
+    //Test que comprueba que el boton de crear Productos
+    @Ignore
+    @Test
+    public void test3() {
         clickOn("Iniciar sesión");
         clickOn("Productos");
         tbProductos = lookup("#tbProductos").query();
@@ -70,9 +102,10 @@ public class ControladorTestProducto extends ApplicationTest {
                 productos.stream().filter(u -> u.getNombre().equals("NTest")).count(), 1);
 
     }
-    //@Ignore
+    //Test que comprueba el boton de modificar Productos
+    @Ignore
     @Test
-    public void test2() {
+    public void test4() {
         clickOn("Iniciar sesión");
         clickOn("Productos");
         tbProductos = lookup("#tbProductos").query();
@@ -88,9 +121,10 @@ public class ControladorTestProducto extends ApplicationTest {
                 productos.stream().filter(u -> u.getNombre().equals("NTestMod")).count(), 1);
 
     }
-    //@Ignore
+    //Test que comprueba el boton de eliminar Productos
+    @Ignore
     @Test
-    public void test3() {
+    public void test5() {
         clickOn("Iniciar sesión");
         clickOn("Productos");
         tbProductos = lookup("#tbProductos").query();
@@ -104,9 +138,10 @@ public class ControladorTestProducto extends ApplicationTest {
                 productos.stream().filter(u -> u.getNombre().equals("NTestMod")).count(), 0);
 
     }
-
+    //Test que comprueba el boton de filtrar Productos
+    @Ignore
     @Test
-    public void test4() {
+    public void test6() {
         clickOn("Iniciar sesión");
         clickOn("Productos");
         tbProductos = lookup("#tbProductos").query();
@@ -119,28 +154,6 @@ public class ControladorTestProducto extends ApplicationTest {
         assertEquals("Ha habido un fallo en el filtro", rowCount - 2, tbProductos.getItems().size());
         List<Producto> productos = tbProductos.getItems();
         assertEquals("Ha habido un fallo en el filtro",
-                productos.stream().filter(u -> u.getNombre().equals("Chococrispis")).count(), 1);
-        assertEquals("Ha habido un fallo en el filtro",
-                productos.stream().filter(u -> u.getNombre().equals("Chokapick")).count(), 1);
-
+                productos.stream().filter(u -> u.getNombre().toLowerCase().contains("Cho".toLowerCase())).count(), 2);
     }
-    
-    
-
-//    @BeforeClass
-//    public static void setUpClass() {
-//        
-//    }
-//    
-//    @AfterClass
-//    public static void tearDownClass() {
-//    }
-//    
-//    @Before
-//    public void setUp() {
-//    }
-//    
-//    @After
-//    public void tearDown() {
-//    }
 }

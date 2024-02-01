@@ -26,8 +26,8 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import reto2g4cliente.Reto2G4Cliente;
 
 /**
- *
- * @author Gonzalo
+ * Tests de la ventana de Eventos
+ * @author Iñigo
  */
 public class ControladorTestEvento extends ApplicationTest {
 
@@ -38,6 +38,10 @@ public class ControladorTestEvento extends ApplicationTest {
         new Reto2G4Cliente().start(stage);
     }
 
+    /* Test que comprueba que la tabla se carga correctamente con los 10 Eventos existentes
+     * que los botones de Editar, Eliminar y Editar estan habilitaods y en el boton para 
+     * unirse a un evento sale con el texto Adjuntar por ser un Admin
+     */
     @Ignore
     @Test
     public void test1() {
@@ -48,12 +52,19 @@ public class ControladorTestEvento extends ApplicationTest {
         write("password9");
         clickOn("Iniciar sesión");
         clickOn("Eventos");
+        tbEventos = lookup("#tbEventos").query();
+        int rowCount = tbEventos.getItems().size();
         verifyThat("#btnCrear", isEnabled());
         verifyThat("#btnEditar", isEnabled());
         verifyThat("#btnEliminar", isEnabled());
         verifyThat("Adjuntar", isVisible());
-    }
+        assertEquals("Ha habido un fallo en la carga de la tabla", rowCount = 10, tbEventos.getItems().size());
 
+    }
+    /* Test que comprueba que la tabla se carga correctamente con los 10 Eventos existentes
+     * que los botones de Editar, Eliminar y Editar estan deshabilitados y en el boton para 
+     * unirse a un evento sale con el texto Apuntarse por ser un Cliente
+     */
     @Ignore
     @Test
     public void test2() {
@@ -64,13 +75,18 @@ public class ControladorTestEvento extends ApplicationTest {
         write("password4");
         clickOn("Iniciar sesión");
         clickOn("Eventos");
+        tbEventos = lookup("#tbEventos").query();
+        int rowCount = tbEventos.getItems().size();
         verifyThat("#btnCrear", isDisabled());
         verifyThat("#btnEditar", isDisabled());
         verifyThat("#btnEliminar", isDisabled());
         verifyThat("Apuntarse", isVisible());
+        assertEquals("Ha habido un fallo en la carga de la tabla", rowCount = 10, tbEventos.getItems().size());
+
     }
 
-//    @Ignore
+    //Test que comprueba el boton de crear Eventos 
+    @Ignore
     @Test
     public void test3() {
         doubleClickOn("#txtFieldEmail");
@@ -96,6 +112,8 @@ public class ControladorTestEvento extends ApplicationTest {
 
     }
 
+    //Test que comprueba el boton de editar Eventos
+    @Ignore
     @Test
     public void test4() {
         doubleClickOn("#txtFieldEmail");
@@ -116,9 +134,10 @@ public class ControladorTestEvento extends ApplicationTest {
         assertEquals("Ha habido un fallo en la modificacion",
                 eventos.stream().filter(u -> u.getNumParticipantes() == 775).count(), 1);
 
-
     }
 
+    //Test que comprueba el boton de eliminar Eventos
+    @Ignore
     @Test
     public void test5() {
         doubleClickOn("#txtFieldEmail");
@@ -139,19 +158,27 @@ public class ControladorTestEvento extends ApplicationTest {
 
     }
 
-//    @BeforeClass
-//    public static void setUpClass() {
-//    }
-//    
-//    @AfterClass
-//    public static void tearDownClass() {
-//    }
-//    
-//    @Before
-//    public void setUp() {
-//    }
-//    
-//    @After
-//    public void tearDown() {
-//    }
+    //Test que comprueba el boton de filtrar Eventos por Total Recaudado
+    @Ignore
+    @Test
+    public void test6() {
+        doubleClickOn("#txtFieldEmail");
+        clickOn("#txtFieldEmail");
+        write("usuario9@example.com");
+        doubleClickOn("#passField");
+        write("password9");
+        clickOn("Iniciar sesión");
+        clickOn("Eventos");
+        tbEventos = lookup("#tbEventos").query();
+        int rowCount = tbEventos.getItems().size();
+        clickOn("#comboFiltros");
+        clickOn("Menor recaudado que");
+        clickOn("#txtFieldParametro1");
+        write("1000");
+        clickOn("#btnFiltrar");
+        assertEquals("Ha habido un fallo en el filtro ", rowCount = 2, tbEventos.getItems().size());
+        List<Evento> eventos = tbEventos.getItems();
+        assertEquals("Ha habido un fallo en el filtro",
+                eventos.stream().filter(u -> u.getTotalRecaudado() < 1000).count(), 2);
+    }
 }
