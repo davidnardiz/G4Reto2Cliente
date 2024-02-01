@@ -334,12 +334,21 @@ public class ControllerTiendas {
                 if (((Cliente) usuario).getTienda().getIdTienda() == tiendaSeleccionada.getIdTienda()) {
                     TiendaInterface ti = TiendaFactoria.getTiendaInterface();
                     ti.edit_XML(tiendaSeleccionada, tiendaSeleccionada.getIdTienda().toString());
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Tienda correctamente editada!!");
+                    alerta.setHeaderText(null);
+                    alerta.show();
                 } else {
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION, "No puedes editar una tienda que no te pertenezca!!");
+                    alerta.setHeaderText(null);
+                    alerta.show();
                     cleanFields();
                 }
             } else {
                 TiendaInterface ti = TiendaFactoria.getTiendaInterface();
                 ti.edit_XML(tiendaSeleccionada, tiendaSeleccionada.getIdTienda().toString());
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Tienda correctamente editada!!");
+                alerta.setHeaderText(null);
+                alerta.show();
             }
 
         } catch (NotSelectedException ex) {
@@ -468,7 +477,7 @@ public class ControllerTiendas {
         } else if (filtroSeleccionado.equalsIgnoreCase("Entre espacios")) {
             String espacio = txtFieldFiltro1.getText();
             String espacio2 = txtFieldFiltro2.getText();
-            if (checkSpaceFormat(Integer.parseInt(espacio)) && checkSpaceFormat(Integer.parseInt(espacio2))) {
+            if (checkSpaceFormat(Integer.parseInt(espacio)) && checkSpaceFormat(Integer.parseInt(espacio2)) && Integer.parseInt(espacio) < Integer.parseInt(espacio2)) {
                 List<Tienda> tiendas = new ArrayList();
                 tiendas = ti.encontrarTiendaEntreEspacio_XML(new GenericType<List<Tienda>>() {
                 }, espacio, espacio2);
@@ -477,7 +486,7 @@ public class ControllerTiendas {
         } else if (filtroSeleccionado.equalsIgnoreCase("Tipo pago")) {
             String tipoPago = txtFieldFiltro1.getText();
             List<Tienda> tiendas = new ArrayList();
-            tiendas = ti.encontrarTiendaMayorEspacio_XML(new GenericType<List<Tienda>>() {
+            tiendas = ti.encontrarTiendaTipoPago_XML(new GenericType<List<Tienda>>() {
             }, tipoPago);
             handleCargeTableFiltro(tiendas);
         } else {

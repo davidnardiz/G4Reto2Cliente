@@ -116,6 +116,7 @@ public class Tienda implements Serializable {
         this.cliente.set(cliente);
     }
 
+    @XmlTransient
     public List<Producto> getProductos() {
         return productos.get();
     }
@@ -159,7 +160,7 @@ public class Tienda implements Serializable {
 
     @Override
     public String toString() {
-        return "Tienda{" + "idTienda=" + idTienda + ", nombre=" + nombre + ", descripcion=" + descripcion + ", tipoPago=" + tipoPago + ", espacio=" + espacio + ", fechaCreacion=" + fechaCreacion + ", productos=" + productos + '}';
+        return "Tienda{" + "idTienda=" + idTienda + ", nombre=" + nombre + ", descripcion=" + descripcion + ", tipoPago=" + tipoPago + ", espacio=" + espacio + ", fechaCreacion=" + fechaCreacion + '}';
     }
 
 }

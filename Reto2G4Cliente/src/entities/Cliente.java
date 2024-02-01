@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -58,6 +59,7 @@ public class Cliente extends Usuario implements Serializable {
         this.tienda.set(tienda);
     }
 
+    @XmlTransient
     public List<Producto> getProductosCreados() {
         return productosCreados.get();
     }
@@ -68,7 +70,7 @@ public class Cliente extends Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "Cliente{" + "tipoVenta=" + tipoVenta + ", tienda=" + tienda + ", productosCreados=" + productosCreados + '}';
+        return super.toString() + "Cliente{" + "tipoVenta=" + tipoVenta + ", tienda=" + tienda + '}';
     }
 
 }

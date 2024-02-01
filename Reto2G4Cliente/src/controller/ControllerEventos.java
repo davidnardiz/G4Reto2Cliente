@@ -20,8 +20,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,16 +52,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
+import net.sf.jasperreports.engine.JRException;
 import service.AdministradorFactoria;
 import service.AdministradorInterface;
 import service.ClienteFactoria;
 import service.ClienteInterface;
-//import net.sf.jasperreports.engine.JasperCompileManager;
-//import net.sf.jasperreports.engine.JasperExportManager;
-//import net.sf.jasperreports.engine.JasperFillManager;
-//import net.sf.jasperreports.engine.JasperPrint;
-//import net.sf.jasperreports.engine.JasperReport;
-//import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import service.EventoFactoria;
 import service.EventoInterface;
 import service.TiendaEventoFactoria;
@@ -211,12 +216,18 @@ public class ControllerEventos {
         btnCrear.setDefaultButton(true);
         btnEditar.setOnAction(this::handleEditEvento);
         btnEliminar.setOnAction(this::handleDeleteEvento);
-        //btnImprimir.setOnAction(this::handleImprimirEvento);
+        btnImprimir.setOnAction(this::handleCrearInforme);
 
         if (usuario instanceof Cliente) {
+            btnCrear.setDisable(true);
+            btnEditar.setDisable(true);
+            btnEliminar.setDisable(true);
             btnAdjuntar.setText("Apuntarse");
             btnAdjuntar.setOnAction(this::handleApuntarse);
         } else {
+            btnCrear.setDisable(false);
+            btnEditar.setDisable(false);
+            btnEliminar.setDisable(false);
             btnAdjuntar.setText("Adjuntarse");
             btnAdjuntar.setOnAction(this::handleAdjuntarOrganizador);
         }
@@ -490,7 +501,7 @@ public class ControllerEventos {
             } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad recaudada entre")) {
                 String total = txtFieldParametro1.getText();
                 String total2 = txtFieldParametro2.getText();
-                if (checkTotalFormat(Float.parseFloat(total)) && checkTotalFormat(Float.parseFloat(total2)) && Float.parseFloat(total) > 0 && Float.parseFloat(total2) > 0) {
+                if (checkTotalFormat(Float.parseFloat(total)) && checkTotalFormat(Float.parseFloat(total2)) && Float.parseFloat(total) > 0 && Float.parseFloat(total2) > 0 && Float.parseFloat(total) < Float.parseFloat(total2)) {
                     List<Evento> eventos = new ArrayList();
                     eventos = eventoInterface.encontrarEventoEntreRecaudado_XML(new GenericType<List<Evento>>() {
                     }, total, total2);
@@ -521,7 +532,7 @@ public class ControllerEventos {
             } else if (filtroSeleccionado.equalsIgnoreCase("Cantidad participantes entre")) {
                 String numParticipantes = txtFieldParametro1.getText();
                 String numParticipantes2 = txtFieldParametro2.getText();
-                if (checkParticipantesFormat(Integer.parseInt(numParticipantes)) && checkParticipantesFormat(Integer.parseInt(numParticipantes2)) && Float.parseFloat(numParticipantes) > 0 && Float.parseFloat(numParticipantes2) > 0) {
+                if (checkParticipantesFormat(Integer.parseInt(numParticipantes)) && checkParticipantesFormat(Integer.parseInt(numParticipantes2)) && Float.parseFloat(numParticipantes) > 0 && Float.parseFloat(numParticipantes2) > 0 && Float.parseFloat(numParticipantes) < Float.parseFloat(numParticipantes2)) {
                     List<Evento> eventos = new ArrayList();
                     eventos = eventoInterface.encontrarEventoEntreParticipantes_XML(new GenericType<List<Evento>>() {
                     }, numParticipantes, numParticipantes2);
@@ -577,9 +588,15 @@ public class ControllerEventos {
         cleanFields();
     }
 
+    /**
+     * Mñetodo para adjuntar un organizador a un evento.
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleAdjuntarOrganizador(ActionEvent actionEvent) {
         EventoInterface ei = EventoFactoria.getEventoInterface();
+        //Cargamos los eventos seleccionados por el usuario.
         ObservableList<Evento> eventosSeleccionados = tbEventos.getSelectionModel().getSelectedItems();
         List<Evento> eventos = (((Administrador) usuario).getListaEventosEvento());
         if (eventos == null) {
@@ -587,17 +604,22 @@ public class ControllerEventos {
         }
         List<Administrador> administradores = new ArrayList();
 
+        //Recorremos todos los eventos
         for (int i = 0; i < eventosSeleccionados.size(); i++) {
+            //Añadimos los eventos seleccionados al organizador.
             eventos.add(eventosSeleccionados.get(i));
 
             administradores = eventosSeleccionados.get(i).getAdministradores();
             if (administradores == null) {
                 administradores = new ArrayList();
             }
+            //Añadimos el administrador a todos los eventos seleccionados
             administradores.add((Administrador) usuario);
+            //Actualizamos cada uno de los eventos.
             eventosSeleccionados.get(i).setAdministradores(administradores);
             ei.edit_XML(eventosSeleccionados.get(i), eventosSeleccionados.get(i).getIdEvento() + "");
         }
+        //Actualizamos el usuario.
         ((Administrador) usuario).setListaEventosEvento(eventos);
         AdministradorInterface ai = AdministradorFactoria.getAdministradorInterface();
         ai.edit_XML(usuario, usuario.getIdUsuario() + "");
@@ -629,38 +651,11 @@ public class ControllerEventos {
     }
 
     /**
-     * Maneja el evento de impresión de un informe de eventos. Compila un
-     * informe Jasper a partir de un archivo JRXML, lo llena con datos de
-     * eventos, lo exporta a un archivo PDF ("informe_eventos.pdf") y finalmente
-     * abre el archivo PDF con el visor de PDF predeterminado en el sistema.
+     * Maneja el evento de abrir la ventana de Inicio. Carga la ventana
+     * principal
      *
-     * @param actionEvent El evento que desencadena la llamada a este método.
-     *
-     * @FXML public void handleImprimirEvento(ActionEvent actionEvent) { try {
-     * InputStream inputStream =
-     * getClass().getResourceAsStream("/resources/informe.jrxml");
-     *
-     * JasperReport jasperReport =
-     * JasperCompileManager.compileReport(inputStream);
-     *
-     * JRBeanCollectionDataSource dataSource = new
-     * JRBeanCollectionDataSource(eventosData); JasperPrint jasperPrint =
-     * JasperFillManager.fillReport(jasperReport, null, dataSource);
-     *
-     * JasperExportManager.exportReportToPdfFile(jasperPrint,
-     * "informe_eventos.pdf");
-     *
-     * File file = new File("informe_eventos.pdf");
-     * Desktop.getDesktop().open(file); } catch (Exception e) {
-     * e.printStackTrace(); } }
-     *
-     */
-    /**
-     * Maneja el evento de cerrar sesión. Carga la vista de inicio de
-     * sesión,establece el escenario y el controlador, y muestra la nueva
-     * ventana.
-     *
-     * @param actionEvent
+     * @param actionEvent Evento que desencadenó la apertura de la ventana
+     * principal.
      */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
@@ -760,6 +755,31 @@ public class ControllerEventos {
     }
 
     /**
+     * Maneja el evento de impresión de un informe de eventos. Compila un
+     * informe Jasper a partir de un archivo JRXML, lo llena con datos de
+     * eventos, lo exporta a un archivo PDF ("informe_eventos.pdf") y finalmente
+     * abre el archivo PDF con el visor de PDF predeterminado en el sistema.
+     *
+     * @param actionEvent El evento que desencadena la llamada a este método.
+     */
+    @FXML
+    public void handleCrearInforme(ActionEvent actionEvent) {
+        try {
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/reports/eventoReport.jrxml"));
+            JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<Evento>) this.tbEventos.getItems());
+            Map<String, Object> parameters = new HashMap<>();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            jasperViewer.setVisible(true);
+        } catch (JRException e) {
+            Alert alerta = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
+        }
+
+    }
+
+    /**
      * Verifica si el formato del valor total proporcionado cumple con los
      * requisitos especificados.
      *
@@ -824,46 +844,6 @@ public class ControllerEventos {
         txtFieldParametro2.setText("");
     }
 
-    /**
-     * Genera un informe de eventos y lo muestra en un archivo PDF. Utiliza un
-     * diseño de informe (.jrxml) para compilar y llenar el informe con datos de
-     * eventos. Exporta el informe a un formato PDF y abre el archivo resultante
-     * en el visor de PDF predeterminado del sistema.
-     *
-     * @param eventos Lista de eventos que se utilizarán para llenar el informe.
-     *
-     * public void generarInformeEventos(List<Evento> eventos) { try {
-     *
-     * String rutaInforme =
-     * "C:\\Users\\inigo\\Desktop\\MarketMaker\\G4Reto2Servidor\\G4Reto2Cliente\\G4Reto2Cliente\\Reto2G4Cliente\\src\\reports\\tiendaReport.jrxml";
-     * InputStream inputStream =
-     * getClass().getClassLoader().getResourceAsStream(rutaInforme);
-     * JasperReport jasperReport =
-     * JasperCompileManager.compileReport(inputStream);
-     *
-     * JRBeanCollectionDataSource dataSource = new
-     * JRBeanCollectionDataSource(eventos); JasperPrint jasperPrint =
-     * JasperFillManager.fillReport(jasperReport, null, dataSource);
-     *
-     * String desktopPath = System.getProperty("user.home") + "/Desktop/";
-     * String pdfFilePath = desktopPath + "informe_eventos.pdf";
-     *
-     * JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFilePath);
-     *
-     * Desktop.getDesktop().open(new File(pdfFilePath)); } catch (Exception e) {
-     * e.printStackTrace(); } }
-     *
-     */
-    /**
-     * Maneja el evento de ayuda. Llama al método que muestra una ventana de
-     * ayuda con información sobre la funcionalidad de la ventana de eventos.
-     *
-     * @param actionEvent El evento que desencadena la llamada a este método.
-     */
-    /*@FXML
-    public void handleAyuda(ActionEvent actionEvent) {
-        mostrarVentanaAyuda();
-    } */
     /**
      * Maneja el evento de ayuda en la interfaz gráfica. Este método invoca el
      * método {@link ControllerAyudas#mostrarVentanaAyudaEvento()} para mostrar

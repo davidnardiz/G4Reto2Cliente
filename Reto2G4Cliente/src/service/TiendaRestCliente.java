@@ -101,6 +101,7 @@ public class TiendaRestCliente implements TiendaInterface {
     public <T> T encontrarTiendaTipoPago_XML(GenericType<T> responseType, String tipoPago) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarTiendaTipoPago/{0}", new Object[]{tipoPago}));
+        System.out.println(resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

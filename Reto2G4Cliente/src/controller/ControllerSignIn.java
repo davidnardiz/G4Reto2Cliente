@@ -67,8 +67,8 @@ public class ControllerSignIn {
         btnIniciarSesion.setDefaultButton(true);
 
         btnIniciarSesion.requestFocus();
-        txtFieldEmail.setText("usuario10@example.com");
-        passField.setText("password10");
+        //txtFieldEmail.setText("usuario10@example.com");
+        //passField.setText("password10");
         if (correo != null) {
             txtFieldEmail.setText(correo);
             passField.setText(pass);

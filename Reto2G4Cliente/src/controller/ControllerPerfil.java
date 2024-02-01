@@ -28,8 +28,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.core.GenericType;
 import service.ClienteFactoria;
 import service.ClienteInterface;
+import service.UsuarioFactoria;
+import service.UsuarioInterface;
 
 /**
  *
@@ -74,31 +77,52 @@ public class ControllerPerfil {
     @FXML
     private PasswordField passwordFieldRepetirContrasenia;
 
+    /**
+     * Método init stage que inicia la ventana.
+     *
+     * @param root
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
 
+        //Declaracion de los métodos de los botones
         miCerrarSesion.setOnAction(this::handleCerrarSesion);
         miPrincipal.setOnAction(this::handleAbrirInicio);
         miProductos.setOnAction(this::handleAbrirProductos);
         miEventos.setOnAction(this::handleAbrirEventos);
         miTiendas.setOnAction(this::handleAbrirTiendas);
         miPerfil.setOnAction(this::handleAbrirPerfil);
-        btnVolver.setOnAction(this::handleVolver);
+        btnVolver.setOnAction(this::handleAbrirInicio);
         btnAceptar.setOnAction(this::handleCambiarContrasenia);
         menuItemAyuda.setOnAction(this::handleAyuda);
 
+        //Cargamos los datos del usuario.
         cargarDatosUsuario();
 
     }
 
+    /**
+     * Método que settea el stage y recibe el usuario que ha iniciado sesión.
+     *
+     * @param stage
+     * @param usuario
+     */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
         this.usuario = usuario;
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de tiendas. Carga la ventana desde
+     * el archivo FXML correspondiente y configura el controlador de la ventana
+     * de tiendas. Finalmente, muestra la ventana.
+     *
+     * @param actionEvent El evento que desencadena la apertura de la ventana de
+     * tiendas.
+     */
     @FXML
     public void handleAbrirTiendas(ActionEvent actionEvent) {
         try {
@@ -114,6 +138,14 @@ public class ControllerPerfil {
 
     }
 
+    /**
+     * Maneja el evento de cerrar sesión. Carga la interfaz de inicio de sesión
+     * (signIn.fxml) utilizando un FXMLLoader y establece el controlador
+     * correspondiente. Después, inicializa y muestra la nueva ventana de inicio
+     * de sesión.
+     *
+     * @param event El evento que desencadena la llamada a este método.
+     */
     private void handleCerrarSesion(Event event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
@@ -126,6 +158,13 @@ public class ControllerPerfil {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de Inicio. Carga la ventana
+     * principal
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana
+     * principal.
+     */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
         try {
@@ -139,6 +178,14 @@ public class ControllerPerfil {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de productos. Carga la vista de
+     * productos, establece el escenario y el controlador, y muestra la nueva
+     * ventana.
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana de
+     * productos.
+     */
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {
         try {
@@ -152,6 +199,14 @@ public class ControllerPerfil {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de eventos. Carga la vista de
+     * eventos, establece el escenario y el controlador, y muestra la nueva
+     * ventana.
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana de
+     * productos.
+     */
     @FXML
     public void handleAbrirEventos(ActionEvent actionEvent) {
         try {
@@ -165,6 +220,14 @@ public class ControllerPerfil {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de perfil. Carga la vista de perfil
+     * utilizando, establece el escenario y el controlador, y muestra la nueva
+     * ventana.
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana de
+     * perfil.
+     */
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
         try {
@@ -198,35 +261,34 @@ public class ControllerPerfil {
         }
     }
 
-    @FXML
-    private void handleVolver(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
-            Parent root = loader.load();
-
-            ControllerPrincipal principalController = loader.getController();
-            principalController.setStage(stage, usuario);
-            principalController.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(ControllerPerfil.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+    /**
+     * Método que cambia la contraseña del usuario por la que introudce y le
+     * informa mediante un email.
+     *
+     * @param event
+     */
     @FXML
     private void handleCambiarContrasenia(ActionEvent event) {
+        //Obtenemos las dos conraseñas.
         String nuevaContrasenia = passwordFieldNuevaContrasenia.getText();
         String repetirContrasenia = passwordFieldRepetirContrasenia.getText();
 
+        //Comparamos si son iguales.
         if (nuevaContrasenia.equals(repetirContrasenia)) {
+            //La actualizamos y informamos al usuario.
             usuario.setPassword(encriptar(nuevaContrasenia));
-            ClienteInterface ci = ClienteFactoria.getClienteInterface();
-            ci.edit_XML(usuario, usuario.getIdUsuario().toString());
+
+            UsuarioInterface ci = UsuarioFactoria.getUserInterface();
+            ci.cambiarContrasenia(new GenericType<String>() {
+            }, usuario.getCorreo(), encriptar(nuevaContrasenia));
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Cambiar Contraseña");
             alert.setHeaderText(null);
             alert.setContentText("Contraseña cambiada.");
             alert.showAndWait();
         } else {
+            //Informamos del error.
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -235,7 +297,11 @@ public class ControllerPerfil {
         }
     }
 
+    /**
+     * Método que ccarga los datos del usuario.
+     */
     private void cargarDatosUsuario() {
+        //Obtenemos los datos del usuario y los mostramos.
         String nombreUsuario = usuario.getNombre();
         String emailUsuario = usuario.getCorreo();
         Date fechaUsuario = usuario.getFechaNacimiento();

@@ -107,6 +107,7 @@ public class UsuarioRestCliente implements UsuarioInterface {
     public <T> T iniciarSesion_XML(GenericType<T> responseType, String correo, String password) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("iniciarSesion/{0}/{1}", new Object[]{correo, password}));
+        System.out.println(resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
 
     }
@@ -136,10 +137,17 @@ public class UsuarioRestCliente implements UsuarioInterface {
     }
 
     @Override
-    public <T> T envioEmail(GenericType<T> responseType, String correo) throws ClientErrorException {
+    public <T> T olvidarContrasenia(GenericType<T> responseType, String correo) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("envioEmail/{0}", new Object[]{correo}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+        resource = resource.path(java.text.MessageFormat.format("olvidarPasswd/{0}", new Object[]{correo}));
+        return resource.request().get(responseType);
+    }
+
+    @Override
+    public <T> T cambiarContrasenia(GenericType<T> responseType, String correo, String passwd) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("cambiarPasswd/{0}/{1}", new Object[]{correo, passwd}));
+        return resource.request().get(responseType);
     }
 
     public void close() {

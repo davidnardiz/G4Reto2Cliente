@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -54,7 +55,7 @@ public class Producto implements Serializable {
         this.fechacreacion = new SimpleObjectProperty<>();
         this.cliente = new SimpleObjectProperty<>();
         this.tienda = new SimpleObjectProperty<>();
-    }    
+    }
 
     public Integer getIdProducto() {
         return idProducto.get();
@@ -127,7 +128,10 @@ public class Producto implements Serializable {
     public void setTienda(Tienda tienda) {
         this.tienda.set(tienda);
     }
- 
-    
-    
+
+    @Override
+    public String toString() {
+        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", altura=" + altura + ", material=" + material + ", peso=" + peso + ", fechacreacion=" + fechacreacion + ", cliente=" + cliente + ", tienda=" + tienda + '}';
+    }
+
 }

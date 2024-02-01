@@ -76,11 +76,22 @@ public class ControllerPrincipal {
         buttonEventos.setOnAction(this::handleAbrirEventos);
     }
 
+    /**
+     * Método que settea el stage y carga la información del usuario.
+     *
+     * @param stage
+     * @param usuario
+     */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
         this.usuario = usuario;
     }
 
+    /**
+     * Método que asocia la tienda al cliente.
+     *
+     * @param tienda
+     */
     public void setTiendaACliente(Tienda tienda) {
         //Actualizamos la informacion del usuario para asignarle la tienda que ha creado.
         System.out.println(tienda.toString());
@@ -91,6 +102,14 @@ public class ControllerPrincipal {
         ci.edit_XML(usuario, usuario.getIdUsuario().toString());
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de tiendas. Carga la ventana desde
+     * el archivo FXML correspondiente y configura el controlador de la ventana
+     * de tiendas. Finalmente, muestra la ventana.
+     *
+     * @param actionEvent El evento que desencadena la apertura de la ventana de
+     * tiendas.
+     */
     @FXML
     public void handleAbrirTiendas(ActionEvent actionEvent) {
         try {
@@ -106,6 +125,14 @@ public class ControllerPrincipal {
 
     }
 
+    /**
+     * Maneja el evento de cerrar sesión. Carga la interfaz de inicio de sesión
+     * (signIn.fxml) utilizando un FXMLLoader y establece el controlador
+     * correspondiente. Después, inicializa y muestra la nueva ventana de inicio
+     * de sesión.
+     *
+     * @param event El evento que desencadena la llamada a este método.
+     */
     private void handleCerrarSesion(Event event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
@@ -118,6 +145,13 @@ public class ControllerPrincipal {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de Inicio. Carga la ventana
+     * principal
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana
+     * principal.
+     */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
         try {
@@ -131,6 +165,14 @@ public class ControllerPrincipal {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de productos. Carga la vista de
+     * productos, establece el escenario y el controlador, y muestra la nueva
+     * ventana.
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana de
+     * productos.
+     */
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {
         try {
@@ -144,6 +186,14 @@ public class ControllerPrincipal {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de eventos. Carga la vista de
+     * eventos, establece el escenario y el controlador, y muestra la nueva
+     * ventana.
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana de
+     * productos.
+     */
     @FXML
     public void handleAbrirEventos(ActionEvent actionEvent) {
         try {
@@ -157,6 +207,14 @@ public class ControllerPrincipal {
         }
     }
 
+    /**
+     * Maneja el evento de abrir la ventana de perfil. Carga la vista de perfil
+     * utilizando, establece el escenario y el controlador, y muestra la nueva
+     * ventana.
+     *
+     * @param actionEvent Evento que desencadenó la apertura de la ventana de
+     * perfil.
+     */
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
         try {

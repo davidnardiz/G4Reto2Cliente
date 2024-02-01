@@ -39,8 +39,9 @@ import service.TiendaFactoria;
 import service.TiendaInterface;
 
 /**
+ * Controlador de la ventana crearTienda.
  *
- * @author Gonzalo
+ * @author David
  */
 public class ControllerCrearTienda {
 
@@ -59,25 +60,36 @@ public class ControllerCrearTienda {
     @FXML
     private Button btnCrearTienda;
 
+    /**
+     * Método initStage del controlador.
+     *
+     * @param root
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
 
+        //Cargamos la comboBox con los datos y le asociamos el método al botón.
         comboBoxTipoPago.getItems().setAll(FXCollections.observableArrayList(TipoPago.values()));
-
         btnCrearTienda.setOnAction(this::handleCreateTienda);
     }
 
+    /**
+     * Método que settea el stage.
+     *
+     * @param stage El stage
+     * @param usuario El usuario que ha iniciado sesión en la aplicación.
+     */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
         this.usuario = usuario;
     }
 
     /**
-     * Método que solicita confirmación antes de cerrar la ventana cuando se
-     * pulsa la x de la parte superior derecha.
+     * Método que crea una nueva tienda en la base de datos con los datos
+     * introducidos en el formulario.
      *
      * @param actionEvent
      */
@@ -90,7 +102,7 @@ public class ControllerCrearTienda {
         TipoPago tipoPago = (TipoPago) comboBoxTipoPago.getValue();
 
         try {
-            //Comprobamos que si ha rellenado todos los datos.
+            //Comprobamos si ha rellenado todos los datos.
             if (nombre.isEmpty() || descripcion.isEmpty() || espacio.isEmpty() || tipoPago == null || datePickerFechaCreacion.getValue() == null) {
                 throw new NotCompletedException("Debes rellenar todos los datos!!");
             }
@@ -101,18 +113,17 @@ public class ControllerCrearTienda {
 
             //Comprobamos el formato de los datos obtenidos.
             if (!checkNameFormat(nombre)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien el nombre!!");
             } else if (!checkDescriptionFormat(descripcion)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien la descripción!!");
             } else if (!checkSpaceFormat(espacio)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien el espacio!!");
             } else if (!checkTypeFormat(tipoPago)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien el tipo de pago!!");
             } else if (!checkDateFormat(fechaCreacion)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien la fecha de creacion!!");
             }
 
-            System.out.println("hola");
             //Creamos una nueva tienda y le asignamos los datos.
             Tienda tienda = new Tienda();
             tienda.setNombre(nombre);
@@ -120,10 +131,8 @@ public class ControllerCrearTienda {
             tienda.setEspacio(Float.parseFloat(espacio));
             tienda.setFechaCreacion(fechaCreacion);
             tienda.setTipoPago(tipoPago);
-            System.out.println("joder" + usuario.toString());
             tienda.setCliente((Cliente) usuario);
 
-            System.out.println("Creando tienda --> " + tienda.toString());
             //LLamamos al metodo correspondiente que se encarga de crear la tienda
             TiendaInterface ti = TiendaFactoria.getTiendaInterface();
             ti.create_XML(tienda);
@@ -163,18 +172,42 @@ public class ControllerCrearTienda {
         }
     }
 
+    /**
+     * Método para comprobar el formato del nombre.
+     *
+     * @param nombre el nombre introducido por el usuario.
+     * @return boolean si tiene o no el formato correcto.
+     */
     private boolean checkNameFormat(String nombre) {
         return nombre.length() > 6;
     }
 
+    /**
+     * Método para comprobar el formato de la descripcion.
+     *
+     * @param descripcion la descripcion introducida por el usuario.
+     * @return boolean si tiene o no el formato correcto.
+     */
     private boolean checkDescriptionFormat(String descripcion) {
         return descripcion.length() > 15;
     }
 
+    /**
+     * Método para comprobar el formato del espacio.
+     *
+     * @param espacio el espacio introducido por el usuario.
+     * @return boolean si tiene o no el formato correcto.
+     */
     private boolean checkSpaceFormat(String espacio) {
         return Float.parseFloat(espacio) > 0;
     }
 
+    /**
+     * Método para comprobar el formato de la fecha.
+     *
+     * @param fechaCreacion la fecha introducida por el usuario.
+     * @return boolean si tiene o no el formato correcto.
+     */
     private boolean checkDateFormat(Date fechaCreacion) {
         Date date = null;
         try {
@@ -187,6 +220,12 @@ public class ControllerCrearTienda {
         return fechaCreacion.before(date);
     }
 
+    /**
+     * Método para comprobar el tipo de pago.
+     *
+     * @param tipoPago el tipo de pago introducido por el usuario.
+     * @return boolean si tiene o no el formato correcto.
+     */
     private boolean checkTypeFormat(TipoPago tipoPago) {
         return tipoPago != null;
     }

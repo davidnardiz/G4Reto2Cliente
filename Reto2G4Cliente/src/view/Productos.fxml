@@ -22,18 +22,21 @@
         <menus>
           <Menu mnemonicParsing="false" text="Inicio">
                <items>
-                  <MenuItem fx:id="menuItemInicio" mnemonicParsing="false" text="Inicio" />
+                  <MenuItem fx:id="miInicio" mnemonicParsing="false" text="Inicio" />
                </items></Menu>
           <Menu mnemonicParsing="false" text="Menú">
             <items>
-                  <MenuItem fx:id="menuItemPerfil" mnemonicParsing="false" text="Perfil" />
-              <MenuItem fx:id="menuItemProductos" mnemonicParsing="false" text="Productos" />
-                  <MenuItem fx:id="menuItemEventos" mnemonicParsing="false" text="Eventos" />
-                  <MenuItem fx:id="menuItemTiendas" mnemonicParsing="false" text="Tiendas" />
-                  <MenuItem fx:id="menuItemCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+                  <MenuItem fx:id="miPerfil" mnemonicParsing="false" text="Perfil" />
+              <MenuItem fx:id="miProductos" mnemonicParsing="false" text="Productos" />
+                  <MenuItem fx:id="miEventos" mnemonicParsing="false" text="Eventos" />
+                  <MenuItem fx:id="miTiendas" mnemonicParsing="false" text="Tiendas" />
+                  <MenuItem fx:id="miCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Ayuda" />
+          <Menu mnemonicParsing="false" text="Ayuda">
+               <items>
+                  <MenuItem fx:id="miAyuda" mnemonicParsing="false" text="Ayuda" />
+               </items></Menu>
         </menus>
          <padding>
             <Insets left="8.0" top="5.0" />

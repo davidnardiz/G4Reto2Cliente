@@ -35,8 +35,10 @@ import service.UsuarioFactoria;
 import service.UsuarioInterface;
 
 /**
+ * Controlador de la ventana de recuperar contraseña a la que se accede desde el
+ * sign In
  *
- * @author Gonzalo
+ * @author David
  */
 public class ControllerRecuperarContrasenia {
 
@@ -48,6 +50,11 @@ public class ControllerRecuperarContrasenia {
     @FXML
     private Button btnEnviar;
 
+    /**
+     * Método init stage que inicia el stage
+     *
+     * @param root
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -56,38 +63,58 @@ public class ControllerRecuperarContrasenia {
 
         txtFieldEmail.setText("daviznardiz2004@gmail.com");
 
+        //Métodos de los botones y al cerrar la ventana.
         stage.setOnCloseRequest(this::handleCloseWindow);
         btnCancelar.setOnAction(this::handleVolver);
         btnEnviar.setOnAction(this::handleEnviar);
 
     }
 
+    /**
+     * Método que settea el Stage.
+     *
+     * @param stage escenario.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Método que solicita confirmación del usuario antes de cerrar la ventana.
+     *
+     * @param windowEvent evento de la ventana.
+     */
     @FXML
     public void handleCloseWindow(WindowEvent windowEvent) {
         windowEvent.consume();
 
+        //Creamos la alerta
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION, "¿Quieres cerrar la ventana?");
         alerta.setHeaderText(null);
 
+        //La mostramos
         Optional<ButtonType> accion = alerta.showAndWait();
         if (accion.get() == ButtonType.OK) {
             Platform.exit();
         }
     }
 
+    /**
+     * Método que vuelve a la anterior ventana, en este caso SignIn.
+     *
+     * @param actionEvent evento de la acción.
+     */
     @FXML
     public void handleVolver(ActionEvent actionEvent) {
         try {
+            //Cargamos el fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root;
 
             root = (Parent) loader.load();
-
+            //Creamos un objeto del controlador que queremos abrir.
             ControllerSignIn viewController = ((ControllerSignIn) loader.getController());
+            //Llamamos a los métodos necesarios del controlador nuevo.
             viewController.setStage(stage);
             viewController.initStage(root);
         } catch (IOException ex) {
@@ -95,8 +122,16 @@ public class ControllerRecuperarContrasenia {
         }
     }
 
+    /**
+     * Método que se encarga de generar una nueva contraseña para el usuario e
+     * informarle enviandole un email al correo que introduzca el propio
+     * usuario.
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleEnviar(ActionEvent actionEvent) {
+        //Obtenemos el email.
         String email = txtFieldEmail.getText();
         String passNueva;
         try {
@@ -106,6 +141,7 @@ public class ControllerRecuperarContrasenia {
                 throw new InvalidFormatException("El email no tiene el formato correcto!!");
             }
 
+            //Buscamos si el correo introducido pertenece a algun usuario.
             UsuarioInterface ui = UsuarioFactoria.getUserInterface();
             Usuario us = ui.findByCorreo_XML(new GenericType<Usuario>() {
             }, email);
@@ -114,15 +150,18 @@ public class ControllerRecuperarContrasenia {
                 throw new IncorrectCredentialsException("El email introducido no pertenece a ninguna cuenta!!");
             }
 
-            passNueva = ui.envioEmail(new GenericType<String>() {
+            //Generamos la nueva contraseña para el usuario y se la asignamos.
+            passNueva = ui.olvidarContrasenia(new GenericType<String>() {
             }, email);
             System.out.println(passNueva);
             us.setPassword(passNueva);
             System.out.println(us.toString());
 
+            //Actualizamos la información del usuario con la nueva contraseña.
             ClienteInterface ci = ClienteFactoria.getClienteInterface();
             ci.edit_XML(us, us.getIdUsuario().toString());
 
+            //Informamos al usuario del cambio.
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Se ha enviado su nueva contraseña al email!!", ButtonType.OK);
             alerta.setHeaderText(null);
             alerta.show();
@@ -144,6 +183,12 @@ public class ControllerRecuperarContrasenia {
         }
     }
 
+    /**
+     * Método para comprobar que el formato del email es correcto.
+     *
+     * @param texto Correo introducido por el usuario.
+     * @return Variable boolean para informar si tiene o no el formato correcto.
+     */
     private boolean checkEmailFormat(String texto) {
         Pattern pattern1 = Pattern.compile("^[a-zA-Z0-9._]{3,}+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}$");
 
@@ -151,6 +196,13 @@ public class ControllerRecuperarContrasenia {
         return matcher.find();
     }
 
+    /**
+     * Método que genera un número aleatorio entre dos rangos.
+     *
+     * @param minimo El valor mínimo que puede tener el número
+     * @param maximo El valor máximo que puede tener el número.
+     * @return Número generado aleatoriamente.
+     */
     public static int numeroAleatorioEnRango(int minimo, int maximo) {
         // nextInt regresa en rango pero con límite superior exclusivo, por eso sumamos 1
         return ThreadLocalRandom.current().nextInt(minimo, maximo + 1);
