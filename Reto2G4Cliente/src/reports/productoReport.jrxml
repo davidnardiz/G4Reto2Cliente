@@ -14,16 +14,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="555" height="79" uuid="0eb270e5-ccb6-45b7-bdf2-a2b59e356cea"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="48" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[INFORME PRODUCTOS]]></text>
-			</staticText>
-		</band>
+		<band height="79" splitType="Stretch"/>
 	</title>
 	<pageHeader>
 		<band height="35" splitType="Stretch"/>
