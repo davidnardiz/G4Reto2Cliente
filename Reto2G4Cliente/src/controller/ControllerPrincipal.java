@@ -71,7 +71,6 @@ public class ControllerPrincipal {
         miPerfil.setOnAction(this::handleAbrirPerfil);
         menuItemAyuda.setOnAction(this::handleAyuda);
 
-
         buttonProductos.setOnAction(this::handleAbrirProductos);
         buttonTiendas.setOnAction(this::handleAbrirTiendas);
         buttonEventos.setOnAction(this::handleAbrirEventos);
@@ -85,6 +84,7 @@ public class ControllerPrincipal {
     public void setTiendaACliente(Tienda tienda) {
         //Actualizamos la informacion del usuario para asignarle la tienda que ha creado.
         System.out.println(tienda.toString());
+        System.out.println("Usuario --> " + usuario.toString());
         ((Cliente) usuario).setTienda(tienda);
         System.out.println(usuario.toString());
         ClienteInterface ci = ClienteFactoria.getClienteInterface();
@@ -156,6 +156,7 @@ public class ControllerPrincipal {
             Logger.getLogger(ControllerPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
         try {

@@ -24,7 +24,7 @@ import javax.ws.rs.core.GenericType;
  *
  * @author Gonzalo
  */
-public class AdministradorRestCliente {
+public class AdministradorRestCliente implements AdministradorInterface {
 
     private WebTarget webTarget;
     private Client client;

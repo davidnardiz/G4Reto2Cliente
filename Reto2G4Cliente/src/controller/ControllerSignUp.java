@@ -5,7 +5,7 @@
  */
 package controller;
 
-import static encriptation.ClienteEncriptation.encriptar;
+import static encriptation.Asimetrico.encriptar;
 import entities.Cliente;
 import entities.TipoVenta;
 import exceptions.InvalidEmailFormatException;
@@ -133,10 +133,10 @@ public class ControllerSignUp {
                 alert.setHeaderText(null);
                 alert.show();
                 throw new InvalidFormatException();
-            } else {
-                encriptar(PassFieldR.getText());
-                cl.setPassword(PassFieldR.getText());
             }
+
+            cl.setPassword(encriptar(PassFieldR.getText()));
+            System.out.println("Contraseña cifrada y hasheada !!! " + cl.getPassword());
 
             if (cbTipoVenta.getValue() == null) {
                 throw new NotCompletedException("Debes seleccionar una opcion de venta!!");
@@ -148,7 +148,7 @@ public class ControllerSignUp {
             cl.setFechaNacimiento(fechaCreacion);
             TipoVenta tipoVenta = (TipoVenta) cbTipoVenta.getValue();
             cl.setTipoVenta(tipoVenta);
-            System.out.println("Correo: " + cl.getCorreo());
+            System.out.println("Cliente: " + cl.toString());
             ClienteInterface ci = ClienteFactoria.getClienteInterface();
             ci.create_XML(cl);
             handleOpenSignIn(event);

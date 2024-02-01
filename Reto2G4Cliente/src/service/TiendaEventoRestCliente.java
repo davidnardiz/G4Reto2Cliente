@@ -22,7 +22,7 @@ import javax.ws.rs.core.GenericType;
  *        client.close();
  * </pre>
  *
- * @author Gonzalo
+ * @author Jason.
  */
 public class TiendaEventoRestCliente implements TiendaEventoInterface {
 
@@ -32,13 +32,7 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
 
     public TiendaEventoRestCliente() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entities.tiendaevento");
-    }
-
-    public String countREST() throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path("count");
-        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
+        webTarget = client.target(BASE_URI).path("entities.tienda_evento");
     }
 
     @Override
@@ -52,36 +46,23 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
     }
 
     @Override
-    public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_XML(GenericType<T> responseType, String tienda_id, String evento_id) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
+        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{tienda_id, evento_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T find_JSON(GenericType<T> responseType, String id) throws ClientErrorException {
+    public <T> T find_JSON(GenericType<T> responseType, String tienda_id, String evento_id) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-    }
-
-    @Override
-    public <T> T findRange_XML(GenericType<T> responseType, String from, String to) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{from, to}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
-    @Override
-    public <T> T findRange_JSON(GenericType<T> responseType, String from, String to) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{from, to}));
+        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{tienda_id, evento_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+        System.out.println(webTarget.getUri());
     }
 
     @Override
@@ -102,8 +83,8 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
     }
 
     @Override
-    public void remove(String id) throws ClientErrorException {
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
+    public void remove(String tienda_id, String evento_id) throws ClientErrorException {
+        webTarget.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{tienda_id, evento_id})).request().delete();
     }
 
     public void close() {

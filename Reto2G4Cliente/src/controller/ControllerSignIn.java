@@ -5,7 +5,7 @@
  */
 package controller;
 
-import static encriptation.ClienteEncriptation.encriptar;
+import static encriptation.Asimetrico.encriptar;
 import entities.Cliente;
 import entities.Usuario;
 import exceptions.IncorrectCredentialsException;

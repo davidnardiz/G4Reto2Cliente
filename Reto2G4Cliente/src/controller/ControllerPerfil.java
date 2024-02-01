@@ -5,7 +5,7 @@
  */
 package controller;
 
-import static encriptation.ClienteEncriptation.encriptar;
+import static encriptation.Asimetrico.encriptar;
 import entities.Usuario;
 import java.io.IOException;
 import java.text.SimpleDateFormat;

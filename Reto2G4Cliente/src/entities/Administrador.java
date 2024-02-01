@@ -11,6 +11,7 @@ import java.util.List;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -46,6 +47,7 @@ public class Administrador extends Usuario implements Serializable {
         this.numEventos.set(numEventos);
     }
 
+    @XmlTransient
     public List<Evento> getListaEventosEvento() {
         return listaEventos.get();
     }
@@ -56,7 +58,7 @@ public class Administrador extends Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Evento{" + "numEventos=" + numEventos + ", listaEventos=" + listaEventos + '}';
+        return "Administrador{" + "numEventos=" + numEventos + ", listaEventos=" + listaEventos + '}';
     }
 
 }

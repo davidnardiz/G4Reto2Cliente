@@ -360,18 +360,10 @@ public class ControllerTiendas {
         ObservableList<Tienda> tiendasSeleccionadas = tbTiendas.getSelectionModel().getSelectedItems();
 
         TiendaInterface ti = TiendaFactoria.getTiendaInterface();
-        ClienteInterface ci = ClienteFactoria.getClienteInterface();
+        for (Tienda t : tiendasSeleccionadas) {
+            ti.remove(t.getIdTienda().toString());
 
-        for (int j = 0; j < tiendasSeleccionadas.size(); j++) {
-            Tienda t = tiendasSeleccionadas.get(j);
-
-            System.out.println("Eliminando tienda --> " + t.toString());
-
-            Cliente c = t.getCliente();
-            c.setTienda(null);
-            ci.edit_XML(c, c.getIdUsuario() + "");
-            System.out.println(tiendasSeleccionadas.toString());
-            ti.remove(t.getIdTienda() + "");
+            System.out.println("Eliminando la tienda --> " + t.getIdTienda());
         }
 
         cleanFields();

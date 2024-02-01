@@ -28,21 +28,17 @@ public class Evento implements Serializable {
     private SimpleObjectProperty<Date> fecha;
     private SimpleFloatProperty totalRecaudado;
     private SimpleIntegerProperty numParticipantes;
-    private SimpleObjectProperty<Cliente> cliente;
-    private SimpleObjectProperty<Administrador> admin;
-    private ArrayList<Object> administradores;
-    private ArrayList<Object> listaTiendasEvento;
-    
+    private SimpleObjectProperty<List<Administrador>> administradores;
+    private SimpleObjectProperty<List<Tienda>> listaTiendasEvento;
 
-    public Evento(Integer idEvento, Float totalRecaudado, Integer numParticipantes, Date fechaCreacion, Administrador admin) {
+    public Evento(Integer idEvento, Float totalRecaudado, Integer numParticipantes, Date fechaCreacion, List<Administrador> administradores, List<Tienda> listaTiendasEvento) {
         this.idEvento = new SimpleIntegerProperty(idEvento);
         this.fecha = new SimpleObjectProperty<>(fechaCreacion);
         this.totalRecaudado = new SimpleFloatProperty(totalRecaudado);
         this.numParticipantes = new SimpleIntegerProperty(numParticipantes);
-        if (admin == null) {
-        throw new IllegalArgumentException("El administrador no puede ser nulo.");
-            }
-        this.admin = new SimpleObjectProperty<>(admin);
+        this.administradores = new SimpleObjectProperty<>(administradores);
+        this.listaTiendasEvento = new SimpleObjectProperty<>(listaTiendasEvento);
+
     }
 
     public Evento() {
@@ -50,10 +46,9 @@ public class Evento implements Serializable {
         this.fecha = new SimpleObjectProperty<>();
         this.totalRecaudado = new SimpleFloatProperty();
         this.numParticipantes = new SimpleIntegerProperty();
-        this.cliente = new SimpleObjectProperty<>();
-        this.administradores = new ArrayList<>();
-        this.listaTiendasEvento = new ArrayList<>();
-        
+        this.administradores = new SimpleObjectProperty<>();
+        this.listaTiendasEvento = new SimpleObjectProperty<>();
+
     }
 
     public Integer getIdEvento() {
@@ -64,12 +59,12 @@ public class Evento implements Serializable {
         this.idEvento.set(idEvento);
     }
 
-    public Integer getNumParticipantes() {
-        return numParticipantes.get();
+    public Date getFecha() {
+        return fecha.get();
     }
 
-    public void setNumParticipantes(Integer numParticipantes) {
-        this.numParticipantes.set(numParticipantes);
+    public void setFecha(Date fecha) {
+        this.fecha.set(fecha);
     }
 
     public Float getTotalRecaudado() {
@@ -80,41 +75,30 @@ public class Evento implements Serializable {
         this.totalRecaudado.set(totalRecaudado);
     }
 
-    public Date getFecha() {
-        return fecha.get();
+    public Integer getNumParticipantes() {
+        return numParticipantes.get();
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha.set(fecha);
+    public void setNumParticipantes(Integer numParticipantes) {
+        this.numParticipantes.set(numParticipantes);
     }
 
-    public Cliente getCliente() {
-        return cliente.get();
+    public List<Administrador> getAdministradores() {
+        return administradores.get();
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente.set(cliente);
+    public void setAdministradores(List<Administrador> administradores) {
+        this.administradores.set(administradores);
     }
 
-   @XmlTransient
-    public Administrador getAdministrador() {
-        if (administradores != null && !administradores.isEmpty()) {
-        return (Administrador) administradores.get(0);
-        } else {
-        return null;
+    @XmlTransient
+    public List<Tienda> getListaTiendasEvento() {
+        return listaTiendasEvento.get();
     }
-}
 
-    public void setAdministrador(Administrador admin) {
-        this.admin.set(admin);
+    public void setListaTiendasEvento(List<Tienda> listaTiendasEvento) {
+        this.listaTiendasEvento.set(listaTiendasEvento);
     }
-    
-    public ArrayList<Object> getAdministradores() {
-    if (administradores == null) {
-        administradores = new ArrayList<>();
-    }
-    return administradores;
-}
 
     @Override
     public int hashCode() {
@@ -123,26 +107,26 @@ public class Evento implements Serializable {
         return hash;
     }
 
-   public boolean equals(Object obj) {
-    if (this == obj) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Evento other = (Evento) obj;
+        if (!Objects.equals(this.idEvento.get(), other.idEvento.get())) {
+            return false;
+        }
         return true;
     }
-    if (obj == null) {
-        return false;
-    }
-    if (getClass() != obj.getClass()) {
-        return false;
-    }
-    final Evento other = (Evento) obj;
-    if (!Objects.equals(this.idEvento.get(), other.idEvento.get())) {
-        return false;
-    }
-    return true;
-}
-    
+
     @Override
     public String toString() {
-        return "Evento{" + "idEvento=" + idEvento + ", fecha=" + fecha + ", numParticipantes=" + numParticipantes + "admin=" + admin + '}';
+        return "Evento{" + "idEvento=" + idEvento + ", fecha=" + fecha + ", totalRecaudado=" + totalRecaudado + ", numParticipantes=" + numParticipantes + '}';
     }
 
 }

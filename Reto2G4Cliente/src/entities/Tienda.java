@@ -159,7 +159,7 @@ public class Tienda implements Serializable {
 
     @Override
     public String toString() {
-        return "Tienda{" + "idTienda=" + idTienda + ", nombre=" + nombre + ", descripcion=" + descripcion + ", tipoPago=" + tipoPago + ", espacio=" + espacio + ", fechaCreacion=" + fechaCreacion + ", productos=" + productos + ", listaTiendasEvento=" + listaTiendasEvento + '}';
+        return "Tienda{" + "idTienda=" + idTienda + ", nombre=" + nombre + ", descripcion=" + descripcion + ", tipoPago=" + tipoPago + ", espacio=" + espacio + ", fechaCreacion=" + fechaCreacion + ", productos=" + productos + '}';
     }
 
 }

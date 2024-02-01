@@ -5,10 +5,12 @@
  */
 package controller;
 
+import entities.Administrador;
 import entities.Cliente;
 import entities.Evento;
 import entities.Tienda;
 import entities.TiendaEvento;
+import entities.TiendaEventoId;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
 import exceptions.NotSelectedException;
@@ -47,6 +49,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
+import service.AdministradorFactoria;
+import service.AdministradorInterface;
 import service.ClienteFactoria;
 import service.ClienteInterface;
 //import net.sf.jasperreports.engine.JasperCompileManager;
@@ -547,12 +551,25 @@ public class ControllerEventos {
         try {
             for (int i = 0; i < eventosSeleccionados.size(); i++) {
                 TiendaEventoInterface ti = TiendaEventoFactoria.getTiendaEventoInterface();
+
                 TiendaEvento te = new TiendaEvento();
-                te.setIdTienda(((Cliente) usuario).getTienda().getIdTienda());
-                te.setIdEvento(eventosSeleccionados.get(i).getIdEvento());
+                TiendaEventoId tei = new TiendaEventoId();
+
+                tei.setIdTienda(((Cliente) usuario).getTienda().getIdTienda());
+                tei.setIdEvento(eventosSeleccionados.get(i).getIdEvento());
+
+                te.setIdTiendaEvento(tei);
+                te.setTienda(((Cliente) usuario).getTienda());
+                te.setEvento(eventosSeleccionados.get(i));
+
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 te.setFechaInscripcion(dateFormat.parse(LocalDate.now().toString()));
                 ti.create_XML(te);
+
+                System.out.println("Apuntandose --> " + te.toString());
+
+                ti.findAll_XML(new GenericType<List<TiendaEvento>>() {
+                });
             }
         } catch (ParseException ex) {
             Logger.getLogger(ControllerEventos.class.getName()).log(Level.SEVERE, null, ex);
@@ -562,7 +579,30 @@ public class ControllerEventos {
 
     @FXML
     public void handleAdjuntarOrganizador(ActionEvent actionEvent) {
+        EventoInterface ei = EventoFactoria.getEventoInterface();
+        ObservableList<Evento> eventosSeleccionados = tbEventos.getSelectionModel().getSelectedItems();
+        List<Evento> eventos = (((Administrador) usuario).getListaEventosEvento());
+        if (eventos == null) {
+            eventos = new ArrayList();
+        }
+        List<Administrador> administradores = new ArrayList();
 
+        for (int i = 0; i < eventosSeleccionados.size(); i++) {
+            eventos.add(eventosSeleccionados.get(i));
+
+            administradores = eventosSeleccionados.get(i).getAdministradores();
+            if (administradores == null) {
+                administradores = new ArrayList();
+            }
+            administradores.add((Administrador) usuario);
+            eventosSeleccionados.get(i).setAdministradores(administradores);
+            ei.edit_XML(eventosSeleccionados.get(i), eventosSeleccionados.get(i).getIdEvento() + "");
+        }
+        ((Administrador) usuario).setListaEventosEvento(eventos);
+        AdministradorInterface ai = AdministradorFactoria.getAdministradorInterface();
+        ai.edit_XML(usuario, usuario.getIdUsuario() + "");
+
+        cleanFields();
     }
 
     /**

@@ -18,13 +18,9 @@ public interface TiendaEventoInterface {
 
     public void edit_JSON(Object requestEntity, String id) throws ClientErrorException;
 
-    public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException;
+    public <T> T find_XML(GenericType<T> responseType, String tienda_id, String evento_id) throws ClientErrorException;
 
-    public <T> T find_JSON(GenericType<T> responseType, String id) throws ClientErrorException;
-
-    public <T> T findRange_XML(GenericType<T> responseType, String from, String to) throws ClientErrorException;
-
-    public <T> T findRange_JSON(GenericType<T> responseType, String from, String to) throws ClientErrorException;
+    public <T> T find_JSON(GenericType<T> responseType, String tienda_id, String evento_id) throws ClientErrorException;
 
     public void create_XML(Object requestEntity) throws ClientErrorException;
 
@@ -34,6 +30,5 @@ public interface TiendaEventoInterface {
 
     public <T> T findAll_JSON(GenericType<T> responseType) throws ClientErrorException;
 
-    public void remove(String id) throws ClientErrorException;
-
+    public void remove(String tienda_id, String evento_id) throws ClientErrorException;
 }

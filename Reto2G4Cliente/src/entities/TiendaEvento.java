@@ -5,56 +5,76 @@
  */
 package entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Gonzalo
  */
-public class TiendaEvento {
+@XmlRootElement(name = "tiendaEvento")
+public class TiendaEvento implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private SimpleIntegerProperty idTienda;
-    private SimpleIntegerProperty idEvento;
+
+    private SimpleObjectProperty<TiendaEventoId> idTiendaEvento;
+    private SimpleObjectProperty<Tienda> tienda;
+    private SimpleObjectProperty<Evento> evento;
     private SimpleObjectProperty<Date> fechaInscripcion;
 
-    public TiendaEvento(Integer idTienda, Integer idEvento, Date fechaCreacion) {
-        this.idTienda = new SimpleIntegerProperty(idTienda);
-        this.idEvento = new SimpleIntegerProperty(idEvento);
+    public TiendaEvento(TiendaEventoId idTiendaEvento, Tienda tienda, Evento evento, Date fechaCreacion) {
+        this.idTiendaEvento = new SimpleObjectProperty<>(idTiendaEvento);
+        this.tienda = new SimpleObjectProperty<>(tienda);
+        this.evento = new SimpleObjectProperty<>(evento);
         this.fechaInscripcion = new SimpleObjectProperty<>(fechaCreacion);
 
     }
 
     public TiendaEvento() {
-        this.idTienda = new SimpleIntegerProperty();
-        this.idEvento = new SimpleIntegerProperty();
+        this.idTiendaEvento = new SimpleObjectProperty<>();
+        this.tienda = new SimpleObjectProperty<>();
+        this.evento = new SimpleObjectProperty<>();
         this.fechaInscripcion = new SimpleObjectProperty<>();
     }
 
-    public Integer getIdTienda() {
-        return idTienda.get();
+    public TiendaEventoId getIdTiendaEvento() {
+        return this.idTiendaEvento.get();
     }
 
-    public void setIdTienda(Integer idTienda) {
-        this.idTienda.set(idTienda);
+    public void setIdTiendaEvento(TiendaEventoId idTiendaEvento) {
+        this.idTiendaEvento.set(idTiendaEvento);
     }
 
-    public Integer getIdEvento() {
-        return idEvento.get();
+    public Tienda getTienda() {
+        return this.tienda.get();
     }
 
-    public void setIdEvento(Integer idEvento) {
-        this.idEvento.set(idEvento);
+    public void setTienda(Tienda tienda) {
+        this.tienda.set(tienda);
+    }
+
+    public Evento getEvento() {
+        return this.evento.get();
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento.set(evento);
     }
 
     public Date getFechaInscripcion() {
-        return fechaInscripcion.get();
+        return this.fechaInscripcion.get();
     }
 
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion.set(fechaInscripcion);
+    }
+
+    @Override
+    public String toString() {
+        return "TiendaEvento{" + "idTiendaEvento=" + idTiendaEvento +/* ", tienda=" + tienda +*/ ", evento=" + evento + ", fechaInscripcion=" + fechaInscripcion + '}';
     }
 
 }
