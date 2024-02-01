@@ -32,6 +32,7 @@ import reto2g4cliente.Reto2G4Cliente;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ControladorTestProducto extends ApplicationTest {
 
+    
     private TableView<Producto> tbProductos;
     private ComboBox cbFiltro;
 
