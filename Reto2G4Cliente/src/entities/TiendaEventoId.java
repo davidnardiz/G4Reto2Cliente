@@ -14,9 +14,11 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public class TiendaEventoId implements Serializable {
 
+    //Variables.
     private SimpleIntegerProperty idTienda;
     private SimpleIntegerProperty idEvento;
 
+    //Constructores.
     public TiendaEventoId(Integer idTienda, Integer idEvento) {
         this.idTienda = new SimpleIntegerProperty(idTienda);
         this.idEvento = new SimpleIntegerProperty(idEvento);
@@ -27,6 +29,7 @@ public class TiendaEventoId implements Serializable {
         this.idEvento = new SimpleIntegerProperty();
     }
 
+    //Getters y setters
     public int getIdTienda() {
         return this.idTienda.get();
     }
@@ -43,6 +46,7 @@ public class TiendaEventoId implements Serializable {
         this.idEvento.set(idEvento);
     }
 
+    //To string para mostrar la información.
     @Override
     public String toString() {
         return "TiendaEventoId{" + "idTienda=" + idTienda + ", idEvento=" + idEvento + '}';

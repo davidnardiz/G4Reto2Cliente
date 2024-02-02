@@ -9,6 +9,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.GenericType;
 
 /**
+ * Interface de TiendaEventos
  *
  * @author David
  */

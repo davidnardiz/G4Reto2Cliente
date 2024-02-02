@@ -6,11 +6,13 @@
 package service;
 
 /**
+ * Factoria del producto
  *
  * @author Gonzalo
  */
 public class ProductoFactoria {
-    public static ProductoInterface createInterface(){
+
+    public static ProductoInterface createInterface() {
         ProductoInterface inter = new ProductoRestCliente();
         return inter;
     }

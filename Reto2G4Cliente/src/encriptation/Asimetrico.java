@@ -16,6 +16,12 @@ import javax.xml.bind.DatatypeConverter;
 
 public class Asimetrico {
 
+    /**
+     * Método que encripta la contrasenia que le lelga por parámetro
+     *
+     * @param pass
+     * @return
+     */
     public static String encriptar(String pass) {
         String p = null;
         try {

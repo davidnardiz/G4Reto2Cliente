@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement(name = "evento")
 public class Evento implements Serializable {
 
+    //Variables.
     private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty idEvento;
     private SimpleObjectProperty<Date> fecha;
@@ -31,6 +32,7 @@ public class Evento implements Serializable {
     private SimpleObjectProperty<List<Administrador>> administradores;
     private SimpleObjectProperty<List<Tienda>> listaTiendasEvento;
 
+    //Constructores.
     public Evento(Integer idEvento, Float totalRecaudado, Integer numParticipantes, Date fechaCreacion, List<Administrador> administradores, List<Tienda> listaTiendasEvento) {
         this.idEvento = new SimpleIntegerProperty(idEvento);
         this.fecha = new SimpleObjectProperty<>(fechaCreacion);
@@ -51,6 +53,7 @@ public class Evento implements Serializable {
 
     }
 
+    //Getters y setters.
     public Integer getIdEvento() {
         return idEvento.get();
     }
@@ -100,6 +103,7 @@ public class Evento implements Serializable {
         this.listaTiendasEvento.set(listaTiendasEvento);
     }
 
+    //Métodos
     @Override
     public int hashCode() {
         int hash = 7;

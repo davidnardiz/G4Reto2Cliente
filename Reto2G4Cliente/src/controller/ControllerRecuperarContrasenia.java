@@ -51,7 +51,8 @@ public class ControllerRecuperarContrasenia {
     private Button btnEnviar;
 
     /**
-     * Método init stage que inicia el stage
+     * Método init stage que inicia el stage y declara los métodos a los
+     * botones.
      *
      * @param root
      */
@@ -60,8 +61,6 @@ public class ControllerRecuperarContrasenia {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
-
-        txtFieldEmail.setText("daviznardiz2004@gmail.com");
 
         //Métodos de los botones y al cerrar la ventana.
         stage.setOnCloseRequest(this::handleCloseWindow);

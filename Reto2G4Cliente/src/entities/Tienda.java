@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement(name = "tienda")
 public class Tienda implements Serializable {
 
+    //Variables
     private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty idTienda;
     private SimpleStringProperty nombre;
@@ -34,6 +35,7 @@ public class Tienda implements Serializable {
     private SimpleObjectProperty<List<Producto>> productos;
     private SimpleObjectProperty<List<TiendaEvento>> listaTiendasEvento;
 
+    //Constructores
     public Tienda(Integer idTienda, String nombre, String descripcion, TipoPago tipoPago, Float espacio, Date fechaCreacion, Cliente cliente, List<Producto> productos, List<TiendaEvento> listaTiendasEvento) {
         this.idTienda = new SimpleIntegerProperty(idTienda);
         this.nombre = new SimpleStringProperty(nombre);
@@ -58,6 +60,7 @@ public class Tienda implements Serializable {
         this.listaTiendasEvento = new SimpleObjectProperty<>();
     }
 
+    //Getters y setters
     public Integer getIdTienda() {
         return idTienda.get();
     }
@@ -133,6 +136,7 @@ public class Tienda implements Serializable {
         this.listaTiendasEvento.set(listaTiendasEvento);
     }
 
+    //Métodos
     @Override
     public int hashCode() {
         int hash = 7;

@@ -6,6 +6,7 @@
 package entities;
 
 /**
+ * Enum del tipo de pago.
  *
  * @author David
  */

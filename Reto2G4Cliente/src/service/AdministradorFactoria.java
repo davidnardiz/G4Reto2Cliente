@@ -6,6 +6,7 @@
 package service;
 
 /**
+ * Factoria del administrador
  *
  * @author David
  */

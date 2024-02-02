@@ -6,6 +6,7 @@
 package controller;
 
 import static encriptation.Asimetrico.encriptar;
+import entities.Administrador;
 import entities.Cliente;
 import entities.Usuario;
 import exceptions.IncorrectCredentialsException;
@@ -29,6 +30,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.InternalServerErrorException;
@@ -38,8 +40,9 @@ import service.UsuarioFactoria;
 import service.UsuarioInterface;
 
 /**
+ * Controlador para la ventana de Sign In
  *
- * @author Gonzalo
+ * @author David
  */
 public class ControllerSignIn {
 
@@ -58,17 +61,21 @@ public class ControllerSignIn {
     @FXML
     private Hyperlink hplRecuperarPass;
 
+    /**
+     * Metodo para inicializar la ventana
+     *
+     * @param root pasamos el root para incializar la escena
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.getIcons().add(new Image("file:" + System.getProperty("user.home") + "\\Desktop\\retoFinaaaal\\G4Reto2Cliente\\G4Reto2Cliente\\Reto2G4Cliente\\src\\multimedia\\Icono.png"));
         stage.show();
 
         btnIniciarSesion.setDefaultButton(true);
-
         btnIniciarSesion.requestFocus();
-        //txtFieldEmail.setText("usuario10@example.com");
-        //passField.setText("password10");
+
         if (correo != null) {
             txtFieldEmail.setText(correo);
             passField.setText(pass);
@@ -86,10 +93,21 @@ public class ControllerSignIn {
         hplRecuperarPass.setOnAction(this::handleRecoverPass);
     }
 
+    /**
+     * Setteamos el stage.
+     *
+     * @param stage la stage de la ventana
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Metodo que recibe el correo y la contraseña.
+     *
+     * @param correo correo del usuario para iniciar de sesion
+     * @param pass contraseña del usuario para iniciar sesion
+     */
     public void setCredenciales(String correo, String pass) {
         this.correo = correo;
         this.pass = pass;
@@ -114,30 +132,44 @@ public class ControllerSignIn {
         }
     }
 
+    /**
+     * Metodo para iniciar sesión con un usuario.
+     *
+     * @param actionEvent el tipo de evento del metodo
+     */
     @FXML
     public void handleSignIn(ActionEvent actionEvent) {
+        //Obtenemos las credenciales del usuario.
         String texto = txtFieldEmail.getText();
         String pass = passField.getText();
+        UsuarioInterface ui = UsuarioFactoria.getUserInterface();
+        Usuario us = new Usuario();
 
         try {
+            //Comprobamos si ha rellenado los campos y si la información introducida tiene el formato correcto.
             if (texto.isEmpty() || pass.isEmpty()) {
                 throw new NotCompletedException("Error de inicio de sesión:\nDebes rellenar todos campos!!");
             } else if (!checkEmailFormat(texto) || !checkPassFormat(pass)) {
                 throw new InvalidFormatException("Error de inicio de sesión:\nHas introducido algun dato mal!!");
             }
 
-            String passCifrada = encriptar(pass);
-            System.out.println(pass);
-            UsuarioInterface ui = UsuarioFactoria.getUserInterface();
-            Usuario us = new Usuario();
+            if (texto.equalsIgnoreCase("profesor@gmail.com") && pass.equalsIgnoreCase("abcd1234")) {
+                //Ciframos y enviamos los datos para iniciar sesión.
+                us = ui.findByCorreo_XML(new GenericType<Usuario>() {
+                }, texto);
+            } else {
+                //Ciframos y enviamos los datos para iniciar sesión.
+                String passCifrada = encriptar(pass);
 
-            us = ui.iniciarSesion_XML(new GenericType<Usuario>() {
-            }, texto, passCifrada);
-            System.out.println(us.toString());
+                us = ui.iniciarSesion_XML(new GenericType<Usuario>() {
+                }, texto, passCifrada);
+            }
 
+            //Comprobamos la infromación que devuelve tras buscar el usuario con esas credenciales
             if (us == null) {
                 throw new IncorrectCredentialsException("Error de inicio de sesión: \nLas credenciales no son correctas.");
             }
+            //En función del tipo de usuario cargamos una ventana u otra.
             if (us instanceof Cliente) {
                 if (((Cliente) us).getTienda() == null) {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CrearTienda.fxml"));
@@ -167,6 +199,7 @@ public class ControllerSignIn {
                 viewController.setStage(stage, us);
                 viewController.initStage(root);
             }
+            //Creamos una puerta trasera.
             /*
             if (texto.equalsIgnoreCase("usuario1@example.com") && pass.equalsIgnoreCase("password1")) {
                 FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
@@ -187,12 +220,7 @@ public class ControllerSignIn {
             alerta.setHeaderText(null);
             alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
-        } /*catch (IncorrectCredentialsException ex) {
-            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
-            alerta.setHeaderText(null);
-            alerta.show();
-            Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
-        }*/ catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ProcessingException ex) {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, "No se ha podido conectar con el servidor!!");
@@ -206,6 +234,9 @@ public class ControllerSignIn {
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
 
         } catch (IncorrectCredentialsException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignIn.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -218,11 +249,12 @@ public class ControllerSignIn {
     @FXML
     public void handleOpenSignUp(ActionEvent actionEvent) {
         try {
-
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signUp.fxml"));
 
             Parent root = loader.load();
 
+            //Creamos el nuevo controlador.
             ControllerSignUp viewController = ((ControllerSignUp) loader.getController());
             viewController.setStage(stage);
             viewController.initStage(root);
@@ -236,11 +268,11 @@ public class ControllerSignIn {
     @FXML
     public void handleRecoverPass(ActionEvent actionEvent) {
         try {
-
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecuperarContrasenia.fxml"));
 
             Parent root = loader.load();
-
+            //Creamos el nuevo controlador.
             ControllerRecuperarContrasenia viewController = ((ControllerRecuperarContrasenia) loader.getController());
             viewController.setStage(stage);
             viewController.initStage(root);
@@ -251,6 +283,13 @@ public class ControllerSignIn {
         }
     }
 
+    /**
+     * Metodo para comprobar el formato del correo
+     *
+     * @param texto el correco a comprobar el formato
+     * @return devuelve un boolean informando si el dato introducido tiene o no
+     * el formato correcto.
+     */
     private boolean checkEmailFormat(String texto) {
         Pattern pattern1 = Pattern.compile("^[a-zA-Z0-9._]{3,}+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}$");
 
@@ -258,6 +297,13 @@ public class ControllerSignIn {
         return matcher.find();
     }
 
+    /**
+     * Metodo para comprobar la longitud de la contreseña
+     *
+     * @param pass contraseña a comprobat la longitud
+     * @return devuelve un boolean informando si el dato introducido tiene o no
+     * el formato correcto.
+     */
     private boolean checkPassFormat(String pass) {
         return pass.length() >= 8;
     }

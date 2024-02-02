@@ -113,7 +113,7 @@ public class ControllerCrearTienda {
 
             //Comprobamos el formato de los datos obtenidos.
             if (!checkNameFormat(nombre)) {
-                throw new InvalidFormatException("Debes introducir bien el nombre!!");
+                throw new InvalidFormatException("Debes introducir bien el nombre(min. 6 caracteres)!!");
             } else if (!checkDescriptionFormat(descripcion)) {
                 throw new InvalidFormatException("Debes introducir bien la descripción!!");
             } else if (!checkSpaceFormat(espacio)) {
@@ -189,7 +189,7 @@ public class ControllerCrearTienda {
      * @return boolean si tiene o no el formato correcto.
      */
     private boolean checkDescriptionFormat(String descripcion) {
-        return descripcion.length() > 15;
+        return descripcion.length() > 12;
     }
 
     /**

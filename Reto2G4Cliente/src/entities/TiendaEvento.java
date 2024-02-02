@@ -18,13 +18,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "tiendaEvento")
 public class TiendaEvento implements Serializable {
 
+    //Variables
     private static final long serialVersionUID = 1L;
-
     private SimpleObjectProperty<TiendaEventoId> idTiendaEvento;
     private SimpleObjectProperty<Tienda> tienda;
     private SimpleObjectProperty<Evento> evento;
     private SimpleObjectProperty<Date> fechaInscripcion;
 
+    //Constructores.
     public TiendaEvento(TiendaEventoId idTiendaEvento, Tienda tienda, Evento evento, Date fechaCreacion) {
         this.idTiendaEvento = new SimpleObjectProperty<>(idTiendaEvento);
         this.tienda = new SimpleObjectProperty<>(tienda);
@@ -40,6 +41,7 @@ public class TiendaEvento implements Serializable {
         this.fechaInscripcion = new SimpleObjectProperty<>();
     }
 
+    //Getters y setters.
     public TiendaEventoId getIdTiendaEvento() {
         return this.idTiendaEvento.get();
     }
@@ -72,6 +74,7 @@ public class TiendaEvento implements Serializable {
         this.fechaInscripcion.set(fechaInscripcion);
     }
 
+    //To string para mostrar la informacion
     @Override
     public String toString() {
         return "TiendaEvento{" + "idTiendaEvento=" + idTiendaEvento +/* ", tienda=" + tienda +*/ ", evento=" + evento + ", fechaInscripcion=" + fechaInscripcion + '}';

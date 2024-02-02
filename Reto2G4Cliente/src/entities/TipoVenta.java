@@ -6,6 +6,7 @@
 package entities;
 
 /**
+ * Enum del tipo de venta.
  *
  * @author Gonzalo
  */

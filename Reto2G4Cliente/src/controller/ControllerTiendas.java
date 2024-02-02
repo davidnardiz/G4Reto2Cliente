@@ -7,6 +7,7 @@ package controller;
 
 import entities.Cliente;
 import entities.Tienda;
+import entities.TiendaEvento;
 import entities.TipoPago;
 import entities.Usuario;
 import exceptions.InvalidFormatException;
@@ -60,12 +61,15 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import service.ClienteFactoria;
 import service.ClienteInterface;
+import service.TiendaEventoFactoria;
+import service.TiendaEventoInterface;
 import service.TiendaFactoria;
 import service.TiendaInterface;
 
 /**
+ * Controlador de la venta de Tiedas
  *
- * @author Gonzalo
+ * @author David
  */
 public class ControllerTiendas {
 
@@ -140,6 +144,26 @@ public class ControllerTiendas {
     @FXML
     private TableColumn<Tienda, Date> cmnFechaCreacion;
 
+    /**
+     ** La venta debe ser Modal La ventana no debe ser redimensionable. La
+     * tabla de tiendas mostrará la información de todas las tiendas existentes
+     * en la app. Si eres administrador el boton“Crear” (btnCrear) estará
+     * deshabilitado y los botones “Editar” (btnEditar) y “Eliminar”
+     * (btnEliminar) se mantendrán habilitados. El botón “Filtrar” (btnFiltrar)
+     * se mantiene habilitado. Si eres un Cliente los botones “Crear” (btnCrear)
+     * y “Eliminar” (btnEliminar) se ocultaran y los botones “Filtrar”
+     * (btnFiltrar) y “Editar” (btnEditar) se mantienen habilitados. Los campos
+     * “Nombre” (textFieldNombre), “Breve Descripción” (textFieldDescripcion),
+     * “Espacio”(textFieldEspacio) y “Fecha de creación”(dpFechaCreacion) están
+     * habilitados. La ComboBox de “Tipo de Pago” (cbTipoPago) se carga con las
+     * descripciones de los diferentes tipos de pago. Si se produce cualquier
+     * excepción en alguno de los procesos, mostrar un mensaje al usuario con el
+     * texto de la excepción. El foco se pone en el campo de “Nombre”. Si eres
+     * cliente, te aparecerán los datos de tu tienda en los campos del
+     * formulario.
+     *
+     * @param root
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -153,7 +177,7 @@ public class ControllerTiendas {
             btnCrear.setDisable(true);
             btnEliminar.setDisable(true);
         } else {
-            btnCrear.setDisable(false);
+            btnCrear.setDisable(true);
             btnEliminar.setDisable(false);
         }
         //Menú items del menú bar
@@ -197,7 +221,7 @@ public class ControllerTiendas {
         });
 
         //Menú de contexto
-        menuItemMenuContextoCrear.setOnAction(this::handleCreateTienda);
+        //menuItemMenuContextoCrear.setOnAction(this::handleCreateTienda);
         menuItemMenuContextoModificar.setOnAction(this::handleEditTienda);
         menuItemMenuContextoEliminar.setOnAction(this::handleDeleteTienda);
         //menuItemMenuContextoVer.setOnAction(this::handle);
@@ -213,7 +237,7 @@ public class ControllerTiendas {
         cbFiltros.setValue("Mostrar todos");
 
         //Botones crear, eliminar y editar
-        btnCrear.setOnAction(this::handleCreateTienda);
+        //btnCrear.setOnAction(this::handleCreateTienda);
         btnCrear.setDefaultButton(true);
         btnEditar.setOnAction(this::handleEditTienda);
         btnEliminar.setOnAction(this::handleDeleteTienda);
@@ -231,6 +255,12 @@ public class ControllerTiendas {
         stage.show();
     }
 
+    /**
+     * Método que settea el stage y guarda la infromacion del usuario.
+     *
+     * @param stage
+     * @param usuario
+     */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
         this.usuario = usuario;
@@ -262,8 +292,9 @@ public class ControllerTiendas {
      *
      * @param actionEvent
      */
-    @FXML
+    /*@FXML
     public void handleCreateTienda(ActionEvent actionEvent) {
+        //Obtenemos los datos del formulario.
         String nombre = txtFieldNombre.getText();
         String descripcion = txtFieldDescripcion.getText();
         float espacio = Float.parseFloat(txtFieldEspacio.getText());
@@ -273,23 +304,21 @@ public class ControllerTiendas {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaCreacion;
             fechaCreacion = dateFormat.parse(dpFechaCreacion.getValue().toString());
-            /*
-            if (!checkNameFormat(nombre) || !checkDescriptionFormat(descripcion) || !checkSpaceFormat(espacio) || checkDateFormat(fechaCreacion) || !checkTypeFormat(tipoPago)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
-            }
-             */
+
+            //Comprobamos el formato de los adros introducidos.
             if (!checkNameFormat(nombre)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien el nombre!!");
             } else if (!checkDescriptionFormat(descripcion)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien la descripcion!!");
             } else if (!checkSpaceFormat(espacio)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien el espacio!!");
             } else if (!checkTypeFormat(tipoPago)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien el tipo de pago!!");
             } else if (!checkDateFormat(fechaCreacion)) {
-                throw new InvalidFormatException("Debes introducir bien los datos!!");
+                throw new InvalidFormatException("Debes introducir bien la fecha de creción!!");
             }
 
+            //Creamos una nueva tienda y le introducimos sus datos.
             Tienda tienda = new Tienda();
             tienda.setNombre(nombre);
             tienda.setDescripcion(descripcion);
@@ -298,9 +327,12 @@ public class ControllerTiendas {
             tienda.setTipoPago(tipoPago);
             tienda.setCliente(null);
 
+            //Creamos la tienda.
             TiendaInterface ti = TiendaFactoria.getTiendaInterface();
             ti.create_XML(tienda);
-
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Tienda creada correctamente");
+            alerta.setHeaderText(null);
+            alerta.show();
             cleanFields();
             handleCargeTable();
         } catch (InvalidFormatException ex) {
@@ -311,16 +343,26 @@ public class ControllerTiendas {
         } catch (ParseException ex) {
             Logger.getLogger(ControllerTiendas.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
+    }*/
+    /**
+     * Esto solo se aplicará tanto para el cliente, que solo podrá editar su
+     * tienda, como para el administrador, que podrá editar todas. Comprobar si
+     * los campos obligatorios están rellenados. Si no lo están, no actualizar
+     * la información e informar al usuario. Si lo están modificar la tienda
+     * seleccionada con los datos de los campos, actualizar la base de datos, la
+     * tabla y vaciar todos los campos.
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleEditTienda(ActionEvent actionEvent) {
+        //Obtenemos los datos de la tienda seleccionada.
         Tienda tiendaSeleccionada = tbTiendas.getSelectionModel().getSelectedItem();
         try {
             if (tiendaSeleccionada == null) {
                 throw new NotSelectedException("No hay seleccionada ninguna tienda!!");
             }
-
+            //Actualizamos la información de la tienda con los datos introducidos.
             tiendaSeleccionada.setNombre(txtFieldNombre.getText());
             tiendaSeleccionada.setDescripcion(txtFieldDescripcion.getText());
             tiendaSeleccionada.setEspacio(Float.parseFloat(txtFieldEspacio.getText()));
@@ -330,6 +372,7 @@ public class ControllerTiendas {
             tiendaSeleccionada.setFechaCreacion(fechaCreacion);
             tiendaSeleccionada.setTipoPago((TipoPago) cbTipoPago.getValue());
 
+            //Comprobamos si el cliente ha seleccionado su tienda y si es asi le dejamos editarla. Si entra un administrador, puede editar todas las que quiera.
             if (usuario instanceof Cliente) {
                 if (((Cliente) usuario).getTienda().getIdTienda() == tiendaSeleccionada.getIdTienda()) {
                     TiendaInterface ti = TiendaFactoria.getTiendaInterface();
@@ -364,15 +407,41 @@ public class ControllerTiendas {
 
     }
 
+    /**
+     * Esto solo se aplicará si el usuario es administrador: Mostrar un diálogo
+     * en el que se pida confirmar al usuario si quiere borrar la tienda: En
+     * caso de cancelar, cerrar el diálogo de confirmación. En caso de
+     * confirmar, eliminar la tienda, actualizar la tabla, deseleccionar la fila
+     * seleccionada de la tabla, vaciar los campos “Nombre” (textFieldNombre),
+     * “Descripción” (textFieldDescripcion), “Tipo de Pago” (textFieldTipoPago),
+     * “Espacio” (columnaEspacio) y “Fecha de Creación” (columnaFecha). Enfocar
+     * el campo “Nombre”.
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleDeleteTienda(ActionEvent actionEvent) {
+        //Obtenemos las tiendas seleccionadas.
         ObservableList<Tienda> tiendasSeleccionadas = tbTiendas.getSelectionModel().getSelectedItems();
 
         TiendaInterface ti = TiendaFactoria.getTiendaInterface();
-        for (Tienda t : tiendasSeleccionadas) {
-            ti.remove(t.getIdTienda().toString());
+        TiendaEventoInterface tei = TiendaEventoFactoria.getTiendaEventoInterface();
 
-            System.out.println("Eliminando la tienda --> " + t.getIdTienda());
+        List<TiendaEvento> tiendasEventos = tei.findAll_XML(new GenericType<List<TiendaEvento>>() {
+        });
+
+        //Borramos todas las tiendas que haya seleccionado el usuario.
+        for (Tienda t : tiendasSeleccionadas) {
+            for (int i = 0; i < tiendasEventos.size(); i++) {
+                if (tiendasEventos.get(i).getTienda().getIdTienda().equals(t.getIdTienda())) {
+                    tei.remove(tiendasEventos.get(i).getTienda().getIdTienda() + "", tiendasEventos.get(i).getEvento().getIdEvento() + "");
+                }
+            }
+
+            ti.remove(t.getIdTienda().toString());
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Tienda eliminada correctamente");
+            alerta.setHeaderText(null);
+            alerta.show();
         }
 
         cleanFields();
@@ -380,6 +449,12 @@ public class ControllerTiendas {
         handleCargeTable();
     }
 
+    /**
+     * Al pulsar el botón se genera un informe con la información que contiene
+     * la información de la tabla.
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleCrearInforme(ActionEvent actionEvent) {
         try {
@@ -397,6 +472,9 @@ public class ControllerTiendas {
 
     }
 
+    /**
+     * Metodo para cargar la tabla con los datos.
+     */
     private void handleCargeTable() {
         List<Tienda> tiendas = new ArrayList();
         TiendaInterface ti = TiendaFactoria.getTiendaInterface();
@@ -413,6 +491,11 @@ public class ControllerTiendas {
         tbTiendas.refresh();
     }
 
+    /**
+     * Metodo para cargar la tabla con los filtros seleccionados
+     *
+     * @param tiendas
+     */
     private void handleCargeTableFiltro(List<Tienda> tiendas) {
         ObservableList<Tienda> tiendasTabla = FXCollections.observableArrayList(tiendas);
 
@@ -424,6 +507,12 @@ public class ControllerTiendas {
         tbTiendas.refresh();
     }
 
+    /**
+     * Metodo que habilita los campos de filtro en funcion del filtro
+     * seleccionado
+     *
+     * @param event el tipo de evento del metodo
+     */
     private void handleFiltros(Event event) {
         String filtroSeleccionado = (String) cbFiltros.getValue();
         if (filtroSeleccionado.equalsIgnoreCase("Mostrar todas")) {
@@ -451,11 +540,22 @@ public class ControllerTiendas {
         }
     }
 
+    /**
+     * Se comprueba si los valores introducidos en los textFields necesarios
+     * para el filtro seleccionado, en caso de que el filtro los necesite,
+     * tienen un formato correcto. En caso de que no lo tenga, se lanza una
+     * excepción informando del error. En caso de que tengan un formato
+     * correcto, se actualizará la información de la tabla aplicando el filtro
+     * seleccionado por el usuario
+     *
+     * @param event
+     */
     private void handleEjecutarFiltros(Event event) {
         String filtroSeleccionado = cbFiltros.getValue().toString();
 
         TiendaInterface ti = TiendaFactoria.getTiendaInterface();
 
+        //Comprobamos que filtro ha seleccionado y cargamos la informacion en función del filtro seleccionado.
         if (filtroSeleccionado.equalsIgnoreCase("Mostrar todas")) {
             handleCargeTable();
         } else if (filtroSeleccionado.equalsIgnoreCase("Menor espacio")) {
@@ -494,13 +594,20 @@ public class ControllerTiendas {
         }
     }
 
+    /**
+     * Metodo para cerrar sesion
+     *
+     * @param event
+     */
+    @FXML
     private void handleCerrarSesion(Event event) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root;
 
             root = (Parent) loader.load();
-
+            //Creamos el nuevo controlador.
             ControllerSignIn viewController = ((ControllerSignIn) loader.getController());
             viewController.setStage(stage);
             viewController.initStage(root);
@@ -511,11 +618,19 @@ public class ControllerTiendas {
         }
     }
 
+    /**
+     * Metodo para abrir la ventana de Inicio
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root = loader.load();
+
+            //Creamos el nuevo controlador.
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -526,11 +641,18 @@ public class ControllerTiendas {
         }
     }
 
+    /**
+     * Metodo para abrir la ventana Productos
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Productos.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerProductos viewController = ((ControllerProductos) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -541,11 +663,18 @@ public class ControllerTiendas {
         }
     }
 
+    /**
+     * Metodo para abrir la ventana de eventos
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleAbrirEventos(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerEventos viewController = ((ControllerEventos) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -556,11 +685,18 @@ public class ControllerTiendas {
         }
     }
 
+    /**
+     * Metodo para abrir el perfil del usuario con el que se ha iniciado sesion
+     *
+     * @param actionEvent
+     */
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Perfil.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -571,18 +707,46 @@ public class ControllerTiendas {
         }
     }
 
+    /**
+     * Metodo para comprobar el formato del nombre
+     *
+     * @param nombre
+     * @return devuelve un boolean informando si el dato introducido tiene o no
+     * el formato correcto.
+     */
     private boolean checkNameFormat(String nombre) {
         return nombre.length() > 6;
     }
 
+    /**
+     * Metodo para comprobar el formato del Descripcion
+     *
+     * @param descripcion
+     * @return devuelve un boolean informando si el dato introducido tiene o no
+     * el formato correcto.
+     */
     private boolean checkDescriptionFormat(String descripcion) {
         return descripcion.length() > 15;
     }
 
+    /**
+     * Metodo para comprobar el formato del espacio
+     *
+     * @param espacio
+     * @return devuelve un boolean informando si el dato introducido tiene o no
+     * el formato correcto.
+     */
     private boolean checkSpaceFormat(float espacio) {
         return espacio > 0;
     }
 
+    /**
+     * Metodo para comprobar el formato de la fecha de creacion
+     *
+     * @param fechaCreacion
+     * @return devuelve un boolean informando si el dato introducido tiene o no
+     * el formato correcto.
+     */
     private boolean checkDateFormat(Date fechaCreacion) {
         Date date = null;
         try {
@@ -597,14 +761,30 @@ public class ControllerTiendas {
         return fechaCreacion.before(date);
     }
 
+    /**
+     * Metodo para comprobar el formato del tipo de pago
+     *
+     * @param tipoPago
+     * @return devuelve un boolean informando si el dato introducido tiene o no
+     * el formato correcto.
+     */
     private boolean checkTypeFormat(TipoPago tipoPago) {
         return tipoPago != null;
     }
 
+    /**
+     * Metodo para cambiar el formato de la fecha el formato
+     *
+     * @param localDate
+     * @return devuelve una fecha.
+     */
     public static Date convertToLocalDateToDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
+    /**
+     * Metodo para limpiar los campos del formulario.
+     */
     private void cleanFields() {
         txtFieldNombre.setText("");
         txtFieldDescripcion.setText("");

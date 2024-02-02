@@ -18,15 +18,17 @@ import javax.xml.bind.annotation.XmlTransient;
  * Clase que representa a un administrador del sistema. Un administrador puede
  * organizar eventos y tiene un contador de eventos organizados.
  *
- * @author Iñigo
+ * @author Iñigo, David
  */
 @XmlRootElement(name = "administrador")
 public class Administrador extends Usuario implements Serializable {
 
+    //Variables
     private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty numEventos;
     private SimpleObjectProperty<List<Evento>> listaEventos;
 
+    //Constructores
     public Administrador(int numEventos, List<Evento> listaEventos, int idUsuario, String nombre, String password, String correo, Date fechaNacimiento) {
         super(idUsuario, nombre, password, correo, fechaNacimiento);
         this.numEventos = new SimpleIntegerProperty(numEventos);
@@ -39,6 +41,7 @@ public class Administrador extends Usuario implements Serializable {
         this.listaEventos = new SimpleObjectProperty<>();
     }
 
+    //Getters y setters
     public Integer getNumEventos() {
         return numEventos.get();
     }
@@ -56,6 +59,7 @@ public class Administrador extends Usuario implements Serializable {
         this.listaEventos.set(listaEventosEvento);
     }
 
+    //To string para mostrar ka infromación.
     @Override
     public String toString() {
         return "Administrador{" + "numEventos=" + numEventos + ", listaEventos=" + listaEventos + '}';

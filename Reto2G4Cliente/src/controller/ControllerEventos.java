@@ -296,6 +296,10 @@ public class ControllerEventos {
             EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
             eventoInterface.create_XML(evento);
 
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Evento correctamente creado!!");
+            alerta.setHeaderText(null);
+            alerta.show();
+
             // Después de crear el evento, actualiza la tabla
             handleCargeTable();
             cleanFields();
@@ -344,7 +348,9 @@ public class ControllerEventos {
 
             EventoInterface eventoInterface = EventoFactoria.getEventoInterface();
             eventoInterface.edit_XML(eventoSeleccionado, eventoSeleccionado.getIdEvento().toString());
-
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Evento correctamente editado!!");
+            alerta.setHeaderText(null);
+            alerta.show();
             // Después de editar el evento, actualiza la tabla
             handleCargeTable();
 
@@ -373,7 +379,9 @@ public class ControllerEventos {
         for (int i = 0; i < eventosSeleccionados.size(); i++) {
             eventoInterface.remove(eventosSeleccionados.get(i).getIdEvento().toString());
         }
-
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Evento/s correctamente eliminado/s!!");
+        alerta.setHeaderText(null);
+        alerta.show();
         cleanFields();
         handleCargeTable();
     }
@@ -577,7 +585,9 @@ public class ControllerEventos {
                 te.setFechaInscripcion(dateFormat.parse(LocalDate.now().toString()));
                 ti.create_XML(te);
 
-                System.out.println("Apuntandose --> " + te.toString());
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Te has apuntado al evento correctamente!!");
+                alerta.setHeaderText(null);
+                alerta.show();
 
                 ti.findAll_XML(new GenericType<List<TiendaEvento>>() {
                 });
@@ -623,6 +633,10 @@ public class ControllerEventos {
         ((Administrador) usuario).setListaEventosEvento(eventos);
         AdministradorInterface ai = AdministradorFactoria.getAdministradorInterface();
         ai.edit_XML(usuario, usuario.getIdUsuario() + "");
+
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Te has apuntado como organizador correctamente!!");
+        alerta.setHeaderText(null);
+        alerta.show();
 
         cleanFields();
     }

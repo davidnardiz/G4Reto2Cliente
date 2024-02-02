@@ -6,10 +6,12 @@
 package service;
 
 /**
+ * Factoria de Usuario
  *
  * @author Gonzalo
  */
 public class UsuarioFactoria {
+
     public static UsuarioInterface getUserInterface() {
         return new UsuarioRestCliente();
     }

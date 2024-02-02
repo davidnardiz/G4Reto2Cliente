@@ -12,11 +12,12 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
 /**
+ * interface de Productos
  *
  * @author Gonzalo
  */
 public interface ProductoInterface {
-    
+
     public <T> T findEntrePrecioProducto_XML(GenericType<T> responseType, String precio1, String precio2, String idTienda) throws ClientErrorException;
 
     public <T> T findEntrePrecioProducto_JSON(GenericType<T> responseType, String precio1, String precio2, String idTienda) throws ClientErrorException;

@@ -23,12 +23,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement(name = "cliente")
 public class Cliente extends Usuario implements Serializable {
 
+    //Variables
     private static final long serialVersionUID = 1L;
-
     private SimpleObjectProperty<TipoVenta> tipoVenta;
     private SimpleObjectProperty<Tienda> tienda;
     private SimpleObjectProperty<List<Producto>> productosCreados;
 
+    //Constructores
     public Cliente(TipoVenta tipoVenta, Tienda tienda, List<Producto> productosCreados, int idUsuario, String nombre, String password, String correo, Date fechaNacimiento) {
         super(idUsuario, nombre, password, correo, fechaNacimiento);
         this.tipoVenta = new SimpleObjectProperty<>(tipoVenta);
@@ -43,6 +44,7 @@ public class Cliente extends Usuario implements Serializable {
         this.productosCreados = new SimpleObjectProperty<>();
     }
 
+    //Getters y setters.
     public TipoVenta getTipoVenta() {
         return tipoVenta.get();
     }
@@ -68,6 +70,7 @@ public class Cliente extends Usuario implements Serializable {
         this.productosCreados.set(productosCreados);
     }
 
+    //To string para mostrar la infroamción.
     @Override
     public String toString() {
         return super.toString() + "Cliente{" + "tipoVenta=" + tipoVenta + ", tienda=" + tienda + '}';

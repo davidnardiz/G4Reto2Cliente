@@ -35,6 +35,13 @@ public class TiendaRestCliente implements TiendaInterface {
         webTarget = client.target(BASE_URI).path("entities.tienda");
     }
 
+    /**
+     * Edita una tienda que busca por id
+     *
+     * @param requestEntity
+     * @param id id de la tienda a editar
+     * @throws ClientErrorException
+     */
     @Override
     public void edit_XML(Object requestEntity, String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
@@ -45,6 +52,15 @@ public class TiendaRestCliente implements TiendaInterface {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Busca una tienda por id
+     *
+     * @param <T>
+     * @param responseType
+     * @param id id de la tienda a
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -59,6 +75,15 @@ public class TiendaRestCliente implements TiendaInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Eceuntra las tiendas de menos de x espacio
+     *
+     * @param <T>
+     * @param responseType
+     * @param espacio espacio maximo
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T encontrarTiendaMenorEspacio_XML(GenericType<T> responseType, String espacio) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -73,6 +98,16 @@ public class TiendaRestCliente implements TiendaInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Ecuentra las tiendas que su espacio este entre un minimo y un maximo
+     *
+     * @param <T>
+     * @param responseType
+     * @param espacioMin espacio minimo
+     * @param espacioMax espacio maximo
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T encontrarTiendaEntreEspacio_XML(GenericType<T> responseType, String espacioMin, String espacioMax) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -87,6 +122,12 @@ public class TiendaRestCliente implements TiendaInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Crea una tienda
+     *
+     * @param requestEntity
+     * @throws ClientErrorException
+     */
     @Override
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
@@ -97,6 +138,15 @@ public class TiendaRestCliente implements TiendaInterface {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Ecuentra tienda en funcion de su tipo de pago
+     *
+     * @param <T>
+     * @param responseType
+     * @param tipoPago el tipo de pago de la tienda
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T encontrarTiendaTipoPago_XML(GenericType<T> responseType, String tipoPago) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -112,6 +162,14 @@ public class TiendaRestCliente implements TiendaInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Ecuentra todas las tiendas
+     *
+     * @param <T>
+     * @param responseType
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -124,6 +182,15 @@ public class TiendaRestCliente implements TiendaInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Ecuentra las tiendas de mas de un epacio
+     *
+     * @param <T>
+     * @param responseType
+     * @param espacio espacio maximo por el que busca
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T encontrarTiendaMayorEspacio_XML(GenericType<T> responseType, String espacio) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -138,6 +205,12 @@ public class TiendaRestCliente implements TiendaInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Elimina una tienda
+     *
+     * @param id id por el que busca la tienda
+     * @throws ClientErrorException
+     */
     @Override
     public void remove(String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();

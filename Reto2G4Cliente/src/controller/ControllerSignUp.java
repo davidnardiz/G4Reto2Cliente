@@ -8,6 +8,7 @@ package controller;
 import static encriptation.Asimetrico.encriptar;
 import entities.Cliente;
 import entities.TipoVenta;
+import exceptions.IncorrectCredentialsException;
 import exceptions.InvalidEmailFormatException;
 import exceptions.InvalidFormatException;
 import exceptions.NotCompletedException;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +39,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.core.GenericType;
 import service.ClienteFactoria;
 import service.ClienteInterface;
 
@@ -106,6 +109,7 @@ public class ControllerSignUp {
     public void handleSignUp(ActionEvent event) {
 
         try {
+            //Miramos si ha rellenado los datos y si están bien.
             checkCompleteFields();
             checkValidEmail();
 
@@ -114,14 +118,14 @@ public class ControllerSignUp {
             Pattern pattern2 = Pattern.compile("^[a-zA-Z0-9]{8,}$");
 
             cl.setCorreo(txtFieldUsuario1.getText());
-            /*if (pattern1.matcher(txtFieldUsuario.getText()).find() == false) {
+            if (pattern1.matcher(txtFieldUsuario.getText()).find() == false) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un nombre valido que no contenga caracteres especiales y como maximo 20 caracteres o digitos", ButtonType.OK);
                 alert.setHeaderText(null);
                 alert.show();
                 throw new InvalidFormatException();
-            } else {*/
-            cl.setNombre(txtFieldUsuario.getText());
-            //}
+            } else {
+                cl.setNombre(txtFieldUsuario.getText());
+            }
 
             if (pattern2.matcher(PassFieldR.getText()).find() == false) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Error de registro: \nPorfavor introduzca un nombre valido que no contenga caracteres especiales y como minimo 8 letras o digitos", ButtonType.OK);
@@ -149,10 +153,22 @@ public class ControllerSignUp {
             TipoVenta tipoVenta = (TipoVenta) cbTipoVenta.getValue();
             cl.setTipoVenta(tipoVenta);
             System.out.println("Cliente: " + cl.toString());
+            //Creamos un usuario con los datos introducidos previamente.
             ClienteInterface ci = ClienteFactoria.getClienteInterface();
+
+            List<Cliente> clientes = ci.findAll_XML(new GenericType<List<Cliente>>() {
+            });
+            for (int i = 0; i < clientes.size(); i++) {
+                if (cl.getCorreo().equalsIgnoreCase(clientes.get(i).getCorreo())) {
+                    txtFieldUsuario1.setText("");
+                    throw new IncorrectCredentialsException("El email introducido ya pertenece a un usuario!!");
+
+                }
+            }
             ci.create_XML(cl);
             handleOpenSignIn(event);
 
+            //Informamos al usuario.
             Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Se ha creado correctamente el usuario!!");
             alerta.setHeaderText(null);
             alerta.show();
@@ -160,10 +176,24 @@ public class ControllerSignUp {
         } catch (ParseException ex) {
             Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotCompletedException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidEmailFormatException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
+            Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IncorrectCredentialsException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, ex.getMessage());
+            alerta.setHeaderText(null);
+            alerta.show();
             Logger.getLogger(ControllerSignUp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -177,8 +207,10 @@ public class ControllerSignUp {
     @FXML
     public void handleOpenSignIn(ActionEvent event) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root = (Parent) loader.load();
+            //Creamos el nuevo controlador.
             ControllerSignIn viewController = ((ControllerSignIn) loader.getController());
             viewController.setStage(stage);
             viewController.setCredenciales(txtFieldUsuario1.getText(), PassFieldR.getText());
@@ -188,10 +220,16 @@ public class ControllerSignUp {
         }
     }
 
+    /**
+     * Método para cerrar la ventana.
+     *
+     * @param windowEvent
+     */
     @FXML
     public void handleCloseRequest(WindowEvent windowEvent) {
         windowEvent.consume();
 
+        //Preguntamos si está seguro de cerrar, si es así, la cerramos.
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION, "¿Quieres cerrar la ventana?");
         alerta.setHeaderText(null);
 
@@ -256,6 +294,7 @@ public class ControllerSignUp {
 
     }
 
+    //Método que settea el stage.
     public void setStage(Stage stage) {
         this.stage = stage;
     }

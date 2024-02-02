@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,6 +26,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({Cliente.class, Administrador.class})
 public class Usuario implements Serializable {
 
+    //Variables.
     private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty idUsuario;
     private SimpleStringProperty nombre;
@@ -32,6 +34,7 @@ public class Usuario implements Serializable {
     private SimpleStringProperty correo;
     private SimpleObjectProperty<Date> fechaNacimiento;
 
+    //Constructores
     public Usuario(Integer idUsuario, String nombre, String password, String correo, Date fechaNacimiento) {
         this.idUsuario = new SimpleIntegerProperty(idUsuario);
         this.nombre = new SimpleStringProperty(nombre);
@@ -48,6 +51,7 @@ public class Usuario implements Serializable {
         this.fechaNacimiento = new SimpleObjectProperty<>();
     }
 
+    //Getters y setters
     public Integer getIdUsuario() {
         return idUsuario.get();
     }
@@ -86,6 +90,32 @@ public class Usuario implements Serializable {
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento.set(fechaNacimiento);
+    }
+
+    //Métodos
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.idUsuario);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        if (!Objects.equals(this.idUsuario, other.idUsuario)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -35,6 +35,16 @@ public class EventoRestCliente implements EventoInterface {
         webTarget = client.target(BASE_URI).path("entities.evento");
     }
 
+    /**
+     * Ecunentra un evento entre un minmo y maximo de participantes
+     *
+     * @param <T>
+     * @param responseType
+     * @param numParticipantesMin numero minimo de participantes
+     * @param numParticipantesMax numero maximo de participantes
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarEventoEntreParticipantes_XML(GenericType<T> responseType, String numParticipantesMin, String numParticipantesMax) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoEntreParticipantes/{0}/{1}", new Object[]{numParticipantesMin, numParticipantesMax}));
@@ -47,6 +57,15 @@ public class EventoRestCliente implements EventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Ecuentra un evento que haya recaudado mas de x Dinero
+     *
+     * @param <T>
+     * @param responseType
+     * @param totalRecaudado total de dinero recaudado
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarEventoMayorRecaudado_XML(GenericType<T> responseType, String totalRecaudado) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMayorRecaudado/{0}", new Object[]{totalRecaudado}));
@@ -59,6 +78,13 @@ public class EventoRestCliente implements EventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Edita un Evento que busca segun su id
+     *
+     * @param requestEntity
+     * @param id id del evento a editar
+     * @throws ClientErrorException
+     */
     public void edit_XML(Object requestEntity, String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
@@ -67,6 +93,15 @@ public class EventoRestCliente implements EventoInterface {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Econtrar un Evento mediante su id
+     *
+     * @param <T>
+     * @param responseType
+     * @param id id dle evento a encontrar
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
@@ -79,6 +114,12 @@ public class EventoRestCliente implements EventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Crea un Evento
+     *
+     * @param requestEntity
+     * @throws ClientErrorException
+     */
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
@@ -87,6 +128,15 @@ public class EventoRestCliente implements EventoInterface {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Ecuentra un evento con menos de x numeor de participantes
+     *
+     * @param <T>
+     * @param responseType
+     * @param numParticipantes numero de participantes
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarEventoMenorNumParticipantes_XML(GenericType<T> responseType, String numParticipantes) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMenorNumParticipantes/{0}", new Object[]{numParticipantes}));
@@ -99,6 +149,15 @@ public class EventoRestCliente implements EventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Eceuntra un evento que haya recaudado menos de x dineor
+     *
+     * @param <T>
+     * @param responseType
+     * @param totalRecaudado total recaudado minimo
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarEventoMenorRecaudado_XML(GenericType<T> responseType, String totalRecaudado) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMenorRecaudado/{0}", new Object[]{totalRecaudado}));
@@ -111,6 +170,14 @@ public class EventoRestCliente implements EventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Ecuentra todos los eventos
+     *
+     * @param <T>
+     * @param responseType
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -121,10 +188,25 @@ public class EventoRestCliente implements EventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Elimina un evento
+     *
+     * @param id id del evento a eliminar
+     * @throws ClientErrorException
+     */
     public void remove(String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
+    /**
+     * Ecuentra eventos que tengas mas de x numero de participantes
+     *
+     * @param <T>
+     * @param responseType
+     * @param numParticipantes numero de participantes
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarEventoMayorNumParticipantes_XML(GenericType<T> responseType, String numParticipantes) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoMayorNumParticipantes/{0}", new Object[]{numParticipantes}));
@@ -137,6 +219,16 @@ public class EventoRestCliente implements EventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Busca eventos que hayan recaudado entre un minimo y un maximo de dinero
+     *
+     * @param <T>
+     * @param responseType
+     * @param totalRecaudadoMin recadado maximo
+     * @param totalRecaudadoMax recaudado minimo
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarEventoEntreRecaudado_XML(GenericType<T> responseType, String totalRecaudadoMin, String totalRecaudadoMax) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarEventoEntreRecaudado/{0}/{1}", new Object[]{totalRecaudadoMin, totalRecaudadoMax}));

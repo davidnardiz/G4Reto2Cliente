@@ -35,6 +35,13 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
         webTarget = client.target(BASE_URI).path("entities.tienda_evento");
     }
 
+    /**
+     * Edita una tienda en funcion a su id
+     *
+     * @param requestEntity
+     * @param id id de la tiendaevento a editar
+     * @throws ClientErrorException
+     */
     @Override
     public void edit_XML(Object requestEntity, String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
@@ -45,6 +52,16 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Encuentra una tienda segun su id y el id del evento al que este apuntado
+     *
+     * @param <T>
+     * @param responseType
+     * @param tienda_id id de la tienda apuntada al evento
+     * @param evento_id id del evento al que esta puntada la tienda
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T find_XML(GenericType<T> responseType, String tienda_id, String evento_id) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -59,6 +76,12 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Crea una tienda apuntanda a un evento
+     *
+     * @param requestEntity
+     * @throws ClientErrorException
+     */
     @Override
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
@@ -70,6 +93,14 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Ecuentra todas las tiendas que esten en algun evento
+     *
+     * @param <T>
+     * @param responseType
+     * @return
+     * @throws ClientErrorException
+     */
     @Override
     public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
@@ -82,6 +113,13 @@ public class TiendaEventoRestCliente implements TiendaEventoInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Elimina una tienda en funcion a su id y del evento al que esta apuntada
+     *
+     * @param tienda_id id de la tienda apuntada al evento
+     * @param evento_id id del evento al que esta puntada la tienda
+     * @throws ClientErrorException
+     */
     @Override
     public void remove(String tienda_id, String evento_id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{tienda_id, evento_id})).request().delete();

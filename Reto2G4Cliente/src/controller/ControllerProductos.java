@@ -280,8 +280,10 @@ public class ControllerProductos {
     @FXML
     public void handleAbrirTiendas(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Tiendas.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerTiendas productController = ((ControllerTiendas) loader.getController());
             productController.setStage(stage, usuario);
             productController.initStage(root);
@@ -298,8 +300,10 @@ public class ControllerProductos {
      */
     private void handleCerrarSesion(Event event) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signIn.fxml"));
             Parent root = (Parent) loader.load();
+            //Creamos el nuevo controlador.
             ControllerSignIn viewController = ((ControllerSignIn) loader.getController());
             viewController.setStage(stage);
             viewController.initStage(root);
@@ -316,8 +320,10 @@ public class ControllerProductos {
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/principal.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerPrincipal viewController = ((ControllerPrincipal) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -334,8 +340,10 @@ public class ControllerProductos {
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Productos.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerProductos viewController = ((ControllerProductos) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -352,8 +360,10 @@ public class ControllerProductos {
     @FXML
     public void handleAbrirEventos(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Eventos.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerEventos viewController = ((ControllerEventos) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -370,8 +380,10 @@ public class ControllerProductos {
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
         try {
+            //Cargamos el nuevo fxml.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Perfil.fxml"));
             Parent root = loader.load();
+            //Creamos el nuevo controlador.
             ControllerPerfil viewController = ((ControllerPerfil) loader.getController());
             viewController.setStage(stage, usuario);
             viewController.initStage(root);
@@ -511,7 +523,7 @@ public class ControllerProductos {
     }
 
     /**
-     * Comprueba que los campos estan informados
+     * Comprueba que los campos estan informados.
      *
      * @throws NotCompletedException
      */
@@ -1027,7 +1039,7 @@ public class ControllerProductos {
     /**
      * Carga la tabla aplicando los filtros
      *
-     * @param productos
+     * @param productos Lista de productos que se van a cargar en la tabla.
      */
     private void handleChargeFiltro(List<Producto> productos) {
         ObservableList<Producto> productosTabla = FXCollections.observableArrayList(productos);

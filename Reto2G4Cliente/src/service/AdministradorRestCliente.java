@@ -35,6 +35,13 @@ public class AdministradorRestCliente implements AdministradorInterface {
         webTarget = client.target(BASE_URI).path("entities.administrador");
     }
 
+    /**
+     * Edita un administrador que busca mediante su id
+     *
+     * @param requestEntity
+     * @param id es el id del Administrador
+     * @throws ClientErrorException
+     */
     public void edit_XML(Object requestEntity, String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
@@ -43,6 +50,15 @@ public class AdministradorRestCliente implements AdministradorInterface {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Encuentra un Usuario que tenga menos de x numeros de eventos creados
+     *
+     * @param <T>
+     * @param responseType
+     * @param numEventos numero de eventos creados
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarUsuarioPorMinNumeroEventos_XML(GenericType<T> responseType, String numEventos) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorMinNumeroEventos/{0}", new Object[]{numEventos}));
@@ -55,6 +71,15 @@ public class AdministradorRestCliente implements AdministradorInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Busca un administrador por su id
+     *
+     * @param <T>
+     * @param responseType
+     * @param id del administrador
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
@@ -67,6 +92,12 @@ public class AdministradorRestCliente implements AdministradorInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Crea un administrador
+     *
+     * @param requestEntity
+     * @throws ClientErrorException
+     */
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
@@ -75,6 +106,15 @@ public class AdministradorRestCliente implements AdministradorInterface {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     * Encunetra un usuario que tenga mas de x Eventos creados
+     *
+     * @param <T>
+     * @param responseType
+     * @param numEventos numeoro de eventos por el que buscar
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T encontrarUsuarioPorMaxNumeroEventos_XML(GenericType<T> responseType, String numEventos) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("encontrarUsuarioPorMaxNumeroEventos/{0}", new Object[]{numEventos}));
@@ -87,6 +127,14 @@ public class AdministradorRestCliente implements AdministradorInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Encuentra todos los Administradores y los devuelve en un array
+     *
+     * @param <T>
+     * @param responseType
+     * @return
+     * @throws ClientErrorException
+     */
     public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -97,6 +145,12 @@ public class AdministradorRestCliente implements AdministradorInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     * Elimina un Administrador por id
+     *
+     * @param id el id del administrador
+     * @throws ClientErrorException
+     */
     public void remove(String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }

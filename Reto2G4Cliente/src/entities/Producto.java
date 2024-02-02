@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -22,6 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement(name = "producto")
 public class Producto implements Serializable {
 
+    //Variables
     private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty idProducto;
     private SimpleStringProperty nombre;
@@ -33,6 +35,7 @@ public class Producto implements Serializable {
     private SimpleObjectProperty<Cliente> cliente;
     private SimpleObjectProperty<Tienda> tienda;
 
+    //Constructores
     public Producto(Integer idProducto, String nombre, Float precio, Integer altura, String material, Float peso, Date fechacreacion, Cliente cliente, Tienda tienda) {
         this.idProducto = new SimpleIntegerProperty(idProducto);
         this.nombre = new SimpleStringProperty(nombre);
@@ -57,6 +60,7 @@ public class Producto implements Serializable {
         this.tienda = new SimpleObjectProperty<>();
     }
 
+    //Getters y setters
     public Integer getIdProducto() {
         return idProducto.get();
     }
@@ -127,6 +131,32 @@ public class Producto implements Serializable {
 
     public void setTienda(Tienda tienda) {
         this.tienda.set(tienda);
+    }
+
+    //Metodos.
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.idProducto);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Producto other = (Producto) obj;
+        if (!Objects.equals(this.idProducto, other.idProducto)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -6,6 +6,7 @@
 package service;
 
 /**
+ * Factoria de Tienda
  *
  * @author David
  */
