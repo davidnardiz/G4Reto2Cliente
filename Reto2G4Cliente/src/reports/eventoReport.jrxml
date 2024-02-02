@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9ea469cc-3cbf-4c13-b31c-4d70485abeaa">
+    <property name="ireport.zoom" value="1.9487171000000014"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <field name="idEvento" class="java.lang.Integer"/>
+    <field name="totalRecaudado" class="java.lang.Float"/>
+    <field name="numParticipantes" class="java.lang.Integer"/>
+    <field name="fecha" class="java.util.Date"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="79" splitType="Stretch">
+            <staticText>
+                <reportElement x="135" y="25" width="300" height="37" uuid="09970967-996e-4b3f-a644-a81fb9b8545c"/>
+                <textElement>
+                    <font size="26"/>
+                </textElement>
+                <text><![CDATA[INFORME DE EVENTOS]]></text>
+            </staticText>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="35" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="61" splitType="Stretch">
+            <staticText>
+                <reportElement x="19" y="15" width="68" height="26" uuid="ca9c6f43-c7dc-497f-94bf-b4d248f4de8c"/>
+                <textElement>
+                    <font size="14" isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[IdTienda]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="119" y="15" width="68" height="26" uuid="a0fe4750-08f5-43ce-8aee-6b72371e551e"/>
+                <textElement>
+                    <font size="14" isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[Fecha]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="242" y="15" width="121" height="26" uuid="9a99f186-1237-469f-9ae3-2d2f2a0a93e3"/>
+                <textElement>
+                    <font size="14" isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[Total Recaudado]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="381" y="15" width="154" height="26" uuid="16f81cd7-85b4-4ee8-8cec-d577251a9fca"/>
+                <textElement>
+                    <font size="14" isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[Número participantes]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="125" splitType="Stretch">
+            <textField>
+                <reportElement x="19" y="13" width="68" height="20" uuid="dc06cf81-f15e-41f5-9d69-76de3856fae2"/>
+                <textFieldExpression><![CDATA[$F{idEvento}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="98" y="13" width="123" height="20" uuid="e99415d5-2b90-4c75-8181-ce1602af2207"/>
+                <textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="254" y="13" width="90" height="20" uuid="f82c33a2-1dd2-400d-a692-6d8572e67d3f"/>
+                <textFieldExpression><![CDATA[$F{totalRecaudado}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="393" y="13" width="117" height="20" uuid="84f3cd83-31b1-4641-89f6-bebac312a9c3"/>
+                <textFieldExpression><![CDATA[$F{numParticipantes}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="54" splitType="Stretch">
+            <staticText>
+                <reportElement x="483" y="15" width="72" height="20" uuid="4d7e7a97-b622-42f7-8afd-fdc071dfeb79"/>
+                <textElement textAlignment="Center">
+                    <font size="11" isBold="false" isItalic="true" isUnderline="false"/>
+                </textElement>
+                <text><![CDATA[Grupo4]]></text>
+            </staticText>
+        </band>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

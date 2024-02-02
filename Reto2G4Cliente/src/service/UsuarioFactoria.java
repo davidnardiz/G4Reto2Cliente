@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entities;
+package service;
 
 /**
+ * Factoria de Usuario
  *
  * @author Gonzalo
  */
-public class TipoUsuario {
-    
+public class UsuarioFactoria {
+
+    public static UsuarioInterface getUserInterface() {
+        return new UsuarioRestCliente();
+    }
 }

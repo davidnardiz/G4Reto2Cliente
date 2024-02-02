@@ -6,9 +6,11 @@
 package entities;
 
 /**
+ * Enum del tipo de pago.
  *
- * @author Gonzalo
+ * @author David
  */
-public class TipoPago {
-    
+public enum TipoPago {
+    Efectivo, Tarjeta, EfectivoYTarjeta
+
 }

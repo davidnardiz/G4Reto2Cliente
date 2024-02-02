@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package service;
 
 /**
+ * Factoria de Tienda
  *
- * @author Gonzalo
+ * @author David
  */
-public class ControllerSingUp {
-    
+public class TiendaFactoria {
+
+    public static TiendaInterface getTiendaInterface() {
+        return new TiendaRestCliente();
+    }
 }
