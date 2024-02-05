@@ -6,17 +6,11 @@
 package controller;
 
 import entities.Evento;
-import entities.Producto;
 import java.util.List;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import static org.testfx.api.FxAssert.verifyThat;
 
 import org.testfx.framework.junit.ApplicationTest;
@@ -43,7 +37,7 @@ public class ControladorTestEvento extends ApplicationTest {
      * que los botones de Editar, Eliminar y Editar estan habilitaods y en el boton para
      * unirse a un evento sale con el texto Adjuntar por ser un Admin
      */
-    @Ignore
+    //@Ignore
     @Test
     public void test1() {
         doubleClickOn("#txtFieldEmail");
@@ -67,7 +61,7 @@ public class ControladorTestEvento extends ApplicationTest {
      * que los botones de Editar, Eliminar y Editar estan deshabilitados y en el boton para
      * unirse a un evento sale con el texto Apuntarse por ser un Cliente
      */
-    @Ignore
+    //@Ignore
     @Test
     public void test2() {
         doubleClickOn("#txtFieldEmail");
@@ -83,7 +77,7 @@ public class ControladorTestEvento extends ApplicationTest {
         verifyThat("#btnEditar", isDisabled());
         verifyThat("#btnEliminar", isDisabled());
         verifyThat("Apuntarse", isVisible());
-        assertEquals("Ha habido un fallo en la carga de la tabla", rowCount = 8, tbEventos.getItems().size());
+        assertEquals("Ha habido un fallo en la carga de la tabla", rowCount = 9, tbEventos.getItems().size());
 
     }
 

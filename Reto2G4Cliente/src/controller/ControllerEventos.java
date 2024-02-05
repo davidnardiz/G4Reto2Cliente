@@ -144,6 +144,7 @@ public class ControllerEventos {
      * Establece el escenario para el controlador de la ventana de eventos.
      *
      * @param stage El escenario de la ventana de inicio de sesión.
+     * @param usuario el ususario
      */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
@@ -601,7 +602,7 @@ public class ControllerEventos {
     /**
      * Mñetodo para adjuntar un organizador a un evento.
      *
-     * @param actionEvent
+     * @param actionEvent el actioevent
      */
     @FXML
     public void handleAdjuntarOrganizador(ActionEvent actionEvent) {

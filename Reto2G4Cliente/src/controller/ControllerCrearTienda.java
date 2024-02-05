@@ -63,7 +63,7 @@ public class ControllerCrearTienda {
     /**
      * Método initStage del controlador.
      *
-     * @param root
+     * @param root el root
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -91,7 +91,7 @@ public class ControllerCrearTienda {
      * Método que crea una nueva tienda en la base de datos con los datos
      * introducidos en el formulario.
      *
-     * @param actionEvent
+     * @param actionEvent el actionevent
      */
     @FXML
     public void handleCreateTienda(ActionEvent actionEvent) {

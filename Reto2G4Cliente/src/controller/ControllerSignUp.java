@@ -223,7 +223,7 @@ public class ControllerSignUp {
     /**
      * Método para cerrar la ventana.
      *
-     * @param windowEvent
+     * @param windowEvent e
      */
     @FXML
     public void handleCloseRequest(WindowEvent windowEvent) {
