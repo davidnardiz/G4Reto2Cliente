@@ -162,7 +162,7 @@ public class ControllerTiendas {
      * cliente, te aparecerán los datos de tu tienda en los campos del
      * formulario.
      *
-     * @param root
+     * @param root e
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -258,8 +258,8 @@ public class ControllerTiendas {
     /**
      * Método que settea el stage y guarda la infromacion del usuario.
      *
-     * @param stage
-     * @param usuario
+     * @param stage e
+     * @param usuario e
      */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
@@ -270,7 +270,7 @@ public class ControllerTiendas {
      * Método que solicita confirmación antes de cerrar la ventana cuando se
      * pulsa la x de la parte superior derecha.
      *
-     * @param windowEvent
+     * @param windowEvent e
      */
     @FXML
     public void handleCloseWindow(WindowEvent windowEvent) {
@@ -352,7 +352,7 @@ public class ControllerTiendas {
      * seleccionada con los datos de los campos, actualizar la base de datos, la
      * tabla y vaciar todos los campos.
      *
-     * @param actionEvent
+     * @param actionEvent e
      */
     @FXML
     public void handleEditTienda(ActionEvent actionEvent) {
@@ -417,7 +417,7 @@ public class ControllerTiendas {
      * “Espacio” (columnaEspacio) y “Fecha de Creación” (columnaFecha). Enfocar
      * el campo “Nombre”.
      *
-     * @param actionEvent
+     * @param actionEvent e
      */
     @FXML
     public void handleDeleteTienda(ActionEvent actionEvent) {
@@ -453,7 +453,7 @@ public class ControllerTiendas {
      * Al pulsar el botón se genera un informe con la información que contiene
      * la información de la tabla.
      *
-     * @param actionEvent
+     * @param actionEvent e
      */
     @FXML
     public void handleCrearInforme(ActionEvent actionEvent) {
@@ -621,7 +621,7 @@ public class ControllerTiendas {
     /**
      * Metodo para abrir la ventana de Inicio
      *
-     * @param actionEvent
+     * @param actionEvent e
      */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
@@ -644,7 +644,7 @@ public class ControllerTiendas {
     /**
      * Metodo para abrir la ventana Productos
      *
-     * @param actionEvent
+     * @param actionEvent e
      */
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {

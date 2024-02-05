@@ -54,7 +54,7 @@ public class ControllerRecuperarContrasenia {
      * Método init stage que inicia el stage y declara los métodos a los
      * botones.
      *
-     * @param root
+     * @param root el root
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -126,7 +126,7 @@ public class ControllerRecuperarContrasenia {
      * informarle enviandole un email al correo que introduzca el propio
      * usuario.
      *
-     * @param actionEvent
+     * @param actionEvent el action event
      */
     @FXML
     public void handleEnviar(ActionEvent actionEvent) {

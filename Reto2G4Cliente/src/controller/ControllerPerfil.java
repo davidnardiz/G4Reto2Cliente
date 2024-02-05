@@ -80,7 +80,7 @@ public class ControllerPerfil {
     /**
      * Método init stage que inicia la ventana.
      *
-     * @param root
+     * @param root el root
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -107,8 +107,8 @@ public class ControllerPerfil {
     /**
      * Método que settea el stage y recibe el usuario que ha iniciado sesión.
      *
-     * @param stage
-     * @param usuario
+     * @param stage el stage
+     * @param usuario el usuario
      */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;

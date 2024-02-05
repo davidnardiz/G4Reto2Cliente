@@ -141,7 +141,7 @@ public class ControllerProductos {
      * Los campos “Nombre”, “Precio”, “Talla”, “Fecha”, “Material”, “Peso” y
      * “Descripción” están habilitados. El foco se pone en el campo de “Nombre”.
      *
-     * @param root
+     * @param root el root
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -275,7 +275,7 @@ public class ControllerProductos {
     /**
      * Accion del menubar para ir a la ventana de tiendas
      *
-     * @param actionEvent
+     * @param actionEvent el action event
      */
     @FXML
     public void handleAbrirTiendas(ActionEvent actionEvent) {
@@ -315,7 +315,7 @@ public class ControllerProductos {
     /**
      * Accion del menubar para abrir la pagina principal de la aplicacion
      *
-     * @param actionEvent
+     * @param actionEvent action event
      */
     @FXML
     public void handleAbrirInicio(ActionEvent actionEvent) {
@@ -335,7 +335,7 @@ public class ControllerProductos {
     /**
      * Accion de menubar para abrir la ventana de productos
      *
-     * @param actionEvent
+     * @param actionEvent el action event
      */
     @FXML
     public void handleAbrirProductos(ActionEvent actionEvent) {
@@ -355,7 +355,7 @@ public class ControllerProductos {
     /**
      * Accion de menubar para abrir la ventana de eventos
      *
-     * @param actionEvent
+     * @param actionEvent el action event
      */
     @FXML
     public void handleAbrirEventos(ActionEvent actionEvent) {
@@ -375,7 +375,7 @@ public class ControllerProductos {
     /**
      * Accion de menubar para abrir la ventana de perfil
      *
-     * @param actionEvent
+     * @param actionEvent el action event
      */
     @FXML
     public void handleAbrirPerfil(ActionEvent actionEvent) {
@@ -1090,7 +1090,7 @@ public class ControllerProductos {
      * Método que solicita confirmación antes de cerrar la ventana cuando se
      * pulsa la x de la parte superior derecha.
      *
-     * @param windowEvent
+     * @param windowEvent el window event
      */
     @FXML
     public void handleCloseWindow(WindowEvent windowEvent) {

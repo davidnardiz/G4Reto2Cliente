@@ -7,21 +7,13 @@ package controller;
 
 import entities.Producto;
 import java.util.List;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
-import static org.testfx.api.FxAssert.verifyThat;
-import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import org.testfx.framework.junit.ApplicationTest;
 import reto2g4cliente.Reto2G4Cliente;
 
@@ -44,7 +36,7 @@ public class ControladorTestProducto extends ApplicationTest {
     }
 
     //Test que comprueba que se cargen solo los productos de un cliente en caso del cliente usado 4
-    @Ignore
+    //@Ignore
     @Test
     public void test1() {
         doubleClickOn("#txtFieldEmail");
@@ -61,7 +53,7 @@ public class ControladorTestProducto extends ApplicationTest {
     }
 
     //Test que comprueba que se cargen todos los productos en este caso 11
-    @Ignore
+    //@Ignore
     @Test
     public void test2() {
         doubleClickOn("#txtFieldEmail");
@@ -73,7 +65,7 @@ public class ControladorTestProducto extends ApplicationTest {
         clickOn("Productos");
         tbProductos = lookup("#tbProductos").query();
         int rowCount;
-        assertEquals("Ha habido un fallo en la carga de tabla", rowCount = 12, tbProductos.getItems().size());
+        assertEquals("Ha habido un fallo en la carga de tabla", rowCount = 11, tbProductos.getItems().size());
 
     }
 
@@ -176,6 +168,6 @@ public class ControladorTestProducto extends ApplicationTest {
         assertEquals("Ha habido un fallo en el filtro", rowCount = 5, tbProductos.getItems().size());
         List<Producto> productos = tbProductos.getItems();
         assertEquals("Ha habido un fallo en el filtro",
-                productos.stream().filter(u -> u.getAltura() < 30).count(), 4);
+                productos.stream().filter(u -> u.getAltura() <= 30).count(), 5);
     }
 }

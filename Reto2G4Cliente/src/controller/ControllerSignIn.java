@@ -117,7 +117,7 @@ public class ControllerSignIn {
      * Método que solicita confirmación antes de cerrar la ventana cuando se
      * pulsa la x de la parte superior derecha.
      *
-     * @param windowEvent
+     * @param windowEvent e
      */
     @FXML
     public void handleCloseWindow(WindowEvent windowEvent) {
@@ -244,7 +244,7 @@ public class ControllerSignIn {
     /**
      * Abrir la ventana signUp y cerrar la ventana signIn.
      *
-     * @param actionEvent
+     * @param actionEvent e
      */
     @FXML
     public void handleOpenSignUp(ActionEvent actionEvent) {

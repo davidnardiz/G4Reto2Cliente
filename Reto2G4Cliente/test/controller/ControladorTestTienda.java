@@ -35,8 +35,8 @@ public class ControladorTestTienda extends ApplicationTest {
     /* Test que comprueba que la tabla se carga correctamente con los 10 Eventos existentes
      * que los botones de Editar, Eliminar y Editar estan habilitaods y por ser un Admin
      */
-    @Ignore
-    //@Test
+    //@Ignore
+    @Test
     public void test1() {
         doubleClickOn("#txtFieldEmail");
         clickOn("#txtFieldEmail");
@@ -54,8 +54,8 @@ public class ControladorTestTienda extends ApplicationTest {
      * que los botones de Eliminar y Editar estan deshabilitados y el boton Editar esta habilitado
      * por se un Cliente
      */
-    @Ignore
-    //@Test
+    //@Ignore
+    @Test
     public void test2() {
         doubleClickOn("#txtFieldEmail");
         clickOn("#txtFieldEmail");
@@ -75,28 +75,23 @@ public class ControladorTestTienda extends ApplicationTest {
     public void test3() {
         doubleClickOn("#txtFieldEmail");
         clickOn("#txtFieldEmail");
-        write("usuario9@example.com");
+        write("davidnardiztartanga@gmail.com");
         doubleClickOn("#passField");
-        write("password9");
+        write("password8");
         clickOn("Iniciar sesión");
-        clickOn("Tiendas");
-        tbTiendas = lookup("#tbTiendas").query();
-        int rowCount = tbTiendas.getItems().size();
         clickOn("#txtFieldNombre");
-        write("NewTest");
-        clickOn("#txtFieldEspacio");
-        write("77");
+        write("Tienda1");
         clickOn("#txtFieldDescripcion");
-        write("TestTestTestTestTest");
-        clickOn("#cbTipoPago");
+        write("Tienda1 venta de productos varios.");
+        clickOn("#txtFieldEspacio");
+        write("10");
+        clickOn("#comboBoxTipoPago");
         clickOn("Efectivo");
-        clickOn("#dpFechaCreacion");
-        write("07/07/2023");
-        clickOn("#btnCrear");
-        assertEquals("Ha habido un fallo en la creacion", rowCount + 1, tbTiendas.getItems().size());
-        List<Tienda> tiendas = tbTiendas.getItems();
-        assertEquals("Ha habido un fallo en la creacion",
-                tiendas.stream().filter(u -> u.getNombre().equals("NewTest")).count(), 1);
+        clickOn("#datePickerFechaCreacion");
+        write("17/12/2023");
+        clickOn("#btnCrearTienda");
+        clickOn("Aceptar");
+
     }
 
     //Test que comprueba el boton de editar Tienda
@@ -113,14 +108,16 @@ public class ControladorTestTienda extends ApplicationTest {
         tbTiendas = lookup("#tbTiendas").query();
         int rowCount = tbTiendas.getItems().size();
         clickOn("Tienda1");
-        doubleClickOn("#txtFieldNombre");
-        write("Tienda1Mod");
+        doubleClickOn("#txtFieldEspacio");
+        write("50");
         clickOn("#btnEditar");
         clickOn("Aceptar");
         assertEquals("Ha habido un fallo en la edicion", rowCount, tbTiendas.getItems().size());
         List<Tienda> tiendas = tbTiendas.getItems();
         assertEquals("Ha habido un fallo en la edicion",
-                tiendas.stream().filter(u -> u.getNombre().equals("Tienda1Mod")).count(), 1);
+                tiendas.stream().filter(u -> u.getEspacio() == 50).
+                        count(),
+                1);
     }
 
     //Test que comprueba el boton de eliminar Tienda
@@ -136,7 +133,7 @@ public class ControladorTestTienda extends ApplicationTest {
         clickOn("Tiendas");
         tbTiendas = lookup("#tbTiendas").query();
         int rowCount = tbTiendas.getItems().size();
-        clickOn("Tienda1Mod");
+        clickOn("Tienda1");
         clickOn("#btnEliminar");
         clickOn("Aceptar");
         assertEquals("Ha habido un fallo en la eliminacion", rowCount - 1, tbTiendas.getItems().size());

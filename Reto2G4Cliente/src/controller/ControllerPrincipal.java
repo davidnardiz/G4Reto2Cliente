@@ -55,7 +55,7 @@ public class ControllerPrincipal {
     /**
      * Metodo para inicializar la ventana
      *
-     * @param root
+     * @param root el root
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
@@ -79,8 +79,8 @@ public class ControllerPrincipal {
     /**
      * Método que settea el stage y carga la información del usuario.
      *
-     * @param stage
-     * @param usuario
+     * @param stage el stage
+     * @param usuario el usuario
      */
     public void setStage(Stage stage, Usuario usuario) {
         this.stage = stage;
@@ -90,7 +90,7 @@ public class ControllerPrincipal {
     /**
      * Método que asocia la tienda al cliente.
      *
-     * @param tienda
+     * @param tienda la tienda
      */
     public void setTiendaACliente(Tienda tienda) {
         //Actualizamos la informacion del usuario para asignarle la tienda que ha creado.
