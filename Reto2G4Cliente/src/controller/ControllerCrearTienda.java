@@ -115,13 +115,13 @@ public class ControllerCrearTienda {
             if (!checkNameFormat(nombre)) {
                 throw new InvalidFormatException("Debes introducir bien el nombre(min. 6 caracteres)!!");
             } else if (!checkDescriptionFormat(descripcion)) {
-                throw new InvalidFormatException("Debes introducir bien la descripción!!");
+                throw new InvalidFormatException("Debes introducir bien la descripción(min. 12 caracteres)!!");
             } else if (!checkSpaceFormat(espacio)) {
-                throw new InvalidFormatException("Debes introducir bien el espacio!!");
+                throw new InvalidFormatException("Debes introducir bien el espacio(>0)!!");
             } else if (!checkTypeFormat(tipoPago)) {
                 throw new InvalidFormatException("Debes introducir bien el tipo de pago!!");
             } else if (!checkDateFormat(fechaCreacion)) {
-                throw new InvalidFormatException("Debes introducir bien la fecha de creacion!!");
+                throw new InvalidFormatException("Debes introducir bien la fecha de creacion(anterior a la actual)!!");
             }
 
             //Creamos una nueva tienda y le asignamos los datos.
